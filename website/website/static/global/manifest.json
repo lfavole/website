@@ -1,0 +1,28 @@
+{
+	"name": "Mon site",
+	"short_name": "Mon site",
+	"description": "",
+	"background_color": "#ffffff",
+	"theme_color": "#ffaa00",
+	"start_url": "/",
+	"dir": "ltr",
+	"scope": "/",
+	"lang": "fr",
+	"orientation": "any",
+	"display": "standalone",
+	"shortcuts": [],
+	"categories": [],
+	"icons": [
+		{
+			"src": "/static/global/profile_16.jpg",
+			"type": "image/jpeg",
+			"sizes": "16x16"
+		},
+		{
+			"src": "/static/global/profile.jpg",
+			"type": "image/jpeg",
+			"sizes": "100x100"
+		}
+	],
+	"screenshots": []
+}

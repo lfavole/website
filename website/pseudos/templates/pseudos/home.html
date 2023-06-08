@@ -1,0 +1,23 @@
+{% extends "pseudos/base.html" %}
+{% load static %}
+
+{% block pseudos_content %}
+<p>
+    <a href="{% static "pseudos/pseudos-standalone.zip" %}">Télécharger le code source</a>
+</p>
+<form action="{% url "pseudos:home" %}" method="post">
+{% csrf_token %}
+{{ form.as_p }}
+<p>
+    <input type="submit" value="OK">
+</p>
+</form>
+{% if request.session.pseudos_mots %}
+<p>Derniers mots utilisés :</p>
+<ul class="derniers-mots">
+{% for mot in mots %}
+    <li>{{ mot }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

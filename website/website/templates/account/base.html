@@ -1,0 +1,21 @@
+{% extends "website/site_base.html" %}
+{% load i18n %}
+
+{% block main-content %}
+<main class="content">
+<div>
+    <strong>{% trans "Menu:" %}</strong>
+    <ul>
+        {% if user.is_authenticated %}
+        <li><a href="{% url "account_email" %}">{% trans "Change e-mail" %}</a></li>
+        <li><a href="{% url "account_logout" %}">{% trans "Log out" %}</a></li>
+        {% else %}
+        <li><a href="{% url "account_login" %}">{% trans "Log in" %}</a></li>
+        <li><a href="{% url "account_signup" %}">{% trans "Sign up" %}</a></li>
+        {% endif %}
+    </ul>
+</div>
+{% block content %}{% endblock %}
+</main>
+{% block extra_body %}{% endblock %}
+{% endblock %}

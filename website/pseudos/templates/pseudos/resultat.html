@@ -1,0 +1,22 @@
+{% extends "pseudos/base.html" %}
+
+{% block pseudos_content %}
+<p>Voici {{ pseudos|length }} nom{% if pseudos|length >= 2 %}s{% endif %} générés à partir des mots <b>{{ mots|join:", " }}</b> :</p>
+<ul class="synonymes">
+{% for nom, syn in synonymes.items %}
+    <li>Synonyme de <b>{{ nom }}</b> : {{ syn|join:", " }}</li>
+{% endfor %}
+</ul>
+<ul class="pseudos">
+{% for pseudos in pseudos %}
+    <li{% if pseudos|last == "o" or pseudos|last == "or" or pseudos|last == "in" %}
+class="garcon"
+{% elif pseudos|last == "a" or pseudos|last == "e" %}
+class="fille"
+{% endif %}>
+    <a href="{% url "pseudos:home" %}?ajouter={{ pseudos }}">{{ pseudos }}</a>
+</li>
+{% endfor %}
+</ul>
+<p><a href="{% url "pseudos:home" %}">Recommencer</a></p>
+{% endblock %}

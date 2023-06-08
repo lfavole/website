@@ -1,0 +1,82 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-06-02 17:19+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: .\pseudos\forms.py:9
+msgid "words"
+msgstr "mots"
+
+#: .\pseudos\forms.py:10
+msgid ""
+"1 word per line\n"
+"Write your name for example"
+msgstr ""
+"1 mot par ligne\n"
+"Écrivez votre nom par exemple"
+
+#: .\pseudos\forms.py:11
+msgid "The synonyms of these words will be included"
+msgstr "Les synonymes de ces mots seront inclus"
+
+#: .\pseudos\forms.py:14
+msgid "syllables number"
+msgstr "nombre de syllabes"
+
+#: .\pseudos\forms.py:19
+msgid "names number"
+msgstr "nombre de noms"
+
+#: .\pseudos\forms.py:22
+msgid "0 for listing all the possibilities"
+msgstr "0 pour lister toutes les possibilités"
+
+#: .\pseudos\gen_pseudos.py:72
+#, python-format
+msgid "Synonyms of %s: "
+msgstr "Synonymes de %s : "
+
+#: .\pseudos\gen_pseudos.py:84
+#, fuzzy, python-format
+msgid "Not enough syllables (only %d)!"
+msgstr "Pas assez de syllabes (seulement %d) !"
+
+#: .\pseudos\gen_pseudos.py:90
+#, python-format
+msgid "Not enough combinations (maximum = %d)!"
+msgstr "Pas assez de combinaisons (maximum = %d) !"
+
+#: .\pseudos\gen_pseudos.py:115
+#, fuzzy, python-format
+msgid "Not enough combinations without a whole word in them (maximum = %d)!"
+msgstr "Pas assez de combinaisons sans mot entier dedans (maximum = %d) !"
+
+#: .\pseudos\gen_pseudos.py:144
+msgid ":"
+msgstr " :"
+
+#: .\pseudos\gen_pseudos.py:147
+msgid "Word"
+msgstr "Mot"
+
+#: .\pseudos\gen_pseudos.py:152
+msgid "Syllables number"
+msgstr "Nombre de syllabes"
+
+#: .\pseudos\gen_pseudos.py:154
+msgid "Number of pseudos to generate"
+msgstr "Nombre de pseudos à générer"

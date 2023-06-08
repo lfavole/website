@@ -1,0 +1,12 @@
+{% extends "website/site_base.html" %}
+{% load markdown %}
+
+{% block title %}{{ page.title }}{% endblock %}
+
+{% block content %}
+<h1>
+    <a href="{% url "blog:home" %}"><span class="fleche fl-gauche"></span></a>
+    {{ page.title }}
+</h1>
+{{ page.content | markdown }}
+{% endblock %}

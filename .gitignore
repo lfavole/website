@@ -1,0 +1,7 @@
+website/db.sqlite3
+website/custom_settings.py
+*.mo
+**/__pycache__/**
+website/media/**
+website/static/**
+data/**

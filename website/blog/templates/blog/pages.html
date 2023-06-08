@@ -1,0 +1,18 @@
+{% extends "website/site_base.html" %}
+
+{% block title %}Pages{% endblock %}
+
+{% block content %}
+<h1>Pages</h1>
+{% if pages %}
+	<ul>
+	{% for page in pages %}
+	<li>
+		<a href="{% url "blog:page-id" page.pk %}">{{ page.title }}</a>
+	</li>
+	{% endfor %}
+	</ul>
+{% else %}
+	<p>Aucune page pour le moment...</p>
+{% endif %}
+{% endblock %}

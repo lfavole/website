@@ -1,0 +1,62 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-06-02 17:53+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: .\home\apps.py:8
+msgid "Home page"
+msgstr "Page d'accueil"
+
+#: .\home\models.py:9
+msgid "order"
+msgstr "ordre"
+
+#: .\home\models.py:10 .\home\models.py:32
+msgid "title"
+msgstr "titre"
+
+#: .\home\models.py:11
+msgid "URL"
+msgstr "URL"
+
+#: .\home\models.py:12
+msgid "hidden link"
+msgstr "lien caché"
+
+#: .\home\models.py:16
+msgid "parent link"
+msgstr "lien précédent"
+
+#: .\home\models.py:20
+msgid "link"
+msgstr "lien"
+
+#: .\home\models.py:31
+msgid "slug"
+msgstr "ID"
+
+#: .\home\models.py:33
+msgid "content"
+msgstr "contenu"
+
+#: .\home\models.py:36
+msgid "special content"
+msgstr "contenu spécial"
+
+#: .\home\models.py:37
+msgid "special contents"
+msgstr "contenus spéciaux"

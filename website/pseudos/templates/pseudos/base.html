@@ -1,0 +1,23 @@
+{% extends "website/site_base.html" %}
+{% load static %}
+
+{% block title %}Générateur de pseudos{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{% static "pseudos/pseudos.css" %}">
+{% endblock %}
+{% block js %}
+<script src="{% static "pseudos/pseudos.js" %}"></script>
+{% endblock %}
+
+{% block main-content %}
+<main class="content">
+<h1>Pseudos pour jeux vidéo</h1>
+{% block pseudos_content %}{% endblock %}
+</main>
+<aside>
+<img src="{% static "pseudos/vulpin.jpg" %}" alt="Vulpin" title="Vulpin">
+<img src="{% static "pseudos/forgeron.jpg" %}" alt="Forgeron" title="Forgeron">
+<img src="{% static "pseudos/herboriste.jpg" %}" alt="Herboriste" title="Herboriste">
+<img src="{% static "pseudos/hydra.jpg" %}" alt="Hydra" title="Hydra">
+</aside>
+{% endblock %}

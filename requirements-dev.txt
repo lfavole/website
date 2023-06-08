@@ -1,0 +1,5 @@
+black ~= 23.3
+flake8 ~= 6.0
+isort ~= 5.0
+pylint ~= 2.17
+pylint_quotes ~= 0.2
