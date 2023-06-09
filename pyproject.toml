@@ -1,6 +1,6 @@
 [tool.black]
 line-length = 120
-extend-exclude = 'migrations[\\/]'
+extend-exclude = "migrations/"
 
 [tool.isort]
 profile = "black"
@@ -26,12 +26,12 @@ disable = [
 expected-line-ending-format = "CRLF"
 include-naming-hint = "y"
 
-[basic]
+[tool.pylint.basic]
 allowed-redefined-builtins = "id"
 good-names = ["f", "i", "id", "md", "pk"]
 no-docstring-rgx = "(^_|Config$|Admin$|Inline$|^(main|contribute_to_argparse|Meta|get_absolute_url)$)"
 
-[pylint_quotes]
+[tool.pylint.pylint_quotes]
 string-quote = "double"
 triple-quote = "double"
 docstring-quote = "double"
