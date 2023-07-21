@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
 from django.views.static import serve
 
 from .views import (
@@ -26,6 +26,7 @@ from .views import (
     handler_500,
     make_error,
     reload_website,
+    songs_list,
 )
 
 handler404 = handler_404
@@ -41,6 +42,7 @@ urlpatterns = i18n_patterns(
     path("debug/", include("debug.urls", namespace="debug")),
     path("errors/", include("errors.urls", namespace="errors")),
     path("pseudos/", include("pseudos.urls", namespace="pseudos")),
+    re_path("songs-list/(?P<path>.*)", songs_list),
     path("telegram-bot/", include("telegram_bot.urls", namespace="telegram_bot")),
     path("", include("home.urls", namespace="home")),
 ) + [

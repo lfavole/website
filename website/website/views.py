@@ -1,9 +1,11 @@
 import hmac
+import os.path
 import sys
 from hashlib import sha1
 from ipaddress import ip_address, ip_network
 from pathlib import Path
-from urllib.parse import quote
+from urllib.parse import quote, urljoin
+from wsgiref.util import is_hop_by_hop
 
 import requests
 from django.conf import settings
@@ -14,6 +16,7 @@ from django.http import (
     HttpResponseForbidden,
     HttpResponseNotAllowed,
     HttpResponseServerError,
+    StreamingHttpResponse,
 )
 from django.http.response import FileResponse, Http404
 from django.shortcuts import redirect, render
@@ -174,3 +177,33 @@ def reload_website(request: HttpRequest):
 
     # In case we receive an event that's not ping or push
     return HttpResponse(status=204)
+
+
+def songs_list(request, path):
+    """
+    Proxy for GitHub repo containing songs.
+    """
+    base_path = "https://lfavole.github.io/songs-list/"
+    req = requests.request(
+        request.method,
+        base_path + path,
+        headers={"User-Agent": request.headers.get("User-Agent")},
+        allow_redirects=False,
+        stream=True,
+    )
+    resp = StreamingHttpResponse(
+        req.iter_content(65536),
+        content_type=req.headers["Content-Type"],
+        status=req.status_code,
+        reason=req.reason,
+    )
+
+    for k, v in req.headers.items():
+        if k.lower() == "location":
+            prefix = os.path.commonprefix([base_path, urljoin(base_path, v)])
+            if prefix.removesuffix("/") == base_path.removesuffix("/"):
+                resp[k] = v.removeprefix(prefix)
+                continue
+        if not is_hop_by_hop(k) and k.lower() != "content-encoding":
+            resp[k] = v
+    return resp
