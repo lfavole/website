@@ -1,16 +1,14 @@
-from django.contrib.auth import get_permission_codename
-from django.db.models import Model
 from django.db.models.query_utils import Q
 from django.utils.timezone import now
 from django.views import generic
 
+from website.utils.permission import has_permission
+
 from .models import Page
 
 
-def has_permission(view: generic.View, permission="view"):
-    model: Model = view.model  # type: ignore
-    perm_name = model._meta.app_label + "." + get_permission_codename(permission, model._meta)
-    return view.request.user.has_perm(perm_name)  # type: ignore
+def has_permission_for_view(view: generic.View, permission="view"):
+    return has_permission(view.request, view.model, permission)  # type: ignore
 
 
 class BasePageView(generic.View):
@@ -23,7 +21,7 @@ class BasePageView(generic.View):
     is_article = False
 
     def get_queryset(self):
-        admin = has_permission(self, "view")
+        admin = has_permission_for_view(self, "view")
         ret = self.model.objects.all()
         if not admin:
             # return the pages that have content, are not hidden and not future

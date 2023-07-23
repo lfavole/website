@@ -1,14 +1,26 @@
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 
+from blog.views import has_permission
 from website.utils.paginator import paginate
 
 from .forms import ErrorForm
 from .models import Error
 
 
+def check_permission(f):
+    def wrapper(request, *args, **kwargs):
+        if not has_permission(request, Error):
+            raise PermissionDenied
+        return f(request, *args, **kwargs)
+
+    return wrapper
+
+
+@check_permission
 def display_error(_request, pk: int):
     """
     Display an error.
@@ -17,6 +29,7 @@ def display_error(_request, pk: int):
     return HttpResponse(error.content)
 
 
+@check_permission
 def errors_list(request: HttpRequest):
     """
     Show the list of all errors.
