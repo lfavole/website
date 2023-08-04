@@ -26,6 +26,7 @@ from .views import (
     handler_500,
     make_error,
     reload_website,
+    robots,
     songs_list,
 )
 
@@ -47,6 +48,7 @@ urlpatterns = i18n_patterns(
     path("", include("home.urls", namespace="home")),
 ) + [
     path("google<str:id>.html", google),
+    path("robots.txt", robots),
     path("500", make_error),
     path("reload-website/", reload_website),
 ]

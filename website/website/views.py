@@ -179,6 +179,16 @@ def reload_website(request: HttpRequest):
     return HttpResponse(status=204)
 
 
+def robots(_request):
+    """
+    `robots.txt` file.
+    """
+    robots_file = Path(__file__).resolve().parent.parent / "robots.txt"
+    if robots_file.exists():
+        return FileResponse(robots_file.open("rb"))
+    raise Http404()
+
+
 def songs_list(request, path):
     """
     Proxy for GitHub repo containing songs.
