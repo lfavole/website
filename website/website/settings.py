@@ -33,16 +33,12 @@ def get_custom_setting(key: str, default: _T = None) -> Any | _T:
         ret = getattr(custom_settings, key, default)
 
     if ret is None:
-        print(key, getattr(custom_settings_default, key, ret))
         return getattr(custom_settings_default, key, ret)
-    print(key, ret)
     return ret
 
 
 PYTHONANYWHERE = get_custom_setting("PYTHONANYWHERE")
 OFFLINE = get_custom_setting("OFFLINE")
-print(get_custom_setting("DB_HOST"))
-print(getattr(custom_settings_default, "DB_HOST"))
 
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -83,6 +79,7 @@ INSTALLED_APPS = [
     # custom apps
     "adminsortable2",
     "django_cleanup",
+    "django_minify_html",
     "easy_thumbnails",
     # apps with urls.py (automatic)
     *(dir.name for dir in BASE_DIR.glob("*") if (dir / "urls.py").exists()),
@@ -105,6 +102,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "website.middleware.MinifyHtmlMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.middleware.locale.LocaleMiddleware",
@@ -115,6 +113,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+HTML_MINIFY = True
 
 ROOT_URLCONF = "website.urls"
 

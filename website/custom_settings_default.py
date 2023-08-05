@@ -7,6 +7,7 @@ You will have to create a `custom_settings.py` file with the overrides.
 import os
 import sys
 from getpass import getuser
+from types import ModuleType
 
 from captcha.constants import TEST_PRIVATE_KEY, TEST_PUBLIC_KEY
 from website.utils.connectivity import internet
@@ -33,7 +34,7 @@ RECAPTCHA_PUBLIC_KEY = TEST_PUBLIC_KEY
 RECAPTCHA_PRIVATE_KEY = TEST_PRIVATE_KEY
 
 
-class CustomSettings:
+class CustomSettings(ModuleType):
     """
     Class for shadowing this module.
     It provides access to attributes that depend on other attributes for ease of use.
@@ -51,4 +52,4 @@ class CustomSettings:
         return super().__getattribute__(name)
 
 
-sys.modules[__name__] = CustomSettings()  # type: ignore
+sys.modules[__name__].__class__ = CustomSettings  # type: ignore
