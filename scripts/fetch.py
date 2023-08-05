@@ -1,38 +1,36 @@
+import builtins
+import io
 import subprocess as sp
+import sys
+from pathlib import Path
 
-from .utils import BASE, get_custom_setting
+from .utils import BASE, get_custom_setting, get_run_with_expl, pipe, run
+
+FOLDER = Path(__file__).parent.parent
 
 
-def main(_args=None):
-    print("Creating git repo")
-    sp.run("git init", cwd=BASE, check=True)
+@pipe
+def main(_args=None, pipe=False, outputs: list[str] | None = None, ok=True):
+    """
+    Fetch changes with `git fetch` and migrate the apps.
+    """
+    print("Fetching script")
     print()
 
-    print("Fetching changes")
-    sp.run(["git", "fetch", get_custom_setting("GITHUB_REPO", "") + ".git"], cwd=BASE, check=True)
-    print()
+    run_with_expl = get_run_with_expl(FOLDER, pipe, (lambda proc: outputs.append(proc.stdout)) if outputs else None)
 
-    print("Merging changes")
-    sp.run(
-        [
-            "git",
-            "merge",
-            "FETCH_HEAD",
-            "main",
-            "--allow-unrelated-histories",
-            "--strategy-option",
-            "theirs",
-            "-m",
-            "Merging remote changes",
-        ],
-        cwd=BASE,
-        check=True,
-    )
-    print()
+    run_with_expl("git init", "creating git repo")
+    run_with_expl(["git", "pull"], "fetching changes")
+    run_with_expl(["git", "stash"], "backing up changes")
+    run_with_expl(["git", "reset", "--hard", "origin/main"], "resetting to server state")
+    run_with_expl(["git", "pull"], "re-fetching changes")
 
     from .reload import main as reload
 
-    reload()
+    reload(pipe=pipe, outputs=outputs, ok=False)
+
+    if ok:
+        print("OK")
 
 
 def contribute_to_argparse(_parser):

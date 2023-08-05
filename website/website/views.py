@@ -170,7 +170,7 @@ def reload_website(request: HttpRequest):
         return HttpResponse("pong")
     if event == "push":
         try:
-            fetch()
+            return HttpResponse(fetch())
         except:  # noqa
             return HttpResponseServerError("Failed to fetch changes")
         return HttpResponse("success")

@@ -51,7 +51,7 @@ urlpatterns = i18n_patterns(
     path("google<str:id>.html", google),
     path("robots.txt", robots),
     path("500", make_error),
-    path("reload-website/", reload_website),
+    path("reload-website", reload_website),
 ]
 
 if not settings.DEBUG and not settings.PYTHONANYWHERE:
