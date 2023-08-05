@@ -69,7 +69,7 @@ GITHUB_WEBHOOK_KEY = get_custom_setting("GITHUB_WEBHOOK_KEY")
 
 INSTALLED_APPS = [
     # Django
-    "django.contrib.admin",
+    "admin_app",  # replaces django.contrib.admin
     "django.contrib.admindocs",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -92,6 +92,10 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.github",
+    "django_otp",
+    "django_otp.plugins.otp_totp",
+    "django_otp.plugins.otp_static",
+    "allauth_2fa",
 ]
 
 MIDDLEWARE = [
@@ -99,8 +103,11 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.middleware.locale.LocaleMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django_otp.middleware.OTPMiddleware",
+    "allauth_2fa.middleware.AllauthTwoFactorMiddleware",
+    "website.middleware.RequireSuperuser2FAMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -167,8 +174,10 @@ AUTH_USER_MODEL = "users.User"
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
+    "allauth_2fa.adapter.OTPAdapter",
 ]
 
+LOGIN_URL = "/accounts/login"
 LOGIN_REDIRECT_URL = "/"
 
 SOCIALACCOUNT_QUERY_EMAIL = True
@@ -178,6 +187,8 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 ACCOUNT_SIGNUP_FORM_CLASS = "users.forms.AllAuthSignupForm"
+# Set the allauth adapter to be the 2FA adapter.
+ACCOUNT_ADAPTER = "allauth_2fa.adapter.OTPAdapter"
 
 SOCIALACCOUNT_PROVIDERS = {
     "google": {

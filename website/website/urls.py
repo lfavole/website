@@ -38,6 +38,7 @@ urlpatterns = i18n_patterns(
     path("admin/docs/", include("django.contrib.admindocs.urls")),
     path("admin/logout/", NewLogoutView.as_view()),
     path("admin/", admin.site.urls),
+    path("accounts/two-factor/", include("allauth_2fa.urls")),
     path("accounts/", include("allauth.urls")),
     path("blog/", include("blog.urls", namespace="blog")),
     path("debug/", include("debug.urls", namespace="debug")),
