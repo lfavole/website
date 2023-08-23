@@ -1,4 +1,5 @@
 from typing import Type
+
 from django.contrib.auth import get_permission_codename
 from django.db.models import Model
 from django.http import HttpRequest

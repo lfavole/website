@@ -10,6 +10,7 @@ from getpass import getuser
 from types import ModuleType
 
 from captcha.constants import TEST_PRIVATE_KEY, TEST_PUBLIC_KEY
+
 from website.utils.connectivity import internet
 
 PA_SITE = os.environ.get("PYTHONANYWHERE_SITE", "")

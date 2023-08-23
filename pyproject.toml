@@ -23,7 +23,7 @@ disable = [
     "protected-access",
     "unspecified-encoding",
 ]
-expected-line-ending-format = "CRLF"
+expected-line-ending-format = "LF"
 include-naming-hint = "y"
 
 [tool.pylint.basic]

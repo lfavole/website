@@ -94,6 +94,7 @@ def get_run_with_expl(
     """
     Return a function that wraps the output of a command and writes a description before it.
     """
+
     def run_with_expl(cmd: str | list[str], expl: str):
         print(expl.capitalize())
         proc = run(cmd, capture=pipe, cwd=cwd)
@@ -111,6 +112,7 @@ def pipe(f):
 
     The decorator passes an `outputs` argument that can be used to add text.
     """
+
     def wrapper(*args, pipe=False, outputs: list[str] | None = None, **kwargs):
         if pipe:
             if not isinstance(outputs, list):

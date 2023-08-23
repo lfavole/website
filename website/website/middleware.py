@@ -1,7 +1,8 @@
 from typing import Callable
+
+import minify_html
 from allauth_2fa.middleware import BaseRequire2FAMiddleware
 from django.http import HttpRequest, HttpResponse
-import minify_html
 
 
 class RequireSuperuser2FAMiddleware(BaseRequire2FAMiddleware):
