@@ -1,11 +1,11 @@
 from pathlib import Path
 
-from .utils import get_run_with_expl, pipe
+from .utils import get_run_with_expl, pipe_function
 
 FOLDER = Path(__file__).parent.parent
 
 
-@pipe
+@pipe_function
 def main(_args=None, pipe=False, outputs: list[str] | None = None, ok=True):
     """
     Fetch changes with `git fetch` and migrate the apps.

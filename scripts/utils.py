@@ -106,7 +106,7 @@ def get_run_with_expl(
     return run_with_expl
 
 
-def pipe(f):
+def pipe_function(f):
     """
     Wraps a function and return all the printed text.
 

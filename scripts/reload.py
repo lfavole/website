@@ -2,13 +2,13 @@ import sys
 from pathlib import Path
 
 from .fetch_gravatar import main as fetch_gravatar
-from .utils import get_custom_setting, get_run_with_expl, pipe
+from .utils import get_custom_setting, get_run_with_expl, pipe_function
 
 FOLDER = Path(__file__).parent.parent
 BASE = FOLDER / "website"
 
 
-@pipe
+@pipe_function
 def main(_args=None, pipe=False, outputs: list[str] | None = None, ok=True):
     print("Reloading script")
     print()
