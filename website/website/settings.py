@@ -79,7 +79,6 @@ INSTALLED_APPS = [
     # custom apps
     "adminsortable2",
     "django_cleanup",
-    "django_minify_html",
     "easy_thumbnails",
     # apps with urls.py (automatic)
     *(dir.name for dir in BASE_DIR.glob("*") if (dir / "urls.py").exists()),
