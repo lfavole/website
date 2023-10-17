@@ -4,7 +4,7 @@ import re
 import requests
 from django.http.response import HttpResponse
 
-from website.settings import get_custom_setting
+import custom_settings
 
 callbacks = []
 
@@ -17,7 +17,7 @@ def pattern(test):
     return wrapper
 
 
-BOT_TOKEN = get_custom_setting("BOT_TOKEN")
+BOT_TOKEN = custom_settings.BOT_TOKEN
 BASE_URL = f"https://api.telegram.org/bot{BOT_TOKEN}"
 
 

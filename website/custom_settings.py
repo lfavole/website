@@ -41,10 +41,30 @@ class CustomSettings(ModuleType):
     It provides access to attributes that depend on other attributes for ease of use.
     """
 
-    def __getattr__(self, name):
+    def __getattribute__(self, name):
+        if name[:2] == "__" and name[-2:] == "__":
+            # short-circuit cf. https://github.com/django/django/blob/f6ed2c3/django/utils/autoreload.py#L118 and l.133
+            return super().__getattribute__(name)
+
         if name == "OFFLINE":
             # return the current value of OFFLINE
             return not internet()
+
+        try:
+            import custom_settings_overrides as cs_overrides
+
+            if getattr(cs_overrides, "TEST", False):
+                import custom_settings_test as cs_test
+
+                return getattr(cs_test, name)
+
+            return getattr(cs_overrides, name)
+        except AttributeError:
+            pass
+
+        if name == "TEST":
+            return False  # True will be returned from CS_OVERRIDES
+
         if name == "DB_NAME":
             try:
                 return super().__getattribute__(name)

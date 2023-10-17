@@ -11,34 +11,13 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
-from typing import Any, TypeVar
 
 import custom_settings
-import custom_settings_default
-import custom_settings_test
 
-_T = TypeVar("_T")
+TEST = custom_settings.TEST
 
-TEST = getattr(custom_settings, "TEST", False)
-
-
-def get_custom_setting(key: str, default: _T = None) -> Any | _T:
-    """
-    Return the value of a custom setting.
-    """
-    ret = None
-    if TEST:
-        ret = getattr(custom_settings_test, key, default)
-    else:
-        ret = getattr(custom_settings, key, default)
-
-    if ret is None:
-        return getattr(custom_settings_default, key, ret)
-    return ret
-
-
-PYTHONANYWHERE = get_custom_setting("PYTHONANYWHERE")
-OFFLINE = get_custom_setting("OFFLINE")
+PYTHONANYWHERE = custom_settings.PYTHONANYWHERE
+OFFLINE = custom_settings.OFFLINE
 
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -48,14 +27,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = get_custom_setting("SECRET_KEY") or "+jt!%+%erdp^y7h37v#68x31+u9ut6^8zryj@#zmu5p$_!u2)u"
+SECRET_KEY = custom_settings.SECRET_KEY or "+jt!%+%erdp^y7h37v#68x31+u9ut6^8zryj@#zmu5p$_!u2)u"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = get_custom_setting("DEBUG")
+DEBUG = custom_settings.DEBUG
 
 if not DEBUG:
     CONN_MAX_AGE = 600
-    ALLOWED_HOSTS = [get_custom_setting("HOST")]
+    ALLOWED_HOSTS = [custom_settings.HOST]
     if PYTHONANYWHERE:
         CSRF_COOKIE_SECURE = True
         SESSION_COOKIE_SECURE = True
@@ -63,7 +42,7 @@ if not DEBUG:
 else:
     ALLOWED_HOSTS = ["*"]
 
-GITHUB_WEBHOOK_KEY = get_custom_setting("GITHUB_WEBHOOK_KEY")
+GITHUB_WEBHOOK_KEY = custom_settings.GITHUB_WEBHOOK_KEY
 
 # Application definition
 
@@ -157,14 +136,14 @@ DATABASES = (
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
-    if get_custom_setting("USE_SQLITE")
+    if custom_settings.USE_SQLITE
     else {
         "default": {
             "ENGINE": "django.db.backends.mysql",
-            "NAME": get_custom_setting("DB_NAME"),
-            "USER": get_custom_setting("DB_USER"),
-            "PASSWORD": get_custom_setting("DB_PASSWORD"),
-            "HOST": get_custom_setting("DB_HOST"),
+            "NAME": custom_settings.DB_NAME,
+            "USER": custom_settings.DB_USER,
+            "PASSWORD": custom_settings.DB_PASSWORD,
+            "HOST": custom_settings.DB_HOST,
             "OPTIONS": {
                 "init_command": 'SET sql_mode="STRICT_TRANS_TABLES"',
             },
@@ -259,5 +238,5 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # reCAPTCHA
 
-RECAPTCHA_PUBLIC_KEY = get_custom_setting("RECAPTCHA_PUBLIC_KEY")
-RECAPTCHA_PRIVATE_KEY = get_custom_setting("RECAPTCHA_PRIVATE_KEY")
+RECAPTCHA_PUBLIC_KEY = custom_settings.RECAPTCHA_PUBLIC_KEY
+RECAPTCHA_PRIVATE_KEY = custom_settings.RECAPTCHA_PRIVATE_KEY
