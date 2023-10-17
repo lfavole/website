@@ -1,0 +1,28 @@
+{
+    "configurations": [
+        {
+            "name": "Development server",
+            "type": "python",
+            "request": "launch",
+            "stopOnEntry": false,
+            "python": "${config:python.defaultInterpreterPath}",
+            "program": "${workspaceRoot}/website/manage.py",
+            "args": [
+                "runserver"
+            ],
+            "justMyCode": false
+        },
+        {
+            "name": "Migrate",
+            "type": "python",
+            "request": "launch",
+            "stopOnEntry": false,
+            "python": "${config:python.defaultInterpreterPath}",
+            "program": "${workspaceRoot}/website/manage.py",
+            "args": [
+                "migrate"
+            ],
+            "justMyCode": false
+        }
+    ]
+}
