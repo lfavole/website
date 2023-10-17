@@ -107,6 +107,7 @@ MIDDLEWARE = [
     "django.middleware.locale.LocaleMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django_otp.middleware.OTPMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
     "allauth_2fa.middleware.AllauthTwoFactorMiddleware",
     "website.middleware.RequireSuperuser2FAMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
