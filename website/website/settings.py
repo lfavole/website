@@ -68,13 +68,10 @@ INSTALLED_APPS = [
     # allauth (for template overridding)
     "allauth",
     "allauth.account",
+    "allauth.mfa",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.github",
-    "django_otp",
-    "django_otp.plugins.otp_totp",
-    "django_otp.plugins.otp_static",
-    "allauth_2fa",
 ]
 
 MIDDLEWARE = [
@@ -85,10 +82,7 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django_otp.middleware.OTPMiddleware",
     "allauth.account.middleware.AccountMiddleware",
-    "allauth_2fa.middleware.AllauthTwoFactorMiddleware",
-    "website.middleware.RequireSuperuser2FAMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -156,7 +150,6 @@ AUTH_USER_MODEL = "users.User"
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
-    "allauth_2fa.adapter.OTPAdapter",
 ]
 
 LOGIN_URL = "/accounts/login"
@@ -170,7 +163,7 @@ ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 ACCOUNT_SIGNUP_FORM_CLASS = "users.forms.AllAuthSignupForm"
 # Set the allauth adapter to be the 2FA adapter.
-ACCOUNT_ADAPTER = "allauth_2fa.adapter.OTPAdapter"
+ACCOUNT_ADAPTER = "users.adapter.Adapter"
 
 SOCIALACCOUNT_PROVIDERS = {
     "google": {

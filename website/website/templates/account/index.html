@@ -1,0 +1,31 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Manage account" %}{% endblock head_title %}
+
+{% block content %}
+    <h1>{% trans "Manage account" %}</h1>
+
+    <ul>
+        {% if user.is_authenticated %}
+        {% if admin_permission %}
+        <li><a href="{% url "admin:index" %}">{% trans "Administration" %}</a></li>
+        {% endif %}
+		<li>
+            <form method="post" action="{% url "account_logout" %}" class="logout-form">
+                {% csrf_token %}
+                <input type="submit" value="{% trans "Log out" %}">
+            </form>
+        </li>
+        <li><a href="{% url "account_reauthenticate" %}">{% trans "Confirm Access" %}</a></li>
+        <li><a href="{% url "account_email" %}">{% trans "Change e-mail" %}</a></li>
+        <li><a href="{% url "account_reset_password" %}">{% trans "Password Reset" %}</a></li>
+        <li><a href="{% url "socialaccount_connections" %}">{% trans "Account Connections" %}</a></li>
+        <li><a href="{% url "mfa_index" %}">{% trans "Two-Factor Authentication" %}</a></li>
+        {% else %}
+        <li><a href="{% url "account_login" %}">{% trans "Log in" %}</a></li>
+        <li><a href="{% url "account_signup" %}">{% trans "Sign up" %}</a></li>
+        {% endif %}
+    </ul>
+{% endblock content %}

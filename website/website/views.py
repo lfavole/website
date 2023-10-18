@@ -113,6 +113,10 @@ def handler_500(request, _template_name=None):
     return HttpResponse(html, status=500)
 
 
+def account_index(request):
+    return render(request, "account/index.html")
+
+
 @csrf_exempt
 def reload_website(request: HttpRequest):
     """
