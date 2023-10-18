@@ -1,6 +1,6 @@
 from typing import Callable
 
-# import minify_html
+import minify_html
 from django.http import HttpRequest, HttpResponse
 
 
