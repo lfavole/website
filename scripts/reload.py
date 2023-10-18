@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 
 from .fetch_gravatar import main as fetch_gravatar
-from .utils import get_custom_setting, get_run_with_expl, pipe_function
+from .utils import custom_settings, get_run_with_expl, pipe_function
 
 FOLDER = Path(__file__).parent.parent
 BASE = FOLDER / "website"
@@ -23,7 +23,7 @@ def main(_args=None, pipe=False, outputs: list[str] | None = None, ok=True):
     fetch_gravatar(reloading=True)
     run_with_expl([*manage, "collectstatic", "--noinput", "--link"], "collecting static files")
 
-    wsgi_file = get_custom_setting("WSGI_FILE")
+    wsgi_file = custom_settings.WSGI_FILE
     if wsgi_file:
         print("Touching WSGI file")
         Path(wsgi_file).touch()

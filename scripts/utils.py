@@ -22,27 +22,10 @@ TEST = None
 
 sys.path.insert(0, str(BASE / "website"))
 import custom_settings  # noqa
-import custom_settings_default  # noqa
-import custom_settings_test  # noqa
 
 sys.path.pop(0)
 
 TEST = getattr(custom_settings, "TEST", False)
-
-
-def get_custom_setting(key: str, default: _T = None) -> Any | _T:
-    """
-    Return the value of a custom setting.
-    """
-    ret = None
-    if TEST:
-        ret = getattr(custom_settings_test, key, default)
-    else:
-        ret = getattr(custom_settings, key, default)
-
-    if ret is None:
-        return getattr(custom_settings_default, key, ret)
-    return ret
 
 
 def run(args: list[str] | str, pipe=False, capture=False, **kwargs) -> sp.CompletedProcess[str]:

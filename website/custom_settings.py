@@ -4,6 +4,9 @@ Default settings.
 You will have to create a `custom_settings.py` file with the overrides.
 """
 
+# import now because we might remove the current directory from sys.path
+import custom_settings_overrides as cs_overrides
+import custom_settings_test as cs_test
 import os
 import sys
 from getpass import getuser
@@ -51,11 +54,7 @@ class CustomSettings(ModuleType):
             return not internet()
 
         try:
-            import custom_settings_overrides as cs_overrides
-
             if getattr(cs_overrides, "TEST", False):
-                import custom_settings_test as cs_test
-
                 return getattr(cs_test, name)
 
             return getattr(cs_overrides, name)
