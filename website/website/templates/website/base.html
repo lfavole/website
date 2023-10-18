@@ -18,7 +18,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
+    {% if offline %}
     <link rel="stylesheet" href="{% static "vendor/bulma.min.css" %}">
+    {% else %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0/css/bulma.min.css">
+    {% endif %}
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static "global/global.css" %}">
     {% block css %}{% endblock %}
