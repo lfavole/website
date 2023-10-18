@@ -9,23 +9,28 @@ from pathlib import Path
 import django
 import pyphen
 import requests
+from django.core.exceptions import AppRegistryNotReady
 
 try:
-    FOLDER = Path(__file__).parent.parent
-    sys.path.insert(0, str(FOLDER))
-    os.environ["DJANGO_SETTINGS_MODULE"] = f"{FOLDER.name}.settings"
-    django.setup()
     from django.utils.translation import gettext as _
-except:  # noqa
+except AppRegistryNotReady:
+    try:
+        FOLDER = Path(__file__).parent.parent
+        sys.path.insert(0, str(FOLDER))
+        os.environ["DJANGO_SETTINGS_MODULE"] = f"{FOLDER.name}.settings"
+        django.setup()
+        from django.utils.translation import gettext as _
+    except:  # noqa
 
-    def _(message: str):
-        return message
+        def _(message: str):
+            return message
 
 
 def french_synonyms(word):
     """
     Return all the synonyms of a French word.
     """
+    return []
     try:
         req = requests.get(f"https://crisco4.unicaen.fr/des/synonymes/{word}")
         req.raise_for_status()
@@ -53,7 +58,7 @@ def factorial(number):
     return ret
 
 
-def pseudo_complete(*words, syllables_n=3, words_n=1, verbose=False):
+def pseudo_complete(*words, syllables_n=3, words_n=1, allow_word=False, verbose=False):
     """
     Create a pseudo with different words.
     Return the synonyms and the pseudos (for the webpage).
@@ -116,13 +121,14 @@ def pseudo_complete(*words, syllables_n=3, words_n=1, verbose=False):
             raise ValueError(
                 _("Not enough combinations without a whole word in them (maximum = %d)!") % (total_max - total,)
             ) from exc
-        stop = False
-        for word in words:
-            if word in final_name:  # don't keep the name if there is a word in them
-                stop = True
-                break
-        if stop:
-            continue
+        if allow_word:
+            stop = False
+            for word in words:
+                if word in final_name:  # don't keep the name if there is a word in them
+                    stop = True
+                    break
+            if stop:
+                continue
         final_name = final_name.title().strip()  # add caps, remove spaces
         if final_name in ret:  # add the name if it is not already there
             continue

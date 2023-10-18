@@ -21,3 +21,7 @@ class PseudosForm(forms.Form):
         validators=[MinValueValidator(0)],
         help_text=_("0 for listing all the possibilities"),
     )
+    allow_word = forms.BooleanField(
+        label=_("allow a word in result"),
+        required=False,
+    )

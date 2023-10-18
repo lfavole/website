@@ -47,8 +47,8 @@ def home(request):
     """
     Home page with the form.
     """
-    s_words = request.session.get("pseudos_words") or []
-    s_last_words = request.session.get("pseudos_last_words") or []
+    s_words = _str_to_list(request.session.get("pseudos_words", "")) or []
+    s_last_words = _str_to_list(request.session.get("pseudos_last_words", "")) or []
 
     if request.method == "POST":
         form = PseudosForm(request.POST)
@@ -56,12 +56,20 @@ def home(request):
             data = form.cleaned_data
             words = _str_to_list(data["words"])
             _log(*words)
-            request.session["pseudos_last_words"] = words
+            request.session["pseudos_last_words"] = "\n".join(words)
             s_words = words + s_words
             s_words = _normaliser(s_words)[0:10]
-            request.session["pseudos_words"] = s_words
+            request.session["pseudos_words"] = "\n".join(s_words)
             try:
-                resultat = pseudo_complete(*words, syllables_n=data["syllabes_n"], words_n=data["words_n"])
+                resultat = pseudo_complete(
+                    *words,
+                    syllables_n=data["syllables_n"],
+                    words_n=data["words_n"],
+                    allow_word=data["allow_word"],
+                )
+            except ValueError as err:
+                form.add_error("words", str(err))
+            else:
                 return render(
                     request,
                     "pseudos/result.html",
@@ -71,8 +79,7 @@ def home(request):
                         "pseudos": resultat["pseudos"],
                     },
                 )
-            except ValueError as err:
-                form.add_error("words", str(err))
+
     else:
         initial = {"words": s_last_words} if s_last_words else {}
         form = PseudosForm(initial=initial)
