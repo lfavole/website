@@ -50,6 +50,8 @@ class CustomSettings(ModuleType):
             return super().__getattribute__(name)
 
         if name == "OFFLINE":
+            if PYTHONANYWHERE:
+                return False
             # return the current value of OFFLINE
             return not internet()
 
