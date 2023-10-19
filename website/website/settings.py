@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 
+from debug_toolbar.settings import PANELS_DEFAULTS
+from debug_toolbar.toolbar import DebugToolbar
+from django.http import HttpRequest
 from django.templatetags.static import static
 from django.urls import reverse_lazy
 from django.utils.functional import lazy
@@ -62,6 +65,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # custom apps
     "adminsortable2",
+    "debug_toolbar",
     "django_cleanup.apps.CleanupConfig",
     "easy_thumbnails",
     "tinymce",
@@ -93,8 +97,39 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 HTML_MINIFY = True
+
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK": "website.settings.show_toolbar",
+    "SHOW_COLLAPSED": True,
+    "RENDER_PANELS": False,
+    "OBSERVE_REQUEST_CALLBACK": "website.settings.observe_request",
+}
+DEBUG_TOOLBAR_PANELS = [
+    *PANELS_DEFAULTS,
+    "debug.panels.ErrorPanel",
+    "debug.panels.GitInfoPanel",
+]
+
+
+def show_toolbar(request: HttpRequest):
+    """
+    Should we show the toolbar?
+    """
+    return request.user.is_authenticated and request.user.has_perm("users.can_see_debug_toolbar")  # type: ignore
+
+
+def observe_request(request: HttpRequest):
+    """
+    Should we observe the request with the toolbar?
+    """
+    if DebugToolbar.is_toolbar_request(request):
+        return False
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+        return False
+    return True
 
 ROOT_URLCONF = "website.urls"
 

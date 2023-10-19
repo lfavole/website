@@ -44,6 +44,7 @@ urlpatterns = i18n_patterns(
     path("accounts/", account_index, name="account_index"),
     path("blog/", include("blog.urls", namespace="blog")),
     path("debug/", include("debug.urls", namespace="debug")),
+    path("debug/", include("debug_toolbar.urls")),
     path("errors/", include("errors.urls", namespace="errors")),
     path("pseudos/", include("pseudos.urls", namespace="pseudos")),
     re_path("songs-list/(?P<path>.*)", songs_list),
