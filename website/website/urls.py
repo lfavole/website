@@ -40,7 +40,6 @@ urlpatterns = i18n_patterns(
     path("admin/docs/", include("django.contrib.admindocs.urls")),
     path("admin/logout/", NewLogoutView.as_view()),
     path("admin/", admin.site.urls),
-    # path("accounts/two-factor/", include("allauth_2fa.urls")),
     path("accounts/", include("allauth.urls")),
     path("accounts/", account_index, name="account_index"),
     path("blog/", include("blog.urls", namespace="blog")),
@@ -51,7 +50,7 @@ urlpatterns = i18n_patterns(
     path("telegram-bot/", include("telegram_bot.urls", namespace="telegram_bot")),
     path("tinymce/upload-image", upload_image, name="tinymce-upload-image"),
     path("tinymce/", include("tinymce.urls")),
-    path("", include("home.urls", namespace="home")),
+    path("", include("globals.urls", namespace="home")),
 ) + [
     path("google<str:id>.html", google),
     path("robots.txt", robots),

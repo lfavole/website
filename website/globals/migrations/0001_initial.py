@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(max_length=100, verbose_name='Titre')),
                 ('url', models.CharField(max_length=100, verbose_name='URL')),
                 ('hidden', models.BooleanField(default=False, verbose_name='Page cachée')),
-                ('parent_page', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='home.page', verbose_name='Page précédente')),
+                ('parent_page', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='globals.page', verbose_name='Page précédente')),
             ],
         ),
     ]

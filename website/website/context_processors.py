@@ -1,6 +1,6 @@
 import custom_settings
 from django.utils.timezone import now
-from home.models import Link
+from globals.models import Link
 
 NavLinks = list[tuple[Link, "NavLinks"]]
 

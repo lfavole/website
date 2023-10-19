@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('home', '0003_alter_page_rename_page_link'),
+        ('globals', '0003_alter_page_rename_page_link'),
     ]
 
     operations = [

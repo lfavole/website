@@ -6,11 +6,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    replaces = [('home', '0003_alter_page_options_page_order_alter_page_hidden_and_more'), ('home', '0004_rename_page_link_rename_parent_page_link_parent_link')]
-
-    dependencies = [
-        ('home', '0002_alter_page_url'),
-    ]
+    dependencies = [('globals', '0002_alter_page_url')]
 
     operations = [
         migrations.AlterModelOptions(
@@ -30,7 +26,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='page',
             name='parent_page',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='home.page', verbose_name='Parent link'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='globals.page', verbose_name='Parent link'),
         ),
         migrations.AlterField(
             model_name='page',

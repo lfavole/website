@@ -2,7 +2,7 @@ from django.apps import AppConfig
 from django.utils.translation import gettext_lazy as _
 
 
-class HomeConfig(AppConfig):
+class GlobalsConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "home"
-    verbose_name = _("Home page")
+    name = "globals"
+    verbose_name = _("Global configuration")

@@ -2,7 +2,7 @@ from django import template
 from django.shortcuts import resolve_url
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
-from django.utils.translation import gettext
+from django.utils.translation import gettext_lazy as _
 
 from website.context_processors import NavLinks
 
@@ -24,7 +24,7 @@ def nav(value: NavLinks):
             has_subpages_class = ' class="has-subpages"' if nested_pages else ""
             ret += f'{indent_str}\t<li{has_subpages_class}>\n{indent_str}\t\t<a href="{href}">'
             if page.hidden:
-                ret += "<i>(<small>" + gettext("Hidden page:") + "</small> "
+                ret += "<i>(<small>" + _("Hidden page:") + "</small> "
             ret += escape(page.title)
             if page.hidden:
                 ret += ")</i>"
