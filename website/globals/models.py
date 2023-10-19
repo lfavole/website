@@ -27,7 +27,7 @@ class Link(models.Model):
         return self.title
 
 
-class SpecialContent(models.Model):
+class Setting(models.Model):
     """
     A special editable text (like the home page content).
     """
