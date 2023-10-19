@@ -1,8 +1,9 @@
+from functools import partial
 from adminsortable2.admin import SortableAdminMixin
-from django import forms
 from django.contrib import admin
-
-from website.widgets import MarkdownEditor
+from django.db import models
+from django.db.models.fields import Field
+from tinymce.widgets import AdminTinyMCE
 
 from .models import Link, SpecialContent
 
@@ -14,23 +15,17 @@ class LinkAdmin(SortableAdminMixin, admin.ModelAdmin):
     """
 
 
-class SpecialContentAdminForm(forms.ModelForm):
-    """
-    Form in the admin interface for special contents (with Markdown editor).
-    """
-
-    model = SpecialContent
-
-    class Meta:
-        widgets = {
-            "content": MarkdownEditor(),
-        }
-
-
 @admin.register(SpecialContent)
 class SpecialContentAdmin(admin.ModelAdmin):
     """
     Admin interface for special contents.
     """
 
-    form = SpecialContentAdminForm
+    def get_form(self, request, obj: SpecialContent | None = None, change=False, **kwargs):
+        kwargs["formfield_callback"] = partial(self.formfield_for_dbfield, request=request, obj=obj)
+        return super().get_form(request, obj, change, **kwargs)
+
+    def formfield_for_dbfield(self, db_field: Field, request=None, obj: SpecialContent | None = None, **kwargs):
+        if obj and obj.slug == "home" and isinstance(db_field, models.TextField):
+            kwargs["widget"] = AdminTinyMCE
+        return super().formfield_for_dbfield(db_field, request, **kwargs)

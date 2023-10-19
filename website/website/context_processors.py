@@ -1,7 +1,15 @@
+import custom_settings
 from django.utils.timezone import now
 from home.models import Link
 
 NavLinks = list[tuple[Link, "NavLinks"]]
+
+
+def offline(_request):
+    """
+    Add an `offline` variable to all templates.
+    """
+    return {"offline": custom_settings.OFFLINE}
 
 
 def now_variable(_request):

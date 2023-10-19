@@ -12,6 +12,11 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 
+from django.templatetags.static import static
+from django.urls import reverse_lazy
+from django.utils.functional import lazy
+from django.utils.translation import gettext
+
 import custom_settings
 
 TEST = custom_settings.TEST
@@ -57,8 +62,9 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # custom apps
     "adminsortable2",
-    "django_cleanup",
+    "django_cleanup.apps.CleanupConfig",
     "easy_thumbnails",
+    "tinymce",
     # apps with urls.py (automatic)
     *(dir.name for dir in BASE_DIR.glob("*") if (dir / "urls.py").exists()),
     # apps without urls.py
@@ -76,7 +82,9 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "django.middleware.gzip.GZipMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.http.ConditionalGetMiddleware",
     "website.middleware.MinifyHtmlMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -101,6 +109,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "website.context_processors.offline",
                 "website.context_processors.nav_links",
                 "website.context_processors.now_variable",
                 "website.context_processors.admin_permission",
@@ -233,3 +242,81 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 RECAPTCHA_PUBLIC_KEY = custom_settings.RECAPTCHA_PUBLIC_KEY
 RECAPTCHA_PRIVATE_KEY = custom_settings.RECAPTCHA_PRIVATE_KEY
+
+# TinyMCE editor
+
+
+def add_url(text, url):
+    return text % {
+        "message": gettext(
+            "You must first create the item, then insert the image. Don't worry, the image will be uploaded after reloading."
+        ),
+        "url": url,
+    }
+
+
+add_url_lazy = lazy(add_url)
+static_lazy = lazy(static)
+TINYMCE_JS_URL = (
+    STATIC_URL + "vendor/tinymce/tinymce.min.js"
+    if custom_settings.OFFLINE
+    else "https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js"
+)
+TINYMCE_EXTRA_MEDIA = {"css": {"all": ("/static/tinymce/tinymce.css",)}, "js": ("/static/tinymce/tinymce.js",)}
+TINYMCE_DEFAULT_CONFIG = {
+    "language": "fr",
+    "language_url": static_lazy("tinymce/langs/fr_FR.js"),
+    "content_css": [
+        "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;1,400;1,700&display=swap",
+        static_lazy("global/global.css"),
+    ],
+    "content_style": "body{padding:8px}",
+    "promotion": False,
+    "plugins": "autolink code fullscreen help image link lists media preview quickbars save searchreplace table",
+    "toolbar": (
+        "undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft "
+        "aligncenter alignright alignjustify | outdent indent | numlist bullist | forecolor backcolor removeformat | "
+        "image media link"
+    ),
+    "relative_urls": False,
+    "extended_valid_elements": "*[*]",  # allow all elements
+    "image_advtab": True,
+    # pylint: disable=C0209
+    "images_upload_handler": add_url_lazy(
+        """\
+(blobInfo, progress) => new Promise((success, failure) => {
+    var parts = location.pathname.split("/");
+    if(parts[4] == "add" && parts[5] == "") {
+        failure("%(message)s");
+        return;
+    }
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "%(url)s");
+    xhr.withCredentials = true;
+    xhr.upload.onprogress = e => {
+        progress(e.loaded / e.total * 100);
+    };
+    xhr.onerror = () => {
+        failure("Image upload failed due to a XHR Transport error. Code: " + xhr.status);
+    };
+    xhr.onload = () => {
+        if(xhr.status < 200 || xhr.status >= 300) {
+            failure("HTTP Error: " + xhr.status);
+            return;
+        }
+        var json = JSON.parse(xhr.responseText);
+        if(!json || !json.location) {
+            failure("Invalid JSON: " + xhr.responseText);
+            return;
+        }
+        success(json.location);
+    };
+    var formData = new FormData();
+    formData.append("file", blobInfo.blob(), blobInfo.filename());
+    formData.append("csrfmiddlewaretoken", django.jQuery("#content-main form").get(0).csrfmiddlewaretoken.value);
+    xhr.send(formData);
+})
+""",
+        reverse_lazy("tinymce-upload-image"),
+    ),
+}

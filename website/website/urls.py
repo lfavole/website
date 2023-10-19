@@ -29,6 +29,7 @@ from .views import (
     reload_website,
     robots,
     songs_list,
+    upload_image,
 )
 
 handler404 = handler_404
@@ -48,6 +49,8 @@ urlpatterns = i18n_patterns(
     path("pseudos/", include("pseudos.urls", namespace="pseudos")),
     re_path("songs-list/(?P<path>.*)", songs_list),
     path("telegram-bot/", include("telegram_bot.urls", namespace="telegram_bot")),
+    path("tinymce/upload-image", upload_image, name="tinymce-upload-image"),
+    path("tinymce/", include("tinymce.urls")),
     path("", include("home.urls", namespace="home")),
 ) + [
     path("google<str:id>.html", google),
@@ -56,14 +59,15 @@ urlpatterns = i18n_patterns(
     path("reload-website", reload_website),
 ]
 
-if not settings.DEBUG and not settings.PYTHONANYWHERE:
-    urlpatterns.append(
-        path(
-            settings.STATIC_URL.strip("/") + "/<path:path>",
-            serve,
-            {"document_root": settings.STATIC_ROOT},
+if not settings.PYTHONANYWHERE:
+    if not settings.DEBUG:
+        urlpatterns.append(
+            path(
+                settings.STATIC_URL.strip("/") + "/<path:path>",
+                serve,
+                {"document_root": settings.STATIC_ROOT},
+            )
         )
-    )
     urlpatterns.append(
         path(
             settings.MEDIA_URL.strip("/") + "/<path:path>",

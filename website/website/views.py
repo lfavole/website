@@ -4,22 +4,28 @@ import sys
 from hashlib import sha1
 from ipaddress import ip_address, ip_network
 from pathlib import Path
-from urllib.parse import quote, urljoin
+from typing import Type
+from urllib.parse import quote, urljoin, urlparse
 from wsgiref.util import is_hop_by_hop
+from django.urls import resolve
 
 import requests
+from blog.models import Image
 from django.conf import settings
+from django.core.exceptions import PermissionDenied
 from django.contrib.auth.views import LogoutView
+from django.db.models import Model
 from django.http import (
     HttpRequest,
     HttpResponse,
     HttpResponseForbidden,
     HttpResponseNotAllowed,
     HttpResponseServerError,
+    JsonResponse,
     StreamingHttpResponse,
 )
 from django.http.response import FileResponse, Http404
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, resolve_url
 from django.template import Context, Engine
 from django.utils.encoding import force_bytes
 from django.views.debug import ExceptionReporter, technical_404_response
@@ -221,3 +227,26 @@ def songs_list(request, path):
         if not is_hop_by_hop(k) and k.lower() != "content-encoding":
             resp[k] = v
     return resp
+
+
+def upload_image(request: HttpRequest):
+    referer_url: str = request.headers["Referer"]
+    referer = urlparse(referer_url)
+    resolver_match = resolve(referer.path)
+    if resolver_match.app_name != "admin":
+        raise PermissionDenied("The referer URL is not an admin URL.")
+
+    try:
+        model: Type[Model] | None = resolver_match.func.model_admin.model
+    except AttributeError:
+        model = None
+
+    pk = resolver_match.kwargs.get("object_id")
+
+    if not model or pk is None or resolver_match.func.__name__ != "change_view":
+        raise PermissionDenied("The referer URL is not a change URL.")
+
+    instance = model.objects.get(pk=pk)
+    image = Image.objects.create(item=instance, file=request.FILES["file"])
+
+    return JsonResponse({"location": image.file.url})

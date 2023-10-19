@@ -1,6 +1,9 @@
 from typing import Callable
 
-import minify_html
+try:
+    import minify_html
+except ImportError:
+    minify_html = None
 from django.http import HttpRequest, HttpResponse
 
 
@@ -27,7 +30,8 @@ class MinifyHtmlMiddleware:
 
     def should_minify(self, request: HttpRequest, response: HttpResponse) -> bool:
         return (
-            not getattr(response, "streaming", False)
+            minify_html
+            and not getattr(response, "streaming", False)
             and (request.resolver_match is None or getattr(request.resolver_match.func, "should_minify_html", True))
             and response.get("Content-Encoding", "") == ""
             and response.get("Content-Type", "").split(";", 1)[0] == "text/html"

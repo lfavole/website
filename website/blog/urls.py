@@ -20,6 +20,6 @@ from .views import PageListView, PageView
 app_name = "blog"
 urlpatterns = [
     path("<int:pk>", PageView.as_view(), name="page-id"),
-    path("<slug:slug>", PageView.as_view(), name="page-slug"),
+    path("<slug:slug>", PageView.as_view(), name="page"),
     path("", PageListView.as_view(), name="home"),
 ]
