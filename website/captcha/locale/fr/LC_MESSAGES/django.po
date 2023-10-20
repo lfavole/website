@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-02 17:53+0200\n"
+"POT-Creation-Date: 2023-10-20 15:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,6 +22,6 @@ msgstr ""
 msgid "Django reCAPTCHA"
 msgstr "reCAPTCHA Django"
 
-#: .\captcha\fields.py:22 .\captcha\fields.py:23
+#: .\captcha\fields.py:23 .\captcha\fields.py:24
 msgid "Error verifying reCAPTCHA, please try again."
 msgstr "Erreur lors de la vérification du reCAPTCHA, veuillez réessayer."

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-02 17:53+0200\n"
+"POT-Creation-Date: 2023-10-20 15:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,46 +17,46 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: .\home\apps.py:8
-msgid "Home page"
-msgstr "Page d'accueil"
+#: .\globals\apps.py:8
+msgid "Global configuration"
+msgstr "Configuration globale"
 
-#: .\home\models.py:9
+#: .\globals\models.py:10
 msgid "order"
 msgstr "ordre"
 
-#: .\home\models.py:10 .\home\models.py:32
+#: .\globals\models.py:11 .\globals\models.py:36
 msgid "title"
 msgstr "titre"
 
-#: .\home\models.py:11
+#: .\globals\models.py:12
 msgid "URL"
 msgstr "URL"
 
-#: .\home\models.py:12
+#: .\globals\models.py:13
 msgid "hidden link"
 msgstr "lien caché"
 
-#: .\home\models.py:16
+#: .\globals\models.py:19
 msgid "parent link"
 msgstr "lien précédent"
 
-#: .\home\models.py:20
+#: .\globals\models.py:23
 msgid "link"
 msgstr "lien"
 
-#: .\home\models.py:31
+#: .\globals\models.py:35
 msgid "slug"
 msgstr "ID"
 
-#: .\home\models.py:33
+#: .\globals\models.py:37
 msgid "content"
 msgstr "contenu"
 
-#: .\home\models.py:36
+#: .\globals\models.py:40
 msgid "special content"
 msgstr "contenu spécial"
 
-#: .\home\models.py:37
+#: .\globals\models.py:41
 msgid "special contents"
 msgstr "contenus spéciaux"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-02 17:30+0200\n"
+"POT-Creation-Date: 2023-10-20 15:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,18 +17,37 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-#: .\blog\models.py:10
+
+#: .\blog\models.py:15
 msgid "slug"
 msgstr "ID"
 
-#: .\blog\models.py:11
+#: .\blog\models.py:16
 msgid "title"
 msgstr "titre"
 
-#: .\blog\models.py:12
+#: .\blog\models.py:17
 msgid "content"
 msgstr "contenu"
 
-#: .\blog\models.py:13
+#: .\blog\models.py:18
 msgid "hidden page"
 msgstr "page cachée"
+
+#: .\blog\models.py:66
+msgid "file"
+msgstr "fichier"
+
+#: .\blog\models.py:69
+#, python-format
+msgid "File '%s' in %s"
+msgstr "fichier '%s' dans %s"
+
+#: .\blog\models.py:76
+msgid "image"
+msgstr "image"
+
+#: .\blog\models.py:79
+#, python-format
+msgid "Image '%s' in %s"
+msgstr "Image '%s' dans %s"

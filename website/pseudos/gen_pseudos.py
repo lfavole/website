@@ -119,7 +119,7 @@ def pseudo_complete(*words, syllables_n=3, words_n=1, allow_word=False, verbose=
             final_name = get_name()
         except StopIteration as exc:
             raise ValueError(
-                _("Not enough combinations without a whole word in them (maximum = %d)!") % (total_max - total,)
+                _("Not enough combinations without an entire word in them (maximum = %d)!") % (total_max - total,)
             ) from exc
         if allow_word:
             stop = False

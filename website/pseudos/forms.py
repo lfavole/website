@@ -22,6 +22,6 @@ class PseudosForm(forms.Form):
         help_text=_("0 for listing all the possibilities"),
     )
     allow_word = forms.BooleanField(
-        label=_("allow a word in result"),
+        label=_("allow an entire word in result"),
         required=False,
     )

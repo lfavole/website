@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-02 17:19+0200\n"
+"POT-Creation-Date: 2023-10-20 15:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,27 +38,65 @@ msgstr ""
 "Votre mot de passe ne doit pas avoir été trouvé dans une faille de sécurité "
 "majeure."
 
+#: .\website\settings.py:287
+msgid ""
+"You must first create the item, then insert the image. Don't worry, the "
+"image will be uploaded after reloading."
+msgstr ""
+"Vous devez d'abord créer l'article, puis insérer l'image. Ne vous inquiétez "
+"pas, l'image sera envoyée lors du rechargement de la page."
+
 #: .\website\templates\account\base.html:7
 msgid "Menu:"
 msgstr "Menu :"
 
 #: .\website\templates\account\base.html:10
+#: .\website\templates\account\index.html:22
 msgid "Change e-mail"
 msgstr "Changer d'adresse mail"
 
 #: .\website\templates\account\base.html:11
-#: .\website\templates\website\site_base.html:30
+#: .\website\templates\account\index.html:18
+#: .\website\templates\website\site_base.html:31
 msgid "Log out"
 msgstr "Se déconnecter"
 
 #: .\website\templates\account\base.html:13
-#: .\website\templates\website\site_base.html:33
+#: .\website\templates\account\index.html:27
+#: .\website\templates\website\site_base.html:34
 msgid "Log in"
 msgstr "Se connecter"
 
 #: .\website\templates\account\base.html:14
+#: .\website\templates\account\index.html:28
 msgid "Sign up"
 msgstr "S'inscrire"
+
+#: .\website\templates\account\index.html:5
+#: .\website\templates\account\index.html:8
+msgid "Manage account"
+msgstr "Gérer le compte"
+
+#: .\website\templates\account\index.html:13
+#: .\website\templates\website\site_base.html:26
+msgid "Administration"
+msgstr "Administration"
+
+#: .\website\templates\account\index.html:21
+msgid "Confirm Access"
+msgstr "Vérifier votre identité"
+
+#: .\website\templates\account\index.html:23
+msgid "Password Reset"
+msgstr "Réinitialiser le mot de passe"
+
+#: .\website\templates\account\index.html:24
+msgid "Account Connections"
+msgstr "Comptes associés"
+
+#: .\website\templates\account\index.html:25
+msgid "Two-Factor Authentication"
+msgstr "Authentification à deux facteurs"
 
 #: .\website\templates\website\404.html:5
 msgid "Page not found"
@@ -99,10 +137,10 @@ msgstr "suivante"
 msgid "last"
 msgstr "fin"
 
-#: .\website\templates\website\site_base.html:26
-msgid "Administration"
-msgstr "Administration"
+#: .\website\templates\website\site_base.html:28
+msgid "Account"
+msgstr "Compte"
 
-#: .\website\templatetags\nav.py:25
+#: .\website\templatetags\nav.py:27
 msgid "Hidden page:"
 msgstr "Page cachée :"

@@ -23,7 +23,7 @@
     {% if user.is_authenticated %}
         {{ user.username }} –
         {% if admin_permission %}
-        <a href="{% url "admin:index" %}">{% trans "Administration" %}</a> –
+        <a href="{% url "admin:index" %}" target="_blank">{% trans "Administration" %}</a> –
         {% endif %}
         <a href="{% url "account_index" %}">{% trans "Account" %}</a> –
 		<form method="post" action="{% url "account_logout" %}" class="logout-form">

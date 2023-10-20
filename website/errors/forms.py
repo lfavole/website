@@ -7,4 +7,4 @@ class ErrorForm(forms.Form):
     Form to quickly go to an error.
     """
 
-    id = forms.IntegerField(min_value=1, required=True, label=_("error ID"))
+    id = forms.IntegerField(min_value=1, required=True, label=_("Error ID"))
