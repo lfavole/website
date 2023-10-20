@@ -1,8 +1,8 @@
 import custom_settings
 from django.utils.timezone import now
-from globals.models import Link
+from globals.models import Page
 
-NavLinks = list[tuple[Link, "NavLinks"]]
+NavLinks = list[tuple[Page, "NavLinks"]]
 
 
 def offline(_request):
@@ -25,10 +25,10 @@ def nav_links(_request) -> dict[str, NavLinks]:
 
     This variable must be used with the `nav` filter.
     """
-    links_list = Link.objects.all()
+    links_list = list(Page.objects.all())
 
     def get_links(parent):
-        links_query = links_list.filter(parent_link=parent)
+        links_query = [link for link in links_list if link.parent_page == parent]
         links = []
         for link in links_query:
             if link != parent:  # avoid recursive links

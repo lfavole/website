@@ -51,7 +51,7 @@ urlpatterns = i18n_patterns(
     path("telegram-bot/", include("telegram_bot.urls", namespace="telegram_bot")),
     path("tinymce/upload-image", upload_image, name="tinymce-upload-image"),
     path("tinymce/", include("tinymce.urls")),
-    path("", include("globals.urls", namespace="home")),
+    path("", include("globals.urls")),
 ) + [
     path("google<str:id>.html", google),
     path("robots.txt", robots),

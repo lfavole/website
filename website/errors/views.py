@@ -1,4 +1,4 @@
-from blog.views import has_permission
+from website.utils.permission import has_permission
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest, HttpResponse

@@ -19,7 +19,13 @@ def nav(value: NavLinks):
         indent_str = "\t" * indent
         ret = f"{indent_str}<ul>\n"
         for page, nested_pages in liste:
-            href = "#" if page.url == "" else resolve_url(page.url)
+            if page.url == "":
+                if page.content == "":
+                    href = "#"
+                else:
+                    href = resolve_url("page", page.slug)
+            else:
+                href = resolve_url(page.url)
 
             has_subpages_class = ' class="has-subpages"' if nested_pages else ""
             ret += f'{indent_str}\t<li{has_subpages_class}>\n{indent_str}\t\t<a href="{href}">'

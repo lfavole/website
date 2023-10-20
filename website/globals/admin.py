@@ -5,14 +5,17 @@ from django.db import models
 from django.db.models.fields import Field
 from tinymce.widgets import AdminTinyMCE
 
-from .models import Link, Setting
+from .models import Page, Setting
 
 
-@admin.register(Link)
-class LinkAdmin(SortableAdminMixin, admin.ModelAdmin):
+@admin.register(Page)
+class PageAdmin(SortableAdminMixin, admin.ModelAdmin):
     """
-    Admin interface for links.
+    Admin interface for pages.
     """
+    formfield_overrides = {
+        models.TextField: {"widget": AdminTinyMCE},
+    }
 
 
 @admin.register(Setting)

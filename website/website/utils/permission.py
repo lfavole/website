@@ -3,6 +3,11 @@ from typing import Type
 from django.contrib.auth import get_permission_codename
 from django.db.models import Model
 from django.http import HttpRequest
+from django.views import generic
+
+
+def has_permission_for_view(view: generic.View, permission="view"):
+    return has_permission(view.request, view.model, permission)  # type: ignore
 
 
 def has_permission(request: HttpRequest, model: Type[Model], permission="view"):

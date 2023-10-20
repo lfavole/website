@@ -1,4 +1,4 @@
-"""global URL Configuration
+"""globals URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.0/topics/http/urls/
@@ -15,9 +15,9 @@ Including another URLconf
 """
 from django.urls import path
 
-from .views import home
+from .views import PageView, home
 
-app_name = "home"
 urlpatterns = [
-    path("", home),
+    path("<slug:slug>", PageView.as_view(), name="page"),
+    path("", home, name="home"),
 ]

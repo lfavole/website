@@ -30,7 +30,7 @@ class MinifyHtmlMiddleware:
 
     def should_minify(self, request: HttpRequest, response: HttpResponse) -> bool:
         return (
-            minify_html
+            minify_html is not None
             and not getattr(response, "streaming", False)
             and (request.resolver_match is None or getattr(request.resolver_match.func, "should_minify_html", True))
             and response.get("Content-Encoding", "") == ""
