@@ -37,6 +37,7 @@ class File(Data):
     """
     A file that is linked to an item.
     """
+
     file = models.FileField(_("file"))
 
     def __str__(self):
@@ -47,6 +48,7 @@ class Image(Data):
     """
     An image that is linked to an item.
     """
+
     file = ImageField(_("image"))
 
     def __str__(self):

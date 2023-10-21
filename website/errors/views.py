@@ -1,4 +1,3 @@
-from website.utils.permission import has_permission
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest, HttpResponse
@@ -6,6 +5,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 
 from website.utils.paginator import paginate
+from website.utils.permission import has_permission
 
 from .forms import ErrorForm
 from .models import Error

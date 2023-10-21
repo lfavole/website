@@ -1,8 +1,7 @@
 {% extends "website/site_base.html" %}
-{% load markdown %}
 
 {% block title %}{{ home.title }}{% endblock %}
 
 {% block content %}
-{{ home.content | markdown }}
+{{ home.content|safe }}
 {% endblock %}

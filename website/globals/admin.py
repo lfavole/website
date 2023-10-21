@@ -1,4 +1,5 @@
 from functools import partial
+
 from adminsortable2.admin import SortableAdminMixin
 from django.contrib import admin
 from django.db import models
@@ -13,6 +14,7 @@ class PageAdmin(SortableAdminMixin, admin.ModelAdmin):
     """
     Admin interface for pages.
     """
+
     formfield_overrides = {
         models.TextField: {"widget": AdminTinyMCE},
     }

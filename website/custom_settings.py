@@ -4,14 +4,14 @@ Default settings.
 You will have to create a `custom_settings.py` file with the overrides.
 """
 
-# import now because we might remove the current directory from sys.path
-import custom_settings_overrides as cs_overrides
-import custom_settings_test as cs_test
 import os
 import sys
 from getpass import getuser
 from types import ModuleType
 
+# import now because we might remove the current directory from sys.path
+import custom_settings_overrides as cs_overrides
+import custom_settings_test as cs_test
 from captcha.constants import TEST_PRIVATE_KEY, TEST_PUBLIC_KEY
 
 from website.utils.connectivity import internet
@@ -71,6 +71,7 @@ class CustomSettings(ModuleType):
                 return super().__getattribute__(name)
             except AttributeError:
                 return USERNAME + "$" + super().__getattribute__("REAL_DB_NAME")
+
         return super().__getattribute__(name)
 
 

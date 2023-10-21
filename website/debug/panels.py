@@ -1,6 +1,5 @@
 import html
 import sys
-from urllib.parse import urlencode
 
 from debug.client import GitClient, GitHubClient
 from debug_toolbar.decorators import render_with_toolbar_language, require_show_toolbar

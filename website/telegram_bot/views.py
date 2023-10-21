@@ -1,10 +1,9 @@
 import io
 import re
 
+import custom_settings
 import requests
 from django.http.response import HttpResponse
-
-import custom_settings
 
 callbacks = []
 

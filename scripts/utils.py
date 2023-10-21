@@ -6,7 +6,7 @@ import shlex
 import subprocess as sp
 import sys
 from pathlib import Path
-from typing import Any, Callable, TypeVar
+from typing import Callable
 
 BASE = Path(__file__).resolve().parent.parent
 
@@ -15,8 +15,6 @@ CUSTOM_SETTINGS_PATH = BASE / "website/custom_settings.py"
 CUSTOM_SETTINGS_PATH.touch()
 
 (BASE / "website/static").mkdir(exist_ok=True)
-
-_T = TypeVar("_T")
 
 TEST = None
 

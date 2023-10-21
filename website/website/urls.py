@@ -14,11 +14,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 import re
+
 from django.conf import settings
 from django.contrib import admin
-from django.http import HttpResponse
-from django.urls import URLPattern, include, path, re_path, URLResolver
-from django.utils.translation import get_language_from_path, get_supported_language_variant
+from django.urls import URLResolver, include, path, re_path
+from django.utils.translation import get_supported_language_variant
 from django.utils.translation.trans_real import language_code_prefix_re
 from django.views.static import serve
 
@@ -29,9 +29,9 @@ from .views import (
     handler_404,
     handler_500,
     make_error,
+    redirect_lang_url,
     reload_website,
     robots,
-    redirect_lang_url,
     songs_list,
     upload_image,
 )

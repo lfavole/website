@@ -10,6 +10,7 @@ class DataInline(GenericTabularInline):
     """
     Inline for files/images.
     """
+
     readonly_fields = ("file",)
     extra = 0
 
@@ -24,6 +25,7 @@ class FilesInline(DataInline):
     """
     Inline for files.
     """
+
     model = File
 
 
@@ -31,6 +33,7 @@ class ImagesInline(DataInline):
     """
     Inline for images.
     """
+
     model = Image
 
 

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 
+import custom_settings
 from debug_toolbar.settings import PANELS_DEFAULTS
 from debug_toolbar.toolbar import DebugToolbar
 from django.http import HttpRequest
@@ -19,8 +20,6 @@ from django.templatetags.static import static
 from django.urls import reverse_lazy
 from django.utils.functional import lazy
 from django.utils.translation import gettext
-
-import custom_settings
 
 TEST = custom_settings.TEST
 
@@ -99,7 +98,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
-HTML_MINIFY = True
 
 DEBUG_TOOLBAR_CONFIG = {
     "SHOW_TOOLBAR_CALLBACK": "website.settings.show_toolbar",
@@ -130,6 +128,7 @@ def observe_request(request: HttpRequest):
     if request.headers.get("X-Requested-With") == "XMLHttpRequest":
         return False
     return True
+
 
 ROOT_URLCONF = "website.urls"
 
@@ -284,7 +283,8 @@ RECAPTCHA_PRIVATE_KEY = custom_settings.RECAPTCHA_PRIVATE_KEY
 def add_url(text, url):
     return text % {
         "message": gettext(
-            "You must first create the item, then insert the image. Don't worry, the image will be uploaded after reloading."
+            "You must first create the item, then insert the image. "
+            "Don't worry, the image will be uploaded after reloading."
         ),
         "url": url,
     }

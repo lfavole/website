@@ -1,5 +1,4 @@
 from django.views import generic
-
 from globals.views import BasePageView
 
 from .models import Page

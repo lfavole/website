@@ -8,13 +8,12 @@ from pathlib import Path
 from typing import Type
 from urllib.parse import quote, urljoin, urlparse
 from wsgiref.util import is_hop_by_hop
-from django.urls import resolve
 
 import requests
 from blog.models import Image
 from django.conf import settings
-from django.core.exceptions import PermissionDenied
 from django.contrib.auth.views import LogoutView
+from django.core.exceptions import PermissionDenied
 from django.db.models import Model
 from django.http import (
     HttpRequest,
@@ -29,6 +28,7 @@ from django.http import (
 from django.http.response import FileResponse, Http404
 from django.shortcuts import redirect, render
 from django.template import Context, Engine
+from django.urls import resolve
 from django.utils.encoding import force_bytes
 from django.utils.translation import get_language_from_path
 from django.views.debug import ExceptionReporter, technical_404_response
@@ -157,8 +157,7 @@ def reload_website(request: HttpRequest):
 
     # The superusers can reload the website
     if request.user.is_superuser:  # type: ignore
-        fetch()
-        return HttpResponse("success")
+        return HttpResponse(fetch(pipe=True))
 
     if request.method != "POST":
         return HttpResponseNotAllowed(["GET", "POST"])
@@ -201,10 +200,9 @@ def reload_website(request: HttpRequest):
         return HttpResponse("pong")
     if event == "push":
         try:
-            return HttpResponse(fetch())
+            return HttpResponse(fetch(pipe=True))
         except:  # noqa
             return HttpResponseServerError("Failed to fetch changes")
-        return HttpResponse("success")
 
     # In case we receive an event that's not ping or push
     return HttpResponse(status=204)
