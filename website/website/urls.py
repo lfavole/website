@@ -13,10 +13,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+import re
 from django.conf import settings
-from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
-from django.urls import include, path, re_path
+from django.http import HttpResponse
+from django.urls import URLPattern, include, path, re_path, URLResolver
+from django.utils.translation import get_language_from_path, get_supported_language_variant
+from django.utils.translation.trans_real import language_code_prefix_re
 from django.views.static import serve
 
 from .views import (
@@ -28,6 +31,7 @@ from .views import (
     make_error,
     reload_website,
     robots,
+    redirect_lang_url,
     songs_list,
     upload_image,
 )
@@ -35,8 +39,43 @@ from .views import (
 handler404 = handler_404
 handler500 = handler_500
 
+
+class LocalePrefixPattern:
+    converters = {}
+    name = None
+
+    @property
+    def regex(self):
+        # This is only used by reverse() and cached in _reverse_dict.
+        return re.compile("^" + language_code_prefix_re.pattern[2:])
+
+    def match(self, path):
+        match = re.match("^" + language_code_prefix_re.pattern[2:], path)
+        if not match:
+            return None
+
+        lang_code = match.group(1)
+        try:
+            get_supported_language_variant(lang_code)
+            path = path[len(lang_code) + 1 :]
+            return path, (), {"path": path}
+        except LookupError:
+            return None
+
+    def check(self):
+        return []
+
+    def describe(self):
+        return "'{}'".format(self)
+
+    def __str__(self):
+        return "<language>/"
+
+
 app_name = "website"
-urlpatterns = i18n_patterns(
+urlpatterns = [
+    URLResolver(LocalePrefixPattern(), [re_path(r"(?P<path>.*)", redirect_lang_url)]),  # type: ignore
+    path("500", make_error),
     path("admin/docs/", include("django.contrib.admindocs.urls")),
     path("admin/logout/", NewLogoutView.as_view()),
     path("admin/", admin.site.urls),
@@ -47,16 +86,15 @@ urlpatterns = i18n_patterns(
     path("debug/", include("debug_toolbar.urls")),
     path("errors/", include("errors.urls", namespace="errors")),
     path("pseudos/", include("pseudos.urls", namespace="pseudos")),
+    path("reload-website", reload_website),
     re_path("songs-list/(?P<path>.*)", songs_list),
     path("telegram-bot/", include("telegram_bot.urls", namespace="telegram_bot")),
     path("tinymce/upload-image", upload_image, name="tinymce-upload-image"),
     path("tinymce/", include("tinymce.urls")),
-    path("", include("globals.urls")),
-) + [
     path("google<str:id>.html", google),
     path("robots.txt", robots),
-    path("500", make_error),
-    path("reload-website", reload_website),
+    path("", include("django.conf.urls.i18n")),
+    path("", include("globals.urls")),
 ]
 
 if not settings.PYTHONANYWHERE:

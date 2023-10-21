@@ -20,14 +20,16 @@ from django.http import (
     HttpResponse,
     HttpResponseForbidden,
     HttpResponseNotAllowed,
+    HttpResponseRedirect,
     HttpResponseServerError,
     JsonResponse,
     StreamingHttpResponse,
 )
 from django.http.response import FileResponse, Http404
-from django.shortcuts import redirect, render, resolve_url
+from django.shortcuts import redirect, render
 from django.template import Context, Engine
 from django.utils.encoding import force_bytes
+from django.utils.translation import get_language_from_path
 from django.views.debug import ExceptionReporter, technical_404_response
 from django.views.decorators.csrf import csrf_exempt
 from errors.models import Error
@@ -39,6 +41,24 @@ except ImportError:
     fetch = None
 
 DATA = Path(__file__).resolve().parent.parent.parent / "data"
+
+
+def redirect_lang_url(request, path):
+    lang = get_language_from_path(request.path)
+    response = HttpResponseRedirect("/" + path)
+    if not lang:
+        return response
+    response.set_cookie(
+        settings.LANGUAGE_COOKIE_NAME,
+        lang,
+        max_age=settings.LANGUAGE_COOKIE_AGE,
+        path=settings.LANGUAGE_COOKIE_PATH,
+        domain=settings.LANGUAGE_COOKIE_DOMAIN,
+        secure=settings.LANGUAGE_COOKIE_SECURE,
+        httponly=settings.LANGUAGE_COOKIE_HTTPONLY,
+        samesite=settings.LANGUAGE_COOKIE_SAMESITE,
+    )
+    return response
 
 
 class NewLogoutView(LogoutView):
