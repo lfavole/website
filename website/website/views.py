@@ -1,7 +1,8 @@
 import hmac
+import importlib
 import os.path
 import sys
-from hashlib import sha1
+from hashlib import sha256
 from ipaddress import ip_address, ip_network
 from pathlib import Path
 from typing import Type
@@ -35,8 +36,8 @@ from django.views.decorators.csrf import csrf_exempt
 from errors.models import Error
 
 try:
-    sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent / "scripts"))
-    from fetch import main as fetch
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
+    fetch = importlib.import_module(".fetch", "scripts").main
 except ImportError:
     fetch = None
 
@@ -176,18 +177,18 @@ def reload_website(request: HttpRequest):
         return forbidden
 
     # Verify the request signature
-    header_signature = request.headers.get("X-Hub-Signature")
+    header_signature = request.headers.get("X-Hub-Signature-256")
     if header_signature is None:
         return forbidden
 
     sha_name, signature = header_signature.split("=", 1)
-    if sha_name != "sha1":
+    if sha_name != "sha256":
         return HttpResponseServerError("Operation not supported.", status=501)
 
     mac = hmac.new(
         force_bytes(key),
         msg=force_bytes(request.body),
-        digestmod=sha1,
+        digestmod=sha256,
     )
     if not hmac.compare_digest(mac.hexdigest(), signature):
         return forbidden
