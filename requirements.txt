@@ -1,10 +1,13 @@
 requests ~= 2.0
 Django ~= 4.0
 django-admin-sortable2 ~= 2.1
+django-allauth ~= 0.57
 django-cleanup ~= 7.0
 django-debug-toolbar ~= 4.2
-django-allauth ~= 0.57
+django-tinymce ~= 3.6
 minify-html ~= 0.11
 easy-thumbnails ~= 2.8
 Pillow ~= 9.0
 pyphen ~= 0.14
+qrcode ~= 7.3
+Unidecode ~= 1.3
