@@ -157,7 +157,7 @@ def reload_website(request: HttpRequest):
 
     # The superusers can reload the website
     if request.user.is_superuser:  # type: ignore
-        return HttpResponse(fetch(pipe=True))
+        return HttpResponse(fetch(pipe=True), "text/plain")
 
     if request.method != "POST":
         return HttpResponseNotAllowed(["GET", "POST"])
@@ -197,10 +197,10 @@ def reload_website(request: HttpRequest):
     event = request.headers.get("X-Github-Event", "ping")
 
     if event == "ping":
-        return HttpResponse("pong")
+        return HttpResponse("pong", "text/plain")
     if event == "push":
         try:
-            return HttpResponse(fetch(pipe=True))
+            return HttpResponse(fetch(pipe=True), "text/plain")
         except:  # noqa
             return HttpResponseServerError("Failed to fetch changes")
 
