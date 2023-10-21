@@ -16,7 +16,7 @@ def pattern(test):
     return wrapper
 
 
-BOT_TOKEN = custom_settings.BOT_TOKEN
+BOT_TOKEN = getattr(custom_settings, "BOT_TOKEN", "")
 BASE_URL = f"https://api.telegram.org/bot{BOT_TOKEN}"
 
 
