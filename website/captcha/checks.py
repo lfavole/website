@@ -18,7 +18,7 @@ def recaptcha_key_check(*_args, **_kwargs):
 
     if not settings.TEST and (private_key == TEST_PRIVATE_KEY or public_key == TEST_PUBLIC_KEY):
         errors.append(
-            checks.Error(
+            checks.Warning(
                 "RECAPTCHA_PRIVATE_KEY or RECAPTCHA_PUBLIC_KEY is making use of the Google test keys "
                 "and will not behave as expected in a production environment",
                 hint="Update settings.RECAPTCHA_PRIVATE_KEY and/or settings.RECAPTCHA_PUBLIC_KEY. "
