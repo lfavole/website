@@ -205,6 +205,7 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 ACCOUNT_SIGNUP_FORM_CLASS = "users.forms.AllAuthSignupForm"
+SOCIALACCOUNT_STORE_TOKENS = True
 # Set the allauth adapter to be the 2FA adapter.
 ACCOUNT_ADAPTER = "users.adapter.Adapter"
 
