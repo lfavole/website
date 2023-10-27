@@ -83,6 +83,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.github",
+    "allauth.socialaccount.providers.telegram",
 ]
 SITE_ID = 1
 
@@ -226,6 +227,9 @@ SOCIALACCOUNT_PROVIDERS = {
         "SCOPE": [
             "user",
         ],
+    },
+    "telegram": {
+        "AUTH_PARAMS": {"auth_date_validity": 30},
     },
 }
 
