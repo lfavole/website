@@ -25,6 +25,7 @@ from django.views.static import serve
 from .views import (
     NewLogoutView,
     account_index,
+    export,
     google,
     handler_404,
     handler_500,
@@ -86,6 +87,7 @@ urlpatterns = [
     path("debug/", include("debug.urls", namespace="debug")),
     path("debug/", include("debug_toolbar.urls")),
     path("errors/", include("errors.urls", namespace="errors")),
+    path("export/<format>/<app_label>/<model_name>/<elements_pk>", export, name="export"),
     path("pseudos/", include("pseudos.urls", namespace="pseudos")),
     path("reload-website", reload_website),
     re_path("songs-list/(?P<path>.*)", songs_list),

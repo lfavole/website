@@ -1,5 +1,7 @@
+import datetime as dt
 import hmac
 import importlib
+import mimetypes
 import os.path
 import sys
 from hashlib import sha256
@@ -11,11 +13,16 @@ from wsgiref.util import is_hop_by_hop
 
 import requests
 from blog.models import Image
+from django.apps import apps
 from django.conf import settings
 from django.contrib.auth.views import LogoutView
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import PermissionDenied
+from django.core.serializers import get_serializer
 from django.db.models import Model
 from django.http import (
+    FileResponse,
+    Http404,
     HttpRequest,
     HttpResponse,
     HttpResponseForbidden,
@@ -25,8 +32,7 @@ from django.http import (
     JsonResponse,
     StreamingHttpResponse,
 )
-from django.http.response import FileResponse, Http404
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.template import Context, Engine
 from django.urls import resolve
 from django.utils.encoding import force_bytes
@@ -34,6 +40,9 @@ from django.utils.translation import get_language_from_path
 from django.views.debug import ExceptionReporter, technical_404_response
 from django.views.decorators.csrf import csrf_exempt
 from errors.models import Error
+
+from website.utils.http import encode_filename
+from website.utils.permission import has_permission
 
 try:
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
@@ -142,6 +151,55 @@ def handler_500(request, _template_name=None):
 
 def account_index(request):
     return render(request, "account/index.html")
+
+
+def export(request, format: str, app_label: str, model_name: str, elements_pk: str):
+    # Run the operations that don't need the database first
+    pk_list = None if elements_pk == "all" else elements_pk.split(",")
+    serializer = get_serializer(format)()
+
+    # import this now because it is assigned during serializers loading
+    from django.core.serializers import _serializers
+
+    for ext, module in _serializers.items():
+        if module.__name__ == serializer.__module__:
+            extension = ext
+            break
+    else:
+        extension = "txt"
+    if extension == "python":
+        extension = "py"
+
+    content_type = get_object_or_404(ContentType, app_label=app_label, model=model_name)
+    model = content_type.model_class()
+
+    if not model:
+        raise Http404
+
+    # Check for permission
+    if not has_permission(request, model):
+        if not settings.DEBUG:
+            raise Http404
+        return HttpResponseForbidden("Permission denied.")
+
+    queryset = model.objects.all()
+    if pk_list:
+        queryset = queryset.filter(pk__in=pk_list)
+    if model.__name__.lower() == "meeting":
+        queryset2 = apps.get_model(model._meta.app_label, "Attendance").objects.filter(meeting__in=queryset)
+        queryset = list(queryset) + list(queryset2)
+    if not isinstance(queryset, list):
+        queryset = list(queryset)
+
+    response = HttpResponse()
+
+    date = dt.datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"export_{content_type.app_label}_{content_type.model}_{date}.{extension}"
+    response.headers["Content-Type"] = mimetypes.guess_type(f"x.{extension}")[0]  # type: ignore
+    response.headers["Content-Disposition"] = "attachment; " + encode_filename(filename)  # type: ignore
+
+    serializer.serialize(queryset, stream=response)
+    return response
 
 
 @csrf_exempt

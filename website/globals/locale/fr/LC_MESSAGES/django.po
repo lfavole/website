@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-20 15:11+0200\n"
+"POT-Creation-Date: 2023-10-27 13:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,46 +17,60 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: .\globals\admin.py:41
+#, python-format
+msgid "Export selected %(verbose_name_plural)s"
+msgstr "Exporter les %(verbose_name_plural)s sélectionné·e·s"
+
 #: .\globals\apps.py:8
 msgid "Global configuration"
 msgstr "Configuration globale"
 
-#: .\globals\models.py:10
-msgid "order"
-msgstr "ordre"
-
-#: .\globals\models.py:11 .\globals\models.py:36
-msgid "title"
-msgstr "titre"
-
-#: .\globals\models.py:12
-msgid "URL"
-msgstr "URL"
-
-#: .\globals\models.py:13
-msgid "hidden link"
-msgstr "lien caché"
-
-#: .\globals\models.py:19
-msgid "parent link"
-msgstr "lien précédent"
-
-#: .\globals\models.py:23
-msgid "link"
-msgstr "lien"
-
-#: .\globals\models.py:35
+#: .\globals\models.py:12 .\globals\models.py:70
 msgid "slug"
 msgstr "ID"
 
-#: .\globals\models.py:37
+#: .\globals\models.py:13 .\globals\models.py:71
+msgid "title"
+msgstr "titre"
+
+#: .\globals\models.py:14 .\globals\models.py:72
 msgid "content"
 msgstr "contenu"
 
-#: .\globals\models.py:40
+#: .\globals\models.py:15
+#, fuzzy
+#| msgid "hidden link"
+msgid "hidden page"
+msgstr "lien caché"
+
+#: .\globals\models.py:47
+msgid "order"
+msgstr "ordre"
+
+#: .\globals\models.py:48
+msgid "URL"
+msgstr "URL"
+
+#: .\globals\models.py:54
+#, fuzzy
+#| msgid "parent link"
+msgid "parent page"
+msgstr "lien précédent"
+
+#: .\globals\models.py:61
+msgid "page"
+msgstr ""
+
+#: .\globals\models.py:75
+#, python-format
+msgid "Setting '%s'"
+msgstr ""
+
+#: .\globals\models.py:78
 msgid "special content"
 msgstr "contenu spécial"
 
-#: .\globals\models.py:41
+#: .\globals\models.py:79
 msgid "special contents"
 msgstr "contenus spéciaux"

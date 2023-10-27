@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-20 15:11+0200\n"
+"POT-Creation-Date: 2023-10-27 13:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,7 +38,7 @@ msgstr ""
 "Votre mot de passe ne doit pas avoir été trouvé dans une faille de sécurité "
 "majeure."
 
-#: .\website\settings.py:287
+#: .\website\settings.py:290
 msgid ""
 "You must first create the item, then insert the image. Don't worry, the "
 "image will be uploaded after reloading."
@@ -141,6 +141,6 @@ msgstr "fin"
 msgid "Account"
 msgstr "Compte"
 
-#: .\website\templatetags\nav.py:27
+#: .\website\templatetags\nav.py:33
 msgid "Hidden page:"
 msgstr "Page cachée :"

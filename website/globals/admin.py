@@ -4,6 +4,8 @@ from adminsortable2.admin import SortableAdminMixin
 from django.contrib import admin
 from django.db import models
 from django.db.models.fields import Field
+from django.shortcuts import redirect
+from django.utils.translation import gettext_lazy as _
 from tinymce.widgets import AdminTinyMCE
 
 from .models import Page, Setting
@@ -34,3 +36,18 @@ class SettingAdmin(admin.ModelAdmin):
         if obj and obj.slug == "home" and isinstance(db_field, models.TextField):
             kwargs["widget"] = AdminTinyMCE
         return super().formfield_for_dbfield(db_field, request, **kwargs)
+
+
+@admin.action(description=_("Export selected %(verbose_name_plural)s"))
+def export_selected(modeladmin, request, queryset):
+    meta = modeladmin.model._meta
+    return redirect(
+        "export",
+        "json",
+        meta.app_label,
+        meta.model_name,
+        ",".join(str(element.pk) for element in queryset),
+    )
+
+
+admin.site.add_action(export_selected)
