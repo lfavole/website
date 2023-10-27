@@ -59,13 +59,15 @@ INSTALLED_APPS = [
     "django.contrib.admindocs",
     "django.contrib.auth",
     "django.contrib.contenttypes",
-    "django.contrib.sessions",
     "django.contrib.messages",
+    "django.contrib.sessions",
+    "django.contrib.sites",
     "django.contrib.staticfiles",
     # custom apps
     "adminsortable2",
     "debug_toolbar",
     "django_cleanup.apps.CleanupConfig",
+    "django_comments",
     "easy_thumbnails",
     "tinymce",
     # apps with urls.py (automatic)

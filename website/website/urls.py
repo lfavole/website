@@ -82,6 +82,7 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path("accounts/", account_index, name="account_index"),
     path("blog/", include("blog.urls", namespace="blog")),
+    path("comments/", include("django_comments.urls")),
     path("debug/", include("debug.urls", namespace="debug")),
     path("debug/", include("debug_toolbar.urls")),
     path("errors/", include("errors.urls", namespace="errors")),
