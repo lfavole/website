@@ -1,0 +1,58 @@
+/* Messages */
+ul.messagelist {
+    padding: 0;
+    margin: 0;
+    li {
+        display: block;
+        padding: 0.5rem 1rem;
+        margin: 0.5rem auto;
+        word-break: break-word;
+        max-width: 1000px;
+        border-radius: 9999px;
+        @mixin icon-style {
+            margin: -0.1667rem 0.3em -0.1667rem 0;
+            width: 1.5em;
+            height: 1.5em;
+        }
+        &.debug {
+            background-color: #ce93d8;
+            border-color: #7b1fa2;
+            &::before {
+                @include icon("bug");
+                @include icon-style;
+            }
+        }
+        &.info {
+            background-color: #90caf9;
+            border: 4px solid #1976d2;
+            &::before {
+                @include icon("info");
+                @include icon-style;
+            }
+        }
+        &.success {
+            background-color: #c5e1a5;
+            border-color: #689f38;
+            &::before {
+                @include icon("check");
+                @include icon-style;
+            }
+        }
+        &.warning {
+            background-color: #fff59d;
+            border-color: #fbc02d;
+            &::before {
+                @include icon("triangle-exclamation");
+                @include icon-style;
+            }
+        }
+        &.error {
+            background-color: #ffab91;
+            border-color: #e64a19;
+            &::before {
+                @include icon("xmark");
+                @include icon-style;
+            }
+        }
+    }
+}

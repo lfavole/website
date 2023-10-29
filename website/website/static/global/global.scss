@@ -1,0 +1,24 @@
+@import "mixins";
+@import "variables";
+
+*, ::before, ::after {
+    box-sizing: border-box;
+}
+
+body, input, button, select, textarea {
+    font-family: $default-font;
+}
+
+.sr-only {
+    position: absolute;
+    clip: rect(1px, 1px, 1px, 1px);
+    padding: 0;
+    border: 0;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+}
+
+@import "header-navbar";
+@import "messages";
+@import "main";

@@ -1,0 +1,115 @@
+/* Header and navbar */
+.navbar {
+    padding: 1rem;
+    background-color: #efefef;
+	align-items: center;
+}
+header {
+    display: flex;
+    align-items: stretch;
+    white-space: nowrap;
+    height: 3.25rem;
+
+    img {
+        width: 4rem;
+        height: 4em;
+        border-radius: 2rem;
+        margin: -0.5rem 0;
+    }
+    .title {
+        font-size: 2.5rem;
+        text-align: center;
+        padding: 0 0.5em;
+        display: inline;
+    }
+}
+
+
+@include phone {
+    input.navbar-checkbox:checked + nav {
+        display: block;
+    }
+    .navbar-menu {
+        margin-top: 1rem;
+        border-top: 1px solid black;
+        background: none;
+        box-shadow: none;
+    }
+}
+nav {
+    ul {
+        font-size: 1.5rem;
+        margin: auto;
+    }
+    li {
+        position: relative;
+        @include phone {
+            padding-left: 0.5rem;
+        }
+        @include computer {
+            display: inline-block;
+            &:not(:last-child)::after {
+                content: "";
+                display: inline-block;
+                width: 0.6em;
+                border-bottom: 0.0625em solid black;
+                margin: 0.25em 0.2em;
+            }
+        }
+        &.has-subpages > a::after {
+            content: "";
+            display: inline-block;
+            margin-left: 0.3em;
+            margin-right: 0.3em;
+            width: 0.55em;
+            height: 0.55em;
+            border: 0.1875em solid #485fc7;
+            border-left: 0;
+            border-top: 0;
+            border-radius: 0.09375em;
+            transform: translateY(-25%) rotate(45deg);
+        }
+    }
+
+    @include computer {
+        ul ul {
+            opacity: 0;
+            pointer-events: none;
+            min-width: 100%;
+            max-width: 500px;
+            position: absolute;
+            left: 0%;
+            top: 100%;
+            z-index: 1;
+            line-height: 1.2em;
+            border-radius: 0 0 8px 8px;
+            border-top: 1px solid black;
+            background-color: #cccccc;
+        }
+        li:hover > ul,
+        a:focus + ul,
+        ul ul:focus-within {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        ul ul li {
+            display: block;
+            margin: 4px 8px;
+        }
+    }
+    @include phone {
+        ul ul {
+            opacity: 1;
+            pointer-events: auto;
+            margin-left: 1em;
+            li {
+                border-left: 1px solid #485fc7;
+            }
+        }
+    }
+}
+@include phone {
+    .navbar .user {
+        margin-top: 0.5rem;
+    }
+}

@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # custom apps
     "adminsortable2",
+    "compressor",
     "debug_toolbar",
     "django_cleanup.apps.CleanupConfig",
     "django_comments",
@@ -268,6 +269,14 @@ STATICFILES_DIRS = [
     BASE_DIR / "src/",
     BASE_DIR.parent / "data/static/",
 ]
+STATICFILES_FINDERS = [
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    "compressor.finders.CompressorFinder",
+]
+COMPRESS_PRECOMPILERS = (
+    ("text/x-scss", "django_libsass.SassCompiler"),
+)
 STATIC_ROOT = BASE_DIR / "static/"
 
 MEDIA_URL = "/media/"

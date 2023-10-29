@@ -371,3 +371,7 @@ function mode_nuit_auto(jr) {
 }
 */
 var mode_nuit_auto = mode_nuit.auto;
+
+$(function() {
+    
+});
