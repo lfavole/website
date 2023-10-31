@@ -1,3 +1,4 @@
+from pathlib import Path, PurePosixPath
 from typing import Type
 
 import requests
@@ -5,20 +6,25 @@ from django.conf import settings
 from django.core.cache import cache
 from django.db.models import Model
 from django.db.models.query_utils import Q
-from django.http import Http404, HttpResponse, HttpResponsePermanentRedirect
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponsePermanentRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils.timezone import now
 from django.views import generic
 from globals.google_drive import FOLDER_MIMETYPE, get_google_drive_token, google_drive_files, populate_file_list  # noqa
 
+import custom_settings
 from website.utils.http import encode_filename
 from website.utils.permission import has_permission_for_view
 
 from .models import Page, Setting
 
 
-def google_drive(request, path: str):
+def google_drive(request: HttpRequest, path: str):
+    if request.user.username == custom_settings.ADMIN_NAME:  # type: ignore
+        folders = [""]
+    else:
+        folders = custom_settings.GOOGLE_DRIVE_FOLDERS
     token = get_google_drive_token(request)
     auth_header = {"Authorization": f"Bearer {token.token}"}
 
@@ -26,11 +32,37 @@ def google_drive(request, path: str):
     if parts == [""]:
         parts = []
 
+    path_obj = PurePosixPath(path)
+    rem_parts_0 = []
+    ok = False
+    ok_all = False
+    for folder in folders:
+        path_to_check = PurePosixPath(folder)
+        parents_and_self = [path_to_check, *path_to_check.parents]
+        if path_to_check in [path_obj, *path_obj.parents]:
+            # it's a child of an authorized folder => show all files, stop everything
+            ok_all = True
+            ok = True
+            break
+        prev_parent = None
+        for parent in parents_and_self:
+            if path_obj == parent:
+                # allow this folder because a subfolder is an authorized folder
+                ok = True
+                if prev_parent:
+                    # save the authorized folder name (previous parent)
+                    rem_parts_0.append(prev_parent.name)
+                break
+            prev_parent = parent
+
+    if not ok:
+        raise Http404
+
     global google_drive_files
     google_drive_files = cache.get("google_drive_files") or google_drive_files
 
     ok_parts = []
-    file_tree: dict | tuple[dict, dict] = google_drive_files
+    file_tree: dict | tuple[dict, dict] | None = google_drive_files
     file_el = {}
     while parts:
         file_id = file_el.get("id", "root")
@@ -57,11 +89,23 @@ def google_drive(request, path: str):
     if isinstance(file_tree, tuple):  # is it a directory?
         file_id = file_el.get("id", "root")
         try:
+            # fetch the files
             populate_file_list(request, file_id, ok_parts)
         except KeyError:
             raise Http404
 
     cache.set("google_drive_files", google_drive_files)
+
+    if not ok_all:
+        file_tree = (
+            {k: v for k, v in file_tree[0].items() if k in rem_parts_0},
+            {k: v for k, v in file_tree[1].items() if v["name"] in rem_parts_0},
+        ) if isinstance(file_tree, tuple) else (
+            file_tree if file_tree["name"] in rem_parts_0 else None
+        )
+
+    if file_tree is None:
+        raise Http404
 
     if isinstance(file_tree, tuple):  # is it a directory?
         if settings.APPEND_SLASH and path and not path.endswith("/"):
