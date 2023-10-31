@@ -1,4 +1,5 @@
-from pathlib import Path, PurePosixPath
+import datetime as dt
+from pathlib import PurePosixPath
 from typing import Type
 
 import requests
@@ -7,9 +8,9 @@ from django.core.cache import cache
 from django.db.models import Model
 from django.db.models.query_utils import Q
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponsePermanentRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.utils.timezone import now
+from django.utils.timezone import now, get_default_timezone
 from django.views import generic
 from globals.google_drive import FOLDER_MIMETYPE, get_google_drive_token, google_drive_files, populate_file_list  # noqa
 
@@ -17,7 +18,47 @@ import custom_settings
 from website.utils.http import encode_filename
 from website.utils.permission import has_permission_for_view
 
+from .forms import ContactCaptchaForm
 from .models import Page, Setting
+
+CAPTCHA_EXPIRE_DURATION = dt.timedelta(seconds=3600)
+CAPTCHA_KEY = "contact_last_captcha_time"
+
+
+def _captcha_expired(request):
+    last_check_time = request.session.get(CAPTCHA_KEY)
+    if not last_check_time:
+        return True
+    last_check_time = dt.datetime.fromisoformat(last_check_time)
+    return last_check_time + CAPTCHA_EXPIRE_DURATION < now()
+
+
+def contact_captcha(request: HttpRequest):
+    if not _captcha_expired(request):
+        return redirect("contact")
+
+    if request.method == "POST":
+        form = ContactCaptchaForm(request.POST)
+        if form.is_valid():
+            request.session[CAPTCHA_KEY] = str(now())
+            return redirect("contact")
+    else:
+        form = ContactCaptchaForm()
+    return render(request, "home/contact_captcha.html", {"form": form})
+
+
+def contact(request):
+    if _captcha_expired(request):
+        return redirect("contact_captcha")
+
+    return render(
+        request,
+        "home/contact.html",
+        {
+            "app": "home",
+            "contact": get_object_or_404(Setting, slug="contact"),
+        },
+    )
 
 
 def google_drive(request: HttpRequest, path: str):

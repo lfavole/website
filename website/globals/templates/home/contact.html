@@ -1,0 +1,37 @@
+{% extends "website/site_base.html" %}
+{% load compress %}
+
+{% block title %}{{ contact.title }}{% endblock %}
+{% block css %}
+{{ block.super }}
+{% compress css %}
+<style type="text/x-scss">
+@import "global/mixins";
+.email::before {
+    @include icon("envelope");
+}
+.github::before {
+    @include icon("github", "brands");
+}
+.gitlab::before {
+    @include icon("gitlab", "brands");
+}
+.strava::before {
+    @include icon("strava", "brands");
+}
+.openstreetmap::before {
+    @include icon("map");
+}
+.codepen::before {s
+    @include icon("codepen", "brands");
+}
+.content p::before {
+    margin-right: 0.3em;
+}
+</style>
+{% endcompress %}
+{% endblock css %}
+
+{% block content %}
+{{ contact.content|safe }}
+{% endblock %}

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+import re
 
 import custom_settings
 from debug_toolbar.settings import PANELS_DEFAULTS
@@ -274,9 +275,7 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
     "compressor.finders.CompressorFinder",
 ]
-COMPRESS_PRECOMPILERS = (
-    ("text/x-scss", "django_libsass.SassCompiler"),
-)
+COMPRESS_PRECOMPILERS = (("text/x-scss", "django_libsass.SassCompiler"),)
 STATIC_ROOT = BASE_DIR / "static/"
 
 MEDIA_URL = "/media/"
@@ -310,8 +309,8 @@ def add_url(text, url):
 add_url_lazy = lazy(add_url)
 static_lazy = lazy(static)
 TINYMCE_JS_URL = (
-    STATIC_URL + "vendor/tinymce/tinymce.min.js"
-    if custom_settings.OFFLINE
+    static_lazy("vendor/tinymce/tinymce.min.js")
+    if custom_settings.OFFLINE  # type: ignore
     else "https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js"
 )
 TINYMCE_EXTRA_MEDIA = {"css": {"all": ("/static/tinymce/tinymce.css",)}, "js": ("/static/tinymce/tinymce.js",)}
@@ -331,7 +330,7 @@ TINYMCE_DEFAULT_CONFIG = {
         "image media link"
     ),
     "relative_urls": False,
-    "extended_valid_elements": "*[*]",  # allow all elements
+    "extended_valid_elements": "*[*],+i[class=fa-*]",  # allow all elements, keep Font Awesome icons
     "image_advtab": True,
     # pylint: disable=C0209
     "images_upload_handler": add_url_lazy(

@@ -1,0 +1,14 @@
+{% extends "website/site_base.html" %}
+{% load i18n %}
+
+{% block page-title %}{% trans "Contact" %}{% endblock %}
+
+{% block content %}
+<h1>{% trans "Contact" %}</h1>
+<p>{% trans "Please complete the CAPTCHA to access to my contact information." %}</p>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <p><input type="submit" value="Valider"></p>
+</form>
+{% endblock %}
