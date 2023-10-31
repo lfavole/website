@@ -10,15 +10,21 @@ from django.db.models.query_utils import Q
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponsePermanentRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.utils.timezone import now, get_default_timezone
+from django.utils.timezone import now
 from django.views import generic
-from globals.google_drive import FOLDER_MIMETYPE, get_google_drive_token, google_drive_files, populate_file_list  # noqa
 
 import custom_settings
 from website.utils.http import encode_filename
 from website.utils.permission import has_permission_for_view
 
 from .forms import ContactCaptchaForm
+from .google_drive import (  # noqa
+    FOLDER_MIMETYPE,
+    get_export_formats,
+    get_google_drive_token,
+    google_drive_files,
+    populate_file_list,
+)
 from .models import Page, Setting
 
 CAPTCHA_EXPIRE_DURATION = dt.timedelta(seconds=3600)
@@ -139,10 +145,12 @@ def google_drive(request: HttpRequest, path: str):
 
     if not ok_all:
         file_tree = (
-            {k: v for k, v in file_tree[0].items() if k in rem_parts_0},
-            {k: v for k, v in file_tree[1].items() if v["name"] in rem_parts_0},
-        ) if isinstance(file_tree, tuple) else (
-            file_tree if file_tree["name"] in rem_parts_0 else None
+            (
+                {k: v for k, v in file_tree[0].items() if k in rem_parts_0},
+                {k: v for k, v in file_tree[1].items() if v["name"] in rem_parts_0},
+            )
+            if isinstance(file_tree, tuple)
+            else (file_tree if file_tree["name"] in rem_parts_0 else None)
         )
 
     if file_tree is None:
@@ -161,16 +169,26 @@ def google_drive(request: HttpRequest, path: str):
             },
         )
 
+    export_formats = get_export_formats(request)
     response = HttpResponse()
-    response["Content-Type"] = (
-        file_tree.get("mimeType", "application/octet-stream") + "; " + encode_filename(file_tree.get("name", ""))
-    )
-    req = requests.get(
-        f"https://www.googleapis.com/drive/v3/files/{file_tree.get('id', '')}",
-        {"alt": "media"},
-        headers=auth_header,
-        stream=True,
-    )
+    if file_tree.get("mimeType", "") in export_formats:
+        response["Content-Type"] = export_formats[file_tree.get("mimeType", "")]
+        req = requests.get(
+            f"https://www.googleapis.com/drive/v3/files/{file_tree.get('id', '')}/export",
+            {"mimeType": response["Content-Type"]},
+            headers=auth_header,
+            stream=True,
+        )
+    else:
+        response["Content-Type"] = (
+            file_tree.get("mimeType", "application/octet-stream") + "; " + encode_filename(file_tree.get("name", ""))
+        )
+        req = requests.get(
+            f"https://www.googleapis.com/drive/v3/files/{file_tree.get('id', '')}",
+            {"alt": "media"},
+            headers=auth_header,
+            stream=True,
+        )
     response.content = req.iter_content(65536)
     return response
 

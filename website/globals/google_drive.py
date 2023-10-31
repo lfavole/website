@@ -61,3 +61,31 @@ def populate_file_list(request, folder_id="root", path: list[str] | None = None,
                 file_tree[0][file_name] = ({}, {})
             if recursive:
                 populate_file_list(request, file.get("id", ""), path + [file_name], True)
+
+
+_export_formats = {}
+
+
+def get_export_formats(request):
+    global _export_formats
+    if _export_formats:
+        return _export_formats
+
+    token = get_google_drive_token(request)
+    auth_header = {"Authorization": f"Bearer {token.token}"}
+    data = requests.get(
+        "https://www.googleapis.com/drive/v3/about",
+        {"fields": "exportFormats"},
+        headers=auth_header,
+    ).json()
+
+    ret = {}
+    for format, export_formats in data.get("exportFormats", {}).items():
+        for export_format in export_formats:
+            if "office" in export_format:
+                ret[format] = export_format
+                break
+        else:
+            ret[format] = export_formats[0]
+    _export_formats = ret
+    return ret
