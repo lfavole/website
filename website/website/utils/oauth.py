@@ -1,7 +1,8 @@
 from datetime import timedelta
+
 import requests
-from allauth.socialaccount.models import SocialApp, SocialToken
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter, get_adapter
+from allauth.socialaccount.models import SocialApp, SocialToken
 from django.utils.timezone import now
 
 

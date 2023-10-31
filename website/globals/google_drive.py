@@ -1,9 +1,8 @@
-from allauth.socialaccount.models import SocialToken
 import requests
-
+from allauth.socialaccount.models import SocialToken
 from custom_settings import ADMIN_NAME
-from website.utils.oauth import ensure_valid_token
 
+from website.utils.oauth import ensure_valid_token
 
 FOLDER_MIMETYPE = "application/vnd.google-apps.folder"
 google_drive_files = ({}, {})

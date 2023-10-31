@@ -2,18 +2,23 @@ import datetime as dt
 from pathlib import PurePosixPath
 from typing import Type
 
+import custom_settings
 import requests
 from django.conf import settings
 from django.core.cache import cache
 from django.db.models import Model
 from django.db.models.query_utils import Q
-from django.http import Http404, HttpRequest, HttpResponse, HttpResponsePermanentRedirect
+from django.http import (
+    Http404,
+    HttpRequest,
+    HttpResponse,
+    HttpResponsePermanentRedirect,
+)
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.timezone import now
 from django.views import generic
 
-import custom_settings
 from website.utils.http import encode_filename
 from website.utils.permission import has_permission_for_view
 

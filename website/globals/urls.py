@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.urls import path
 
-from .views import PageView, contact_captcha, contact, google_drive, home
+from .views import PageView, contact, contact_captcha, google_drive, home
 
 urlpatterns = [
     path("contact/captcha", contact_captcha, name="contact_captcha"),

@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
-import re
 
 import custom_settings
 from debug_toolbar.settings import PANELS_DEFAULTS
@@ -375,6 +374,7 @@ TINYMCE_DEFAULT_CONFIG = {
 if custom_settings.SENTRY_DSN:
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
+
     sentry_sdk.init(
         dsn=custom_settings.SENTRY_DSN,
         traces_sample_rate=1.0,
