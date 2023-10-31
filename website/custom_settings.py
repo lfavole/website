@@ -1,7 +1,7 @@
 """
 Default settings.
 
-You will have to create a `custom_settings.py` file with the overrides.
+You will have to create a `custom_settings_overrides.py` file with the overrides.
 """
 
 import os
@@ -29,8 +29,10 @@ DB_HOST = USERNAME + ".mysql." + PA_SITE.replace("pythonanywhere.com", "pythonan
 REAL_DB_NAME = "django"
 DB_USER = USERNAME
 
+ADMIN_NAME = "lfavole"
 GITHUB_REPO = "https://github.com/lfavole/website"
 GITHUB_WEBHOOK_KEY = None
+GOOGLE_DRIVE_FOLDERS = []
 
 WSGI_FILE = "/var/www/" + HOST.replace(".", "_").lower().strip() + "_wsgi.py" if PYTHONANYWHERE else None
 

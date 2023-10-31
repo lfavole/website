@@ -17,7 +17,7 @@ import re
 
 from django.conf import settings
 from django.contrib import admin
-from django.urls import URLResolver, include, path, re_path
+from django.urls import URLResolver, converters, include, path
 from django.utils.translation import get_supported_language_variant
 from django.utils.translation.trans_real import language_code_prefix_re
 from django.views.static import serve
@@ -39,6 +39,23 @@ from .views import (
 
 handler404 = handler_404
 handler500 = handler_500
+
+
+class OptionalPathConverter:
+    """
+    Optional path that removes .php extension.
+    """
+
+    regex = r".*"
+
+    def to_url(self, value: str):
+        return value
+
+    def to_python(self, value):
+        return self.to_url(value)
+
+
+converters.register_converter(OptionalPathConverter, "optpath")
 
 
 class LocalePrefixPattern:
@@ -75,7 +92,7 @@ class LocalePrefixPattern:
 
 app_name = "website"
 urlpatterns = [
-    URLResolver(LocalePrefixPattern(), [re_path(r"(?P<path>.*)", redirect_lang_url)]),  # type: ignore
+    URLResolver(LocalePrefixPattern(), [path("<optpath:path>", redirect_lang_url)]),  # type: ignore
     path("500", make_error),
     path("admin/docs/", include("django.contrib.admindocs.urls")),
     path("admin/logout/", NewLogoutView.as_view()),
@@ -90,7 +107,7 @@ urlpatterns = [
     path("export/<format>/<app_label>/<model_name>/<elements_pk>", export, name="export"),
     path("pseudos/", include("pseudos.urls", namespace="pseudos")),
     path("reload-website", reload_website),
-    re_path("songs-list/(?P<path>.*)", songs_list),
+    path("songs-list/<optpath:path>", songs_list),
     path("telegram-bot/", include("telegram_bot.urls", namespace="telegram_bot")),
     path("tinymce/upload-image", upload_image, name="tinymce-upload-image"),
     path("tinymce/", include("tinymce.urls")),

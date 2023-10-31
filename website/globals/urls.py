@@ -15,9 +15,10 @@ Including another URLconf
 """
 from django.urls import path
 
-from .views import PageView, home
+from .views import PageView, google_drive, home
 
 urlpatterns = [
+    path("drive/<optpath:path>", google_drive, name="google_drive"),
     path("<slug:slug>", PageView.as_view(), name="page"),
     path("", home, name="home"),
 ]

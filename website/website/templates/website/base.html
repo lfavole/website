@@ -37,6 +37,8 @@
     {% block extra_head %}{% endblock extra_head %}
 </head>
 <body>
-    {% block body %}{% endblock %}
+{% block body %}
+<main class="content">{% block content %}{% endblock content %}</main>
+{% endblock %}
 </body>
 </html>
