@@ -103,7 +103,6 @@ urlpatterns = [
     path("comments/", include("django_comments.urls")),
     path("debug/", include("debug.urls", namespace="debug")),
     path("debug/", include("debug_toolbar.urls")),
-    path("errors/", include("errors.urls", namespace="errors")),
     path("export/<format>/<app_label>/<model_name>/<elements_pk>", export, name="export"),
     path("pseudos/", include("pseudos.urls", namespace="pseudos")),
     path("reload-website", reload_website),

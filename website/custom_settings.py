@@ -32,6 +32,7 @@ DB_USER = USERNAME
 ADMIN_NAME = "lfavole"
 GITHUB_REPO = "https://github.com/lfavole/website"
 GITHUB_WEBHOOK_KEY = None
+SENTRY_DSN = None
 GOOGLE_DRIVE_FOLDERS = []
 
 WSGI_FILE = "/var/www/" + HOST.replace(".", "_").lower().strip() + "_wsgi.py" if PYTHONANYWHERE else None

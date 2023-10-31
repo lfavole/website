@@ -33,13 +33,12 @@ from django.http import (
     StreamingHttpResponse,
 )
 from django.shortcuts import get_object_or_404, redirect, render
-from django.template import Context, Engine
+from django.template import Engine
 from django.urls import resolve
 from django.utils.encoding import force_bytes
 from django.utils.translation import get_language_from_path
-from django.views.debug import ExceptionReporter, technical_404_response
+from django.views.debug import technical_404_response
 from django.views.decorators.csrf import csrf_exempt
-from errors.models import Error
 
 from website.utils.http import encode_filename
 from website.utils.permission import has_permission
@@ -136,16 +135,9 @@ def handler_500(request, _template_name=None):
     """
     500 (server error) page that logs the error.
     """
-    reporter = ExceptionReporter(request, *sys.exc_info(), is_email=True)
-    html = reporter.get_traceback_html()
-    error = Error.create_from_traceback_data(reporter.get_traceback_data(), html)
-    if request.user and request.user.has_perm("can_see_traceback"):
-        return HttpResponse(html, status=500)
-
     with (Path(__file__).parent / "templates/website/500.html").open() as f:
         t = DEBUG_ENGINE.from_string(f.read())
-    c = Context({"error_id": error.pk}, use_l10n=False)
-    html = t.render(c)
+    html = t.render()
     return HttpResponse(html, status=500)
 
 
