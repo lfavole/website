@@ -28,6 +28,20 @@ TEST = custom_settings.TEST
 PYTHONANYWHERE = custom_settings.PYTHONANYWHERE
 OFFLINE = custom_settings.OFFLINE
 
+if custom_settings.SENTRY_DSN:
+    # Load Sentry at the start to capture as many errors as possible
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
+
+    sentry_sdk.init(
+        dsn=custom_settings.SENTRY_DSN,
+        traces_sample_rate=1.0,
+        profiles_sample_rate=1.0,
+        send_default_pii=False,
+        integrations=[DjangoIntegration()],
+        environment="production" if PYTHONANYWHERE else "development",
+    )
+
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -387,16 +401,3 @@ TINYMCE_DEFAULT_CONFIG = {
         reverse_lazy("tinymce-upload-image"),
     ),
 }
-
-if custom_settings.SENTRY_DSN:
-    import sentry_sdk
-    from sentry_sdk.integrations.django import DjangoIntegration
-
-    sentry_sdk.init(
-        dsn=custom_settings.SENTRY_DSN,
-        traces_sample_rate=1.0,
-        profiles_sample_rate=1.0,
-        send_default_pii=False,
-        integrations=[DjangoIntegration()],
-        environment="production" if PYTHONANYWHERE else "development",
-    )
