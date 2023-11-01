@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+import re
 
 import custom_settings
 from debug_toolbar.settings import PANELS_DEFAULTS
@@ -306,6 +307,19 @@ def add_url(text, url):
     }
 
 
+@lazy
+def get_global_css_url_lazy():
+    from compressor.templatetags.compress import CompressorMixin
+
+    class CompressorNode(CompressorMixin):
+        def get_original_content(self, context):
+            return f'<link rel="stylesheet" href="{static_lazy("global/global.css")}" type="text/x-scss">'
+
+    content = CompressorNode().render_compressed({}, "css", "file")
+    match = re.search(r'href="(.*?)"', content)
+    return match.group(1) if match else ""
+
+
 add_url_lazy = lazy(add_url)
 static_lazy = lazy(static)
 TINYMCE_JS_URL = (
@@ -319,7 +333,7 @@ TINYMCE_DEFAULT_CONFIG = {
     "language_url": static_lazy("tinymce/langs/fr_FR.js"),
     "content_css": [
         "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;1,400;1,700&display=swap",
-        static_lazy("global/global.css"),
+        get_global_css_url_lazy(),
     ],
     "content_style": "body{padding:8px}",
     "promotion": False,
