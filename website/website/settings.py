@@ -381,4 +381,5 @@ if custom_settings.SENTRY_DSN:
         profiles_sample_rate=1.0,
         send_default_pii=False,
         integrations=[DjangoIntegration()],
+        environment="production" if PYTHONANYWHERE else "development",
     )
