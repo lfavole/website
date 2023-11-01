@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 import re
 from shutil import which
+import subprocess as sp
 
 import custom_settings
 from debug_toolbar.settings import PANELS_DEFAULTS
@@ -86,7 +87,6 @@ INSTALLED_APPS = [
     "django_cleanup.apps.CleanupConfig",
     "django_comments",
     "easy_thumbnails",
-    "tinymce",
     # apps with urls.py (automatic)
     *(dir.name for dir in BASE_DIR.glob("*") if (dir / "urls.py").exists()),
     # apps without urls.py
@@ -290,9 +290,16 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
     "compressor.finders.CompressorFinder",
 ]
-COMPRESS_PRECOMPILERS = (
-    ("text/x-scss", ("django_libsass.SassCompiler" if not which("sass") else "sass --scss {infile} {outfile}")),
+sass_path = (
+    "django_libsass.SassCompiler"
+    if not which("sass")
+    else (
+        "sass {infile} {outfile}"
+        if sp.check_output([which("sass"), "--version"], text=True).removeprefix("Sass ").split(".")[0] == "1"  # type: ignore
+        else "sass --scss {infile} {outfile}"
+    )
 )
+COMPRESS_PRECOMPILERS = (("text/x-scss", sass_path),)
 STATIC_ROOT = BASE_DIR / "static/"
 
 MEDIA_URL = "/media/"
