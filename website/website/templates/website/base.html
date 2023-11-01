@@ -25,15 +25,25 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/solid.min.css">
     {% endif %}
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
     {% compress css %}
     <link rel="stylesheet" type="text/x-scss" href="{% static "global/global.scss" %}">
     {% endcompress %}
+
+    {% compress css %}
     {% block css %}{% endblock %}
+    {% endcompress %}
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/moment@2/moment.min.js"></script>
+
+    {% compress js %}
     <script src="{% static "global/global.js" %}"></script>
+    {% endcompress %}
+
+    {% compress js %}
     {% block js %}{% endblock %}
+    {% endcompress %}
 
     {% block manifest %}
     <link rel="manifest" href="{% static "global/manifest.json" %}">

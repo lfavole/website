@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import re
+from shutil import which
 
 import custom_settings
 from debug_toolbar.settings import PANELS_DEFAULTS
@@ -275,7 +276,9 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
     "compressor.finders.CompressorFinder",
 ]
-COMPRESS_PRECOMPILERS = (("text/x-scss", "django_libsass.SassCompiler"),)
+COMPRESS_PRECOMPILERS = (
+    ("text/x-scss", ("django_libsass.SassCompiler" if not which("sass") else "sass --scss {infile} {outfile}")),
+)
 STATIC_ROOT = BASE_DIR / "static/"
 
 MEDIA_URL = "/media/"
