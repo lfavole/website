@@ -12,6 +12,7 @@ from urllib.parse import quote, urljoin, urlparse
 from wsgiref.util import is_hop_by_hop
 
 import requests
+from sentry_sdk import Hub
 from blog.models import Image
 from django.apps import apps
 from django.conf import settings
@@ -123,6 +124,7 @@ DEBUG_ENGINE = Engine(
     dirs=[str(Path(__file__).parent / "templates")],
     debug=True,
     libraries={
+        "compress": "compressor.templatetags.compress",
         "i18n": "django.templatetags.i18n",
         "nav": "website.templatetags.nav",
         "socialaccount": "allauth.socialaccount.templatetags.socialaccount",
@@ -137,7 +139,9 @@ def handler_500(request, _template_name=None):
     """
     with (Path(__file__).parent / "templates/website/500.html").open() as f:
         t = DEBUG_ENGINE.from_string(f.read())
-    html = t.render(Context())
+    html = t.render(Context({
+        "error_id": Hub.current._last_event_id,
+    }))
     return HttpResponse(html, status=500)
 
 
