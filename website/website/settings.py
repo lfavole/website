@@ -29,6 +29,9 @@ TEST = custom_settings.TEST
 PYTHONANYWHERE = custom_settings.PYTHONANYWHERE
 OFFLINE = custom_settings.OFFLINE
 
+# Build paths inside the project like this: BASE_DIR / "subdir".
+BASE_DIR = Path(__file__).resolve().parent.parent
+
 if custom_settings.SENTRY_DSN:
     # Load Sentry at the start to capture as many errors as possible
     import sentry_sdk
@@ -36,15 +39,13 @@ if custom_settings.SENTRY_DSN:
 
     sentry_sdk.init(
         dsn=custom_settings.SENTRY_DSN,
+        environment="production" if PYTHONANYWHERE else "development",
+        integrations=[DjangoIntegration()],
+        send_default_pii=False,
         traces_sample_rate=1.0,
         profiles_sample_rate=1.0,
-        send_default_pii=False,
-        integrations=[DjangoIntegration()],
-        environment="production" if PYTHONANYWHERE else "development",
+        project_root=str(BASE_DIR),
     )
-
-# Build paths inside the project like this: BASE_DIR / "subdir".
-BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
