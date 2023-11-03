@@ -296,7 +296,7 @@ sass_path = (
     if not which("sass")
     else (
         "sass {infile} {outfile}"
-        if sp.check_output([which("sass"), "--version"], text=True).removeprefix("Sass ").split(".")[0] == "1"  # type: ignore
+        if "--scss" not in sp.check_output([which("sass"), "--help"], text=True)  # type: ignore
         else "sass --scss {infile} {outfile}"
     )
 )
