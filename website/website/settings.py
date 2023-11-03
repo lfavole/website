@@ -358,22 +358,11 @@ class Stylesheets(LazyObject, list):
     def _setup(self):
         from django.test.client import Client
 
+        ALLOWED_HOSTS.append("testserver")
         content = Client().get("/").content.decode()
+        ALLOWED_HOSTS.pop()
 
         self._wrapped = re.findall(r'<link rel="stylesheet"[^>]*href="(.*?)"[^>]*>', content)
-
-
-@lazy
-def get_global_css_url_lazy():
-    from compressor.templatetags.compress import CompressorMixin
-
-    class CompressorNode(CompressorMixin):
-        def get_original_content(self, context):
-            return f'<link rel="stylesheet" href="{static_lazy("global/global.css")}" type="text/x-scss">'
-
-    content = CompressorNode().render_compressed({}, "css", "file")
-    match = re.search(r'href="(.*?)"', content)
-    return match.group(1) if match else ""
 
 
 add_url_lazy = lazy(add_url)
