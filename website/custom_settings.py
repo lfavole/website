@@ -10,7 +10,10 @@ from getpass import getuser
 from types import ModuleType
 
 # import now because we might remove the current directory from sys.path
-import custom_settings_overrides as cs_overrides
+try:
+    import custom_settings_overrides as cs_overrides
+except ImportError:
+    cs_overrides = None
 import custom_settings_test as cs_test
 from captcha.constants import TEST_PRIVATE_KEY, TEST_PUBLIC_KEY
 
@@ -18,6 +21,9 @@ from website.utils.connectivity import internet
 
 PA_SITE = os.environ.get("PYTHONANYWHERE_SITE", "")
 PYTHONANYWHERE = bool(PA_SITE)
+PRODUCTION = PYTHONANYWHERE
+TEST = False
+OFFLINE = False  # placeholder
 USERNAME = getuser()
 
 HOST = USERNAME + "." + PA_SITE if PYTHONANYWHERE else "*"
@@ -26,9 +32,12 @@ SECRET_KEY = ""
 
 USE_SQLITE = not PYTHONANYWHERE
 DB_HOST = USERNAME + ".mysql." + PA_SITE.replace("pythonanywhere.com", "pythonanywhere-services.com")
+DB_NAME = ""  # placeholder
 REAL_DB_NAME = "django"
 DB_USER = USERNAME
+DB_PASSWORD = ""  # placeholder
 
+ADMINS = []
 ADMIN_NAME = "lfavole"
 GITHUB_REPO = "https://github.com/lfavole/website"
 GITHUB_WEBHOOK_KEY = None
@@ -58,16 +67,14 @@ class CustomSettings(ModuleType):
             # return the current value of OFFLINE
             return not internet()
 
-        try:
-            if getattr(cs_overrides, "TEST", False):
-                return getattr(cs_test, name)
+        if cs_overrides is not None:
+            try:
+                if getattr(cs_overrides, "TEST", False):
+                    return getattr(cs_test, name)
 
-            return getattr(cs_overrides, name)
-        except AttributeError:
-            pass
-
-        if name == "TEST":
-            return False  # True will be returned from CS_OVERRIDES
+                return getattr(cs_overrides, name)
+            except AttributeError:
+                pass
 
         if name == "DB_NAME":
             try:

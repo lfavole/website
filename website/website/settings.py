@@ -18,6 +18,7 @@ from shutil import which
 import custom_settings
 from debug_toolbar.settings import PANELS_DEFAULTS
 from debug_toolbar.toolbar import DebugToolbar
+from django.contrib.messages import constants as message_constants
 from django.http import HttpRequest
 from django.templatetags.static import static
 from django.urls import reverse_lazy
@@ -27,7 +28,9 @@ from django.utils.translation import gettext
 TEST = custom_settings.TEST
 
 PYTHONANYWHERE = custom_settings.PYTHONANYWHERE
+PRODUCTION = custom_settings.PRODUCTION
 OFFLINE = custom_settings.OFFLINE
+GITHUB_WEBHOOK_KEY = custom_settings.GITHUB_WEBHOOK_KEY
 
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,18 +46,13 @@ if custom_settings.SENTRY_DSN:
         integrations=[DjangoIntegration()],
         send_default_pii=False,
         traces_sample_rate=1.0,
-        profiles_sample_rate=1.0,
+        profiles_sample_rate=0.1 if PRODUCTION else 1.0,
         project_root=str(BASE_DIR),
     )
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
+SECRET_KEY = custom_settings.SECRET_KEY
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = custom_settings.SECRET_KEY or "+jt!%+%erdp^y7h37v#68x31+u9ut6^8zryj@#zmu5p$_!u2)u"
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = custom_settings.DEBUG
 
 if not DEBUG:
@@ -67,7 +65,9 @@ if not DEBUG:
 else:
     ALLOWED_HOSTS = ["*"]
 
-GITHUB_WEBHOOK_KEY = custom_settings.GITHUB_WEBHOOK_KEY
+ADMINS = custom_settings.ADMINS
+
+CSRF_USE_SESSIONS = True
 
 # Application definition
 
@@ -121,6 +121,8 @@ MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
+# Debug toolbar settings
+# https://django-debug-toolbar.readthedocs.io/en/latest/configuration.html
 DEBUG_TOOLBAR_CONFIG = {
     "SHOW_TOOLBAR_CALLBACK": "website.settings.show_toolbar",
     "SHOW_COLLAPSED": True,
@@ -186,7 +188,7 @@ STORAGES = {
 }
 
 # Database
-# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
+# https://docs.djangoproject.com/en/stable/ref/settings/#databases
 
 DATABASES = (
     {
@@ -210,6 +212,16 @@ DATABASES = (
     }
 )
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache"
+        if PRODUCTION
+        else "django.core.cache.backends.locmem.LocMemCache",
+    }
+}
+
+# Authentication settings
+# https://docs.djangoproject.com/en/stable/ref/settings/#auth
 AUTH_USER_MODEL = "users.User"
 
 AUTHENTICATION_BACKENDS = [
@@ -220,17 +232,19 @@ AUTHENTICATION_BACKENDS = [
 LOGIN_URL = "/accounts/login"
 LOGIN_REDIRECT_URL = "/"
 
-SOCIALACCOUNT_QUERY_EMAIL = True
+# https://docs.allauth.org/en/stable/account/configuration.html
 ACCOUNT_LOGOUT_ON_GET = False
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 ACCOUNT_SIGNUP_FORM_CLASS = "users.forms.AllAuthSignupForm"
-SOCIALACCOUNT_STORE_TOKENS = True
 # Set the allauth adapter to be the 2FA adapter.
 ACCOUNT_ADAPTER = "users.adapter.Adapter"
 
+# https://docs.allauth.org/en/stable/socialaccount/configuration.html
+SOCIALACCOUNT_QUERY_EMAIL = True
+SOCIALACCOUNT_STORE_TOKENS = True
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
         "SCOPE": [
@@ -250,6 +264,12 @@ SOCIALACCOUNT_PROVIDERS = {
         "AUTH_PARAMS": {"auth_date_validity": 30},
     },
 }
+
+
+# Messages
+# https://docs.djangoproject.com/en/stable/ref/settings/#messages
+MESSAGE_LEVEL = message_constants.INFO if PRODUCTION else message_constants.DEBUG
+MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
 
 
 # Password validation
@@ -291,20 +311,23 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
     "compressor.finders.CompressorFinder",
 ]
-sass_path = (
-    "django_libsass.SassCompiler"
-    if not which("sass")
-    else (
-        "sass {infile} {outfile}"
-        if "--scss" not in sp.check_output([which("sass"), "--help"], text=True)  # type: ignore
-        else "sass --scss {infile} {outfile}"
-    )
-)
-COMPRESS_PRECOMPILERS = (("text/x-scss", sass_path),)
 STATIC_ROOT = BASE_DIR / "static/"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media/"
+
+# Compressor settings (Sass)
+sass_path = which("sass")
+if not sass_path:
+    sass_command = "django_libsass.SassCompiler"
+else:
+    sass_help = sp.run([sass_path, "--help"], check=False, stdout=sp.PIPE, stderr=sp.STDOUT, text=True).stdout
+    if "--scss" in sass_help:
+        sass_command = "sass --scss {infile} {outfile}"
+    else:
+        sass_command = "sass {infile} {outfile}"
+
+COMPRESS_PRECOMPILERS = (("text/x-scss", sass_command),)
 
 
 # Default primary key field type
