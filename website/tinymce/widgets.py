@@ -83,6 +83,7 @@ class TinyMCE(forms.Textarea):
         assert "id" in final_attrs, "TinyMCE widget attributes must contain 'id'"
 
         mce_config = self.get_mce_config(final_attrs)
+        mce_config["content_css"] = list(mce_config["content_css"])
         final_attrs["data-mce-conf"] = json.dumps(mce_config, cls=DjangoJSONEncoder)
         return mark_safe(f"<textarea{flatatt(final_attrs)}>{escape(value)}</textarea>")
 

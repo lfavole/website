@@ -21,7 +21,7 @@ from debug_toolbar.toolbar import DebugToolbar
 from django.http import HttpRequest
 from django.templatetags.static import static
 from django.urls import reverse_lazy
-from django.utils.functional import lazy
+from django.utils.functional import LazyObject, lazy
 from django.utils.translation import gettext
 
 TEST = custom_settings.TEST
@@ -331,6 +331,14 @@ def add_url(text, url):
     }
 
 
+class Stylesheets(LazyObject, list):
+    def _setup(self):
+        from django.test.client import Client
+        content = Client().get("/").content.decode()
+
+        self._wrapped = re.findall(r'<link rel="stylesheet"[^>]*href="(.*?)"[^>]*>', content)
+
+
 @lazy
 def get_global_css_url_lazy():
     from compressor.templatetags.compress import CompressorMixin
@@ -353,13 +361,9 @@ TINYMCE_JS_URL = (
 )
 TINYMCE_EXTRA_MEDIA = {"css": {"all": ("/static/tinymce/tinymce.css",)}, "js": ("/static/tinymce/tinymce.js",)}
 TINYMCE_DEFAULT_CONFIG = {
-    "language": "fr",
-    "language_url": static_lazy("tinymce/langs/fr_FR.js"),
-    "content_css": [
-        "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;1,400;1,700&display=swap",
-        get_global_css_url_lazy(),
-    ],
-    "content_style": "body{padding:8px}",
+    "base_url": "https://cdn.tiny.cloud/1/no-api-key/tinymce/6",
+    "body_class": "content",
+    "content_css": Stylesheets(),
     "promotion": False,
     "plugins": "autolink code fullscreen help image link lists media preview quickbars save searchreplace table",
     "toolbar": (
