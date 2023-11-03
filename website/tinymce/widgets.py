@@ -63,7 +63,8 @@ class TinyMCE(forms.Textarea):
                 lang[:2]: lang
                 for lang in (
                     "ar eu bg_BG ca zh_CN zh_TW hr cs da nl fi fr_FR de el he_IL hi hu_HU id it ja kk ko_KR ms nb_NO "
-                    "fa pl pt_BR pt_PT ro ru sk sl_SI es sv_SE th_TH tr uk vi").split()
+                    "fa pl pt_BR pt_PT ro ru sk sl_SI es sv_SE th_TH tr uk vi"
+                ).split()
             }
             mce_config["language"] = languages[mce_config["language"][:2]]
         mce_config.update(self.mce_attrs)

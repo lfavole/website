@@ -26,9 +26,7 @@ USE_COMPRESSOR = getattr(settings, "TINYMCE_COMPRESSOR", False)
 
 USE_EXTRA_MEDIA = getattr(settings, "TINYMCE_EXTRA_MEDIA", None)
 
-USE_FILEBROWSER = getattr(
-    settings, "TINYMCE_FILEBROWSER", "filebrowser" in settings.INSTALLED_APPS
-)
+USE_FILEBROWSER = getattr(settings, "TINYMCE_FILEBROWSER", "filebrowser" in settings.INSTALLED_APPS)
 
 JS_URL = getattr(
     settings,

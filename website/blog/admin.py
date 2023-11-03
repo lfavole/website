@@ -1,4 +1,5 @@
 from typing import Type
+
 from django import forms
 from django.contrib import admin
 from django.contrib.admin.options import InlineModelAdmin
@@ -54,6 +55,7 @@ class DataInline(DataMixin, GenericTabularInline):
     """
     Inline for files/images.
     """
+
     readonly_fields = ("file",)
     extra = 0
 

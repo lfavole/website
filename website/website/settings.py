@@ -10,10 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
-from pathlib import Path
 import re
-from shutil import which
 import subprocess as sp
+from pathlib import Path
+from shutil import which
 
 import custom_settings
 from debug_toolbar.settings import PANELS_DEFAULTS
@@ -334,6 +334,7 @@ def add_url(text, url):
 class Stylesheets(LazyObject, list):
     def _setup(self):
         from django.test.client import Client
+
         content = Client().get("/").content.decode()
 
         self._wrapped = re.findall(r'<link rel="stylesheet"[^>]*href="(.*?)"[^>]*>', content)

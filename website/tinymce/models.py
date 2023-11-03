@@ -3,7 +3,6 @@
 
 from django.contrib.admin import widgets as admin_widgets
 from django.db import models
-
 from tinymce import widgets as tinymce_widgets
 
 

@@ -12,7 +12,6 @@ from urllib.parse import quote, urljoin, urlparse
 from wsgiref.util import is_hop_by_hop
 
 import requests
-from sentry_sdk import Hub
 from blog.models import Image
 from django.apps import apps
 from django.conf import settings
@@ -40,6 +39,7 @@ from django.utils.encoding import force_bytes
 from django.utils.translation import get_language_from_path
 from django.views.debug import technical_404_response
 from django.views.decorators.csrf import csrf_exempt
+from sentry_sdk import Hub
 
 from website.utils.http import encode_filename
 from website.utils.permission import has_permission
@@ -139,9 +139,13 @@ def handler_500(request, _template_name=None):
     """
     with (Path(__file__).parent / "templates/website/500.html").open() as f:
         t = DEBUG_ENGINE.from_string(f.read())
-    html = t.render(Context({
-        "error_id": Hub.current._last_event_id,
-    }))
+    html = t.render(
+        Context(
+            {
+                "error_id": Hub.current._last_event_id,
+            }
+        )
+    )
     return HttpResponse(html, status=500)
 
 
