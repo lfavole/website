@@ -1,0 +1,14 @@
+/* Footer */
+@import "mixins";
+
+footer {
+    font-size: 1.5em;
+    text-align: center;
+
+    .github-icon::before {
+        @include icon("github", "brands");
+    }
+    img {
+        height: 1em;
+    }
+}

@@ -171,6 +171,7 @@ TEMPLATES = [
                 "website.context_processors.nav_links",
                 "website.context_processors.now_variable",
                 "website.context_processors.admin_permission",
+                "website.context_processors.github_repo_url",
             ],
         },
     },

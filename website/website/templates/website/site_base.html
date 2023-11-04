@@ -51,4 +51,10 @@
 </main>
 {% endblock %}
 </div>
+<footer class="footer">
+    {% block footer %}
+    <a href="{{ github_repo }}" target="_blank" class="github-icon"></a>
+    <img src="https://github.com/lfavole/website/actions/workflows/django.yml/badge.svg">
+    {% endblock footer %}
+</footer>
 {% endblock %}

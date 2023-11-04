@@ -47,3 +47,10 @@ def admin_permission(request):
     from django.contrib import admin
 
     return {"admin_permission": admin.site.has_permission(request)}
+
+
+def github_repo_url(request):
+    """
+    Add an `github_repo` variable to all templates.
+    """
+    return {"github_repo": custom_settings.GITHUB_REPO}
