@@ -39,5 +39,3 @@ try:
     JS_ROOT = getattr(settings, "TINYMCE_JS_ROOT", finders.find("tinymce", all=False))
 except AppRegistryNotReady:
     JS_ROOT = getattr(settings, "TINYMCE_JS_ROOT", os.path.join(settings.STATIC_ROOT, "tinymce"))
-
-JS_BASE_URL = JS_URL[: JS_URL.rfind("/")]
