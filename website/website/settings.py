@@ -358,13 +358,20 @@ def add_url(text, url):
 
 class Stylesheets(LazyObject, list):
     def _setup(self):
+        global SECURE_SSL_REDIRECT
         from django.test.client import Client
 
         ALLOWED_HOSTS.append("testserver")
+        SECURE_SSL_REDIRECT = False
         content = Client().get("/").content.decode()
         ALLOWED_HOSTS.pop()
+        SECURE_SSL_REDIRECT = True
 
-        self._wrapped = re.findall(r'<link rel="stylesheet"[^>]*href="(.*?)"[^>]*>', content)
+        self._wrapped = []
+        for match in re.finditer(r'<link\b[^>]*\bhref=(["\']?)(.*?)\1[^>]*>', content):
+            if not re.match(r'rel=(["\']?)stylesheet\1', match.group(0)):
+                continue
+            self._wrapped.append(match.group(2))
 
 
 add_url_lazy = lazy(add_url)
