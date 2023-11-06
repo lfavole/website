@@ -18,6 +18,7 @@ def main(_args=None, pipe=False, outputs: list[str] | None = None, ok=True):
     manage = [sys.executable, str(BASE / "manage.py")]
 
     run_with_expl(["pip", "install", "-r", str(FOLDER / "requirements.txt")], "installing requirements")
+    run_with_expl([*manage, "createcachetable"], "creating the cache tables")
     run_with_expl([*manage, "migrate"], "migrating")
     run_with_expl([*manage, "compilemessages"], "compiling translations")
     fetch_gravatar(reloading=True)

@@ -218,6 +218,7 @@ CACHES = {
         "BACKEND": "django.core.cache.backends.db.DatabaseCache"
         if PRODUCTION
         else "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "cache",
     }
 }
 
