@@ -78,9 +78,12 @@ class CustomSettings(ModuleType):
 
         if name == "DB_NAME":
             try:
-                return super().__getattribute__(name)
+                ret = super().__getattribute__(name)
+                if ret:
+                    return ret
             except AttributeError:
-                return USERNAME + "$" + super().__getattribute__("REAL_DB_NAME")
+                pass
+            return USERNAME + "$" + self.REAL_DB_NAME  # type: ignore
 
         return super().__getattribute__(name)
 
