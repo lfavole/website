@@ -28,6 +28,15 @@
                 mce_conf[fn_name] = window[mce_conf[fn_name]];
         });
 
+        if("protect" in mce_conf)
+            mce_conf["protect"] = mce_conf["protect"].map(function(item) {
+                var match = /^\/(.*)\/([gimuy]*)$/.exec(item);
+                if(match === null)
+                    return new RegExp(item);
+                else
+                    return new RegExp(match[1], match[2]);
+            });
+
         if (!"selector" in mce_conf)
             mce_conf["target"] = el;
         if (!tinyMCE.get(el.id))

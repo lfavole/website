@@ -394,7 +394,11 @@ TINYMCE_DEFAULT_CONFIG = {
         "image media link"
     ),
     "relative_urls": False,
-    "extended_valid_elements": "*[*],+i[class=fa-*]",  # allow all elements, keep Font Awesome icons
+    "valid_elements": "*[*]",
+    "protect": [
+        r"/<style>[\s\S]*?<\/style>/g",
+        r"/<script>[\s\S]*?<\/script>/g",
+    ],
     "image_advtab": True,
     # pylint: disable=C0209
     "images_upload_handler": add_url_lazy(
