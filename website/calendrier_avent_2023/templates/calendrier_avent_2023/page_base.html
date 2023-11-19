@@ -1,0 +1,21 @@
+{% extends "website/base.html" %}
+{% load static %}
+
+{% block cdn_css %}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lobster&amp;display=swap">
+{% endblock cdn_css %}
+{% block css %}
+<link rel="stylesheet" type="text/x-scss" href="{% static "global/countdown.scss" %}">
+<link rel="stylesheet" type="text/x-scss" href="{% static "calendrier-avent-2023/style.scss" %}">
+{% endblock css %}
+{% block js %}
+{{ block.super }}
+<script src="{% static "global/countdown.js" %}"></script>
+<script src="{% static "calendrier-avent-2023/script.js" %}"></script>
+{% endblock js %}
+
+{% block body %}
+<main>
+{% block content %}{% endblock %}
+</main>
+{% endblock %}

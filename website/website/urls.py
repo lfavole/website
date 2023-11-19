@@ -100,6 +100,7 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path("accounts/", account_index, name="account_index"),
     path("blog/", include("blog.urls", namespace="blog")),
+    path("calendrier-avent-2023/", include("calendrier_avent_2023.urls", namespace="calendrier_avent_2023")),
     path("comments/", include("django_comments.urls")),
     path("debug/", include("debug.urls", namespace="debug")),
     path("debug/", include("debug_toolbar.urls")),

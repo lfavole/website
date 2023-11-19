@@ -1,0 +1,74 @@
+.cpt {
+	display:inline-block;
+
+	.hidden,
+	.hidden + .hidden2 {
+		display:none;
+	}
+	.hidden2 {
+		display:inline;
+	}
+	> span {
+		transition:color 0.4s ease-in-out;
+		display:inline-block;
+	}
+	> span > span {
+		display:inline-block;
+		width:0.7em;
+		height:1em;
+		line-height:1em;
+		text-align:center;
+
+		&:first-of-type {
+			text-align:right;
+		}
+		&:last-of-type {
+			text-align:left;
+		}
+	}
+	&.anim .prec {
+		position:relative;
+		color:transparent;
+		&::before,
+		&::after {
+			color:black;
+			color:var(--color);
+			color:var(--color, black);
+			position:absolute;
+			left:0px;
+			right:0px;
+		}
+		&::before {
+			content:attr(data-prec);
+			top:-100%;
+			opacity:0;
+			animation:prec-before 0.4s ease-in-out;
+		}
+		@keyframes prec-before {
+			0% {
+				top:0%;
+				opacity:1;
+			}
+			100% {
+				top:-100%;
+				opacity:0;
+			}
+		}
+		&::after {
+			content:attr(data-act);
+			top:0%;
+			opacity:1;
+			animation:prec-after 0.4s ease-in-out;
+		}
+		@keyframes prec-after {
+			0% {
+				top:100%;
+				opacity:0;
+			}
+			100% {
+				top:0%;
+				opacity:1;
+			}
+		}
+	}
+}
