@@ -15,6 +15,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
+    {% block cdn_css %}
     {% if offline %}
     <link rel="stylesheet" href="{% static "vendor/bulma.min.css" %}">
     <link rel="stylesheet" href="{% static "vendor/fontawesome/fontawesome.min.css" %}">
@@ -25,6 +26,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/solid.min.css">
     {% endif %}
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    {% endblock cdn_css %}
 
     {% compress css %}
     <link rel="stylesheet" type="text/x-scss" href="{% static "global/global.scss" %}">
@@ -34,8 +36,15 @@
     {% block css %}{% endblock %}
     {% endcompress %}
 
+    {% block cdn_js %}
+    {% if offline %}
+    <script src="{% static "vendor/jquery.min.js" %}"></script>
+    <script src="{% static "vendor/moment.min.js" %}"></script>
+    {% else %}
     <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/moment@2/moment.min.js"></script>
+    {% endif %}
+    {% endblock cdn_js %}
 
     {% compress js %}
     <script src="{% static "global/global.js" %}"></script>
