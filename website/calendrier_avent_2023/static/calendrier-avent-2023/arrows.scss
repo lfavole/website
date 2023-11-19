@@ -35,7 +35,7 @@
         }
     }
     $rotation: 45deg;
-    $rotation-hover: calc(2/3);
+    $rotation-hover: 30deg;
 	&::before {
 		transform: rotate($rotation);
 	}
@@ -44,10 +44,10 @@
 	}
     @include hover {
         &::before {
-            transform: rotate($rotation * $rotation-hover);
+            transform: rotate($rotation-hover);
         }
         &::after {
-            transform: rotate(-$rotation * $rotation-hover);
+            transform: rotate(-$rotation-hover);
         }
     }
 
@@ -65,10 +65,10 @@
         }
         @include hover {
             &::before {
-                transform: rotate(-$rotation * $rotation-hover);
+                transform: rotate(-$rotation-hover);
             }
             &::after {
-                transform: rotate($rotation * $rotation-hover);
+                transform: rotate($rotation-hover);
             }
         }
 	}
