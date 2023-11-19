@@ -33,7 +33,7 @@ from django.http import (
     StreamingHttpResponse,
 )
 from django.shortcuts import get_object_or_404, redirect, render
-from django.template import Context, Engine
+from django.template import Engine, RequestContext
 from django.urls import resolve
 from django.utils.encoding import force_bytes
 from django.utils.translation import get_language_from_path
@@ -140,7 +140,8 @@ def handler_500(request, _template_name=None):
     with (Path(__file__).parent / "templates/website/500.html").open() as f:
         t = DEBUG_ENGINE.from_string(f.read())
     html = t.render(
-        Context(
+        RequestContext(
+            request,
             {
                 "error_id": Hub.current._last_event_id,
             }
