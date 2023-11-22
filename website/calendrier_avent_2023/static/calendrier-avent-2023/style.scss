@@ -1,6 +1,6 @@
 body {
-	background-color: #88f;
 	background-color: #4ae;
+    background-image: url("background.jpg");
 }
 h1, .jours {
 	font-family: Lobster, cursive;
@@ -94,8 +94,8 @@ main {
 	font-size: 64px;
 	color: black;
 	text-decoration: none;
-	background-color: #7ee836;
-	border: 5px solid #0d860d;
+	background-color: #ffe082;
+	border: 5px solid #ffb300;
 	transition: background-color 0.4s, border-color 0.4s;
 }
 @media screen and (max-width: 500px) {
@@ -110,8 +110,8 @@ body.mode-nuit .jours a {
 	color: #222;
 }
 .jours + .jours a {
-	background-color: #ffd54f;
-	border-color: #f57f17;
+	background-color: #80deea;
+	border-color: #0277bd;
 	position: relative;
 	border-radius: 50%;
 }
@@ -121,7 +121,7 @@ body.mode-nuit .jours a {
 	bottom: 100%;
 	width: 60px;
 	height: 40px;
-	border: 4px solid red;
+	border: 4px solid #311b92;
 }
 .jours + .jours a::before {
 	right: calc(50% - 2px);
@@ -132,8 +132,8 @@ body.mode-nuit .jours a {
 	border-radius: 80% 20%;
 }
 .jours a.ajd {
-	background-color: #ff8a7e;
-	border: 5px solid #b00f0f;
+	background-color: #66bb6a;
+	border: 5px solid #558b2f;
 	animation: clignoter 2s ease-in-out infinite;
 }
 @keyframes clignoter {
