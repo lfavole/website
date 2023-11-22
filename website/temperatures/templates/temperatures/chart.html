@@ -1,0 +1,20 @@
+{% extends "temperatures/base.html" %}
+{% load static %}
+{% load temperatures_utils %}
+
+{% block title %}Graphique des températures{% endblock title %}
+{% block js %}
+<script src="{% static "temperatures/highcharts.js" %}"></script>
+<script src="{% static "temperatures/highcharts-boost.js" %}"></script>
+<script src="{% static "temperatures/chart.js" %}"></script>
+<script>
+{% get_all_temperatures %}
+</script>
+{% endblock js %}
+
+{% block content %}
+{{ block.super }}
+<h1>Graphique des températures</h1>
+<div id="temperatures-chart"></div>
+<div id="weather-pie-chart"></div>
+{% endblock content %}

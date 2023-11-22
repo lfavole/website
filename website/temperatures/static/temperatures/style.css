@@ -1,0 +1,125 @@
+#days {
+    background-color: white;
+    border-radius: 4px;
+    padding: 4px;
+    display: inline-block;
+}
+
+.missing {
+    max-height: 6em;
+    overflow-y: auto;
+}
+#weekday {
+    width: 5.5em;
+    display: inline-block;
+    text-align: center;
+}
+#id_weather label {
+    border: 1px solid black;
+    outline: 0;
+    background-color: #ddffdd;
+    line-height: inherit;
+    padding: 0.25em 0.5em;
+    border-radius: 9999px;
+    font-size: 1em;
+    vertical-align: middle;
+}
+.temperatures-form input {
+    text-align: center;
+}
+.date-warning {
+    color: red;
+    margin-left: 2em;
+}
+.temperatures-form input[type=number] {
+    width: 4.5em;
+}
+.temperatures-form input[type=radio] {
+    display: none;
+}
+#id_weather, #id_notes {
+    margin-top: 0.5em;
+}
+#id_weather label, .notes span {
+    background-color: #87ceeb;
+    cursor: pointer;
+    padding: 4px;
+    line-height: 30px;
+    border-radius: 30px;
+}
+#id_weather {
+    counter-set: ct;
+}
+#id_weather div {
+    display: inline-block;
+    width: 9em;
+    margin-right: 1em;
+    vertical-align: middle;
+}
+#id_weather label {
+    display: block;
+    padding: 0.5em;
+    padding-right: 3.5em;
+    background-size: 2.625em;
+    height: 3.5em;
+    line-height: 1.25em;
+    background-repeat: no-repeat;
+    background-position: right 0.25em center;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color .4s;
+}
+#id_weather label::before {
+    content: counter(ct) ". ";
+    counter-increment: ct;
+}
+#id_weather div:nth-child(1) label {
+    background-image: url("icons/sunny.png");
+}
+#id_weather div:nth-child(2) label {
+    background-image: url("icons/few_clouds.png");
+}
+#id_weather div:nth-child(3) label {
+    background-image: url("icons/cloudy.png");
+}
+#id_weather div:nth-child(4) label {
+    background-image: url("icons/rain.png");
+}
+#id_weather div:nth-child(5) label {
+    background-image: url("icons/snow.png");
+}
+#id_weather div:nth-of-type(4) label, #id_weather div:nth-of-type(5) label {
+    line-height: 2.5em;
+}
+.temperatures-form label:has(input[type=radio]:checked) {
+    background-color: #00dd00 !important;
+}
+.temperatures-form input[type=checkbox] {
+    appearance: none;
+    padding: 0;
+    cursor: pointer;
+    width: 3em;
+    height: 3em;
+}
+.temperatures-form input[type=checkbox]::before {
+    content: "";
+    display: block;
+    width: 3em;
+    height: 3em;
+    background-position: center;
+    background-size: 0;
+    background-repeat: no-repeat;
+    transition: background-size 0.4s;
+}
+.temperatures-form input[type=checkbox]:checked::before {
+    background-size: 2.5em;
+}
+#id_wind::before {
+    background-image: url("icons/wind.png");
+}
+#id_hail::before {
+    background-image: url("icons/hail.png");
+}
+#id_mist::before {
+    background-image: url("icons/mist.png");
+}

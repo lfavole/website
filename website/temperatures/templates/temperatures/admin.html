@@ -1,0 +1,21 @@
+{% extends "temperatures/base.html" %}
+{% load static %}
+{% load temperatures_utils %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static "temperatures/style.css" %}">
+{% endblock css %}
+{% block js %}
+<script src="{% static "temperatures/script.js" %}"></script>
+{% endblock js %}
+
+{% block content %}
+{{ block.super }}
+<form class="temperatures-form" name="save_temp" method="post" action="{% url "temperatures:home" %}">
+    <h1>Enregistrer une température</h1>
+    {% missing_extra_days %}
+    {% csrf_token %}
+    {{ form.as_p }}
+    <p><input type="submit"></p>
+</form>
+{% endblock content %}

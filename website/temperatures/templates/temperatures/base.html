@@ -1,0 +1,13 @@
+{% extends "website/site_base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static "temperatures/style.css" %}">
+{% endblock css %}
+{% block content %}
+<p>
+    {% if perms.add_temperature %}<a href="{% url "temperatures:admin" %}">{% trans "Add temperatures" %}</a> –{% endif %}
+    <a href="{% url "temperatures:chart" %}">{% trans "Chart" %}</a>
+</p>
+{% endblock content %}

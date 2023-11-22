@@ -109,6 +109,7 @@ urlpatterns = [
     path("reload-website", reload_website),
     path("songs-list/<optpath:path>", songs_list),
     path("telegram-bot/", include("telegram_bot.urls", namespace="telegram_bot")),
+    path("temperatures/", include("temperatures.urls", namespace="temperatures")),
     path("tinymce/upload-image", upload_image, name="tinymce-upload-image"),
     path("tinymce/", include("tinymce.urls")),
     path("google<str:id>.html", google),
