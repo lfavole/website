@@ -8,7 +8,7 @@
     <a href="{% url "calendrier_avent_2023:home" %}"><span class="arrow left-arrow"></span></a>
     {{ day|format_day_html }} décembre
 </h1>
-<p>
+<p class="center">
     {% if not_begun %}
     Le calendrier de l’Avent n’a pas encore commencé.
     {% else %}
@@ -17,4 +17,9 @@
     <br>
     <span class="cpt" data-date="{{ date_to_wait.isoformat }}">Revenez plus tard...</span>
 </p>
+{% if has_perm %}
+<p class="center">
+    Ou <a href="?unlock=1">cliquez ici</a> pour débloquer.
+</p>
+{% endif %}
 {% endblock %}

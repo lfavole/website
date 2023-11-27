@@ -1,3 +1,4 @@
+from django.urls import reverse
 from blog.models import Image
 from django.db import models
 from django.utils.safestring import mark_safe
@@ -18,3 +19,6 @@ class Day(models.Model):
 
     def __html__(self):
         return mark_safe(format_day_html(self.day) + " décembre")
+
+    def get_absolute_url(self):
+        return reverse("calendrier_avent_2023:day", args=[self.day])

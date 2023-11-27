@@ -1,9 +1,6 @@
 .arrow {
     &, &::before, &::after {
-        background-color: #000;
-        body.night-mode & {
-            background-color: #eee;
-        }
+        background-color: currentcolor;
     }
 
 	position: relative;

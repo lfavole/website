@@ -8,6 +8,9 @@
 body, input, button, select, textarea {
     font-family: $default-font;
 }
+body {
+    min-height: 100vh;
+}
 
 .sr-only {
     position: absolute;

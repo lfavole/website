@@ -17,7 +17,7 @@ class DataMixin:
         if isinstance(self, InlineModelAdmin):
             # ModelAdmin of the parent object
             return admin.site._registry[self.parent_model]
-        return admin.site._registry[type(obj.item)] if obj else None
+        return admin.site._registry[type(obj.item)] if obj and obj.item else None
 
     def has_add_permission(self, request, obj: File | Image | None = None):
         ma = self.get_modeladmin(obj)
