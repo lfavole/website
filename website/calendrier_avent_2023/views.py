@@ -29,7 +29,7 @@ def day(request, day: int):
     day_date = date(YEAR, MONTH, day)
 
     try:
-        day_obj = Day.objects.select_related("image").get(day=day)
+        day_obj = Day.objects.get(day=day)
     except Day.DoesNotExist:
         day_obj = None  # hide the 404 error if too early (see below)
 
