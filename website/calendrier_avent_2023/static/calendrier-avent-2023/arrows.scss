@@ -52,7 +52,7 @@
         &::before, &::after {
             right: unset;
             left: 0;
-            transform-origin: calc($height / 2) 50%;
+            transform-origin: #{$height / 2} 50%;
         }
         &::before {
             transform: rotate(-$rotation);
