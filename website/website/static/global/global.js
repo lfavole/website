@@ -373,5 +373,10 @@ function mode_nuit_auto(jr) {
 var mode_nuit_auto = mode_nuit.auto;
 
 $(function() {
-    
+    $("body").on("click", "button:has(.arrow), a:has(.arrow), .arrow", function() {
+        var obj = $(this);
+        if(!obj.hasClass("arrow"))
+            obj = obj.find(".arrow")
+        obj.addClass("clicked");
+    });
 });
