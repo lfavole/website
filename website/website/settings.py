@@ -84,7 +84,6 @@ INSTALLED_APPS = [
     # custom apps
     "adminsortable2",
     "compressor",
-    "debug_toolbar",
     "django_cleanup.apps.CleanupConfig",
     "django_comments",
     "easy_thumbnails",
@@ -94,7 +93,7 @@ INSTALLED_APPS = [
     "captcha",
     "users",
     "storage",
-    # allauth (for template overridding)
+    # template overridding
     "allauth",
     "allauth.account",
     "allauth.mfa",
@@ -102,6 +101,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.github",
     "allauth.socialaccount.providers.telegram",
+    "debug_toolbar",
 ]
 SITE_ID = 1
 
@@ -383,7 +383,11 @@ TINYMCE_JS_URL = (
 )
 TINYMCE_EXTRA_MEDIA = {"css": {"all": ("/static/tinymce/tinymce.css",)}, "js": ("/static/tinymce/tinymce.js",)}
 TINYMCE_DEFAULT_CONFIG = {
-    "base_url": "https://cdn.tiny.cloud/1/no-api-key/tinymce/6",
+    "base_url": (
+        STATIC_URL + "vendor/tinymce"
+        if custom_settings.OFFLINE
+        else "https://cdn.tiny.cloud/1/no-api-key/tinymce/6"
+    ),
     "body_class": "content",
     "content_css": Stylesheets(),
     "promotion": False,

@@ -7,137 +7,158 @@ function unite_pluriel(u, c) {
 }
 
 function countdown(options) {
-	var opt = $.extend({
-		couleur: null,
-		raccourci: false,
-		unChiffre: false,
-		anim: true
-	}, options || {}, {
-		prec: null,
-		timeout: null
-	});
-	opt.date = moment(opt.date).toDate().getTime();
-	opt.element = $(opt.element);
-	opt.element.addClass("cpt");
-	opt.txts = opt.txts || {
+    var color = options.color;
+    var short_display = options.short_display;
+    var one_digit = options.one_digit;
+    var date = moment(options.date).toDate().getTime();
+    var container = $(options.element).addClass("countdown");
+    var texts = options.texts || options.txts || {
 		0: "CPT",
 		[-Infinity]: "Le compte à rebours est fini !"
 	};
-	if(opt.txts["-inf"] || opt.txts.inf) {
-		opt.txts[-Infinity] = opt.txts["-inf"] || opt.txts.inf;
-		delete opt.txts["-inf"];
-		delete opt.txts.inf;
+	if(texts["-inf"] || texts.inf) {
+		texts[-Infinity] = texts["-inf"] || texts.inf;
+		delete texts["-inf"];
+		delete texts.inf;
 	}
-	if(opt.anim)
-		opt.element.addClass("anim");
-	var id = countdown.cpts.length;
-	countdown.cpts[id] = opt;
-	var f = function() {
-		var debut = performance.now();
-		var max = moment.duration(10, "y").add(-1, "ms")._data;
-		var cpt = countdown.cpts[this];
-		var txts = cpt.txts;
-		var date = cpt.date;
-		var el = cpt.element;
-		var couleur = cpt.couleur;
-		var raccourci = cpt.raccourci;
-		var unChiffre = cpt.un_chiffre;
+    var texts_keys = Object.keys(texts).sort().reverse();
+
+	if(options.anim != false)
+		container.addClass("anim");
+
+    var max_duration = moment.duration(10, "y").add(-1, "ms")._data;
+    var units = [
+        ["y", "an"],
+        ["M", "mois"],
+        ["d", "j"],
+        ["h", "h"],
+        ["m", "min"],
+        ["s", "s"],
+    ];
+    var short_units = ["h", "m", "s"];
+    var required_units = ["h", "m", "s"];
+
+    var previous_text;
+    var timeout;
+	var callback = function() {
+		var start = performance.now();
 		var now = new Date().getTime();
 		var distance = date - now;
+
 		var diff = moment.duration(Math.abs(distance));
-		var a = moment(date).isDST();
-		var b = moment(now).isDST();
-		if(a != b)
-			diff.add(a && !b ? 1 : -1, "hours");
+        var ms = diff.get("ms");
+        if(Math.abs(ms) < 500)
+            diff.add(-ms, "ms");  // round down
+        else
+            diff.add(ms, "ms");  // round up
+		var dst1 = moment(date).isDST();
+		var dst2 = moment(now).isDST();
+		if(dst1 != dst2)
+			diff.add(dst1 && !dst2 ? 1 : -1, "hours");
 		var html = [];
-		var units = [];
-		units.push(["y", "an"]);
-		units.push(["M", "mois"]);
-		units.push(["d", "j"]);
-		units.push("h");
-		units.push("min");
-		units.push("s");
-		for(var p = false, e, u, i = 0, l = units.length; i < l; i++) {
-			u = units[i][0];
-			e = diff.get(u);
-			p = p || e;
-			if(html.length) html.push('<span class="hidden2">' + (raccourci && i > 2 ? ":" : " ") + "</span>");
+		for(var display_next = false, diff_value, unit, i = 0, l = units.length; i < l; i++) {
+			unit = units[i][0];
+			diff_value = diff.get(unit);
+			display_next = display_next || diff_value;
 			html.push([
-				e,
-				unite_pluriel(typeof units[i] == "string" ? units[i] : units[i][1] || u, e),
-				u,
-				i < 3 ? e : p
+				diff_value,
+				unite_pluriel(units[i][1], diff_value),
+				unit,
+                // always show seconds
+				unit == "s" || (required_units.includes(unit) ? display_next : diff_value)
 			]);
+			if(i != l - 1)
+                // add a spacer for all elements except for the last element
+                html.push(
+                    '<span class="spacer">'
+                    + (short_display && short_units.includes(unit) ? ":" : " ")
+                    + "</span>"
+                );
 		}
 
-
-		html = html.map(function(part, index) {
+		html = html.map(function(part) {
 			if(typeof part == "string") return part;
-			var c = part[0] + "";
-			if(!unChiffre && part[2] != "d" && part[2] != "M" && part[2] != "y" && c < 10) c = "0" + c;
-			var cssColors = [];
+            var diff_value = part[0];
+            var diff_value_str = diff_value + "";
+            var verbose_unit = part[1];
+            var unit = part[2];
+            var display = part[3];
+
+            // add zero at start
+			if(!one_digit && short_units.includes(unit) && diff_value < 10)
+                diff_value_str = "0" + diff_value_str;
+			var css_colors = [];
 			var classes = [];
-			if(!part[3])
+			if(!display)
 				classes.push("hidden");
-			else if(couleur)
-				cssColors.push("color:" + (typeof couleur == "function" ? couleur(part[0], part[2], max[moment.normalizeUnits(part[2]) + "s"] + 1) : couleur));
-			var t = "";
-			if(c.length < 2) {
-				for(var iter = c.length; iter < 2; iter++)
-					t += '<span class="hidden"></span>';
-			}
-			return "<span" + (classes.length ? ' class="' + classes.join(" ") + '"' : "") + (cssColors.length ? ' style="' + cssColors.join("; ") + '"' : "") + ">" + t + "<span>" + [].slice.call(c, 0).join("</span><span>") + "</span>" + (raccourci && index > 2 ? "" : " <small>" + part[1] + "</small>") + "</span>";
+			else if(color)
+				css_colors.push(
+                    "color:"
+                    + (typeof color == "function" ? color(diff_value, unit, max_duration[moment.normalizeUnits(unit) + "s"] + 1) : color)
+                );
+			return (
+                "<span"
+                + (classes.length ? ' class="' + classes.join(" ") + '"' : "")
+                + (css_colors.length ? ' style="' + css_colors.join("; ") + '"' : "")
+                + ">"
+                + (diff_value_str.replace(/(.)/g, '<span data-digit="$1">$1</span>') || "<span></span>")
+                + (short_display && short_units.includes(unit) ? "" : " <small>" + verbose_unit + "</small>")
+                + "</span>"
+            );
 		});
-		var txt;
-		for(var i in txts) {
-			if(distance > i * 1000) {
-				txt = typeof txts[i] == "function" ? txts[i]() : txts[i];
-				if(cpt.prec != txt)
-					el.html(txt.replace(/CPT/g, html.join("")));
-				cpt.prec = txt;
-				$.each(html, function(x, e) {
-					e = $(e);
-					if(e.text() == e.html()) {
-						var elt = el.eq(x);
-						e.toggleClass("hidden", elt.hasClass("hidden"));
-						if(e.attr("style") != elt.attr("style"))
-							e.attr("style", elt.attr("style"));
-						if(e.html() != elt.html())
-							e.html(elt.html());
-						return;
-					}
-					if(e.find("> span").length == 1)
-						e.prepend($("<span>").hide());
-					var elt = el.find("> span").eq(x);
-					elt.toggleClass("hidden", e.hasClass("hidden"));
-					if(elt.attr("style") != e.attr("style"));
-					elt.attr("style", e.attr("style"));
-					for(var t, t2, nb = 1, l = e.children().length; nb <= l; nb++) {
-						t = elt.find(":nth-child(" + nb + ")");
-						t2 = e.find(":nth-child(" + nb + ")");
-						t.toggleClass("hidden", t2.hasClass("hidden"));
-						if(t.attr("style") != t2.attr("style"))
-							t.attr("style", t2.attr("style"));
-						if(t.html() != t2.html()) {
-							t.attr("data-prec", t.text().trim());
-							t.attr("data-act", t2.text().trim());
-							t.addClass("prec");
-							setTimeout(function() {
-								this.removeClass("prec");
-							}.bind(t), 400);
-							t.html(t2.html());
-						}
-					}
-				});
-				if(!txt.match(/CPT/g))
-					return;
+		for(var key, i = 0, l = texts_keys.length; i < l; i++) {
+            key = texts_keys[i];
+			if(distance > key * 1000) {
+				var text = typeof texts[key] == "function" ? texts[key]() : texts[key];
+				if(previous_text != text) {
+					container.html(text.replace(/CPT/g, html.join("")));
+                    previous_text = text;
+                } else {
+                    $.each(html, function(index, new_element) {
+                        new_element = $(new_element);
+                        if(new_element.text() == new_element.html()) {  // text elements
+                            var element = container.eq(index);
+                            new_element.toggleClass("hidden", element.hasClass("hidden"));  // copy hidden class
+                            if(new_element.attr("style") != element.attr("style"))
+                                new_element.attr("style", element.attr("style"));  // copy style
+                            if(new_element.html() != element.html())
+                                new_element.html(element.html());  // copy content
+                            return;
+                        }
+                        // if(new_element.find("> span").length == 1)
+                        //     new_element.prepend($("<span>").hide());  // add a second span if not present
+                        var element = container.find("> span").eq(index);
+                        element.toggleClass("hidden", new_element.hasClass("hidden"));
+                        if(element.attr("style") != new_element.attr("style"));
+                        element.attr("style", new_element.attr("style"));
+                        for(var t, t2, nb = 0, l = new_element.children().length; nb < l; nb++) {
+                            t = element.children().eq(nb);
+                            t2 = new_element.children().eq(nb);
+                            t.toggleClass("hidden", t2.hasClass("hidden"));  // copy hidden class
+                            if(t.attr("style") != t2.attr("style"))
+                                t.attr("style", t2.attr("style"));  // copy style
+                            var d1 = t.attr("data-digit");
+                            var d2 = t2.attr("data-digit");
+                            if(d1 != d2) {
+                                // add transition
+                                t.html('<span class="prev">' + d1 + '</span><span class="act">' + d2 + '</span>')
+                                t.attr("data-digit", d2);
+                            }
+                        }
+                    });
+                }
 				break;
 			}
 		}
-		var fin = performance.now();
-		cpt.timeout = setTimeout(cpt.f, 1000 - (fin - debut));
-	}.bind(id);
-	opt.f = f;
-	f();
+		var end = performance.now();
+		timeout = setTimeout(
+            callback,
+            (
+                // 700 ms  => wait 700 ms
+                // -700 ms => wait 300 ms
+                ms < 0 ? 1000 - -ms : ms
+            ) - (end - start),
+        );
+	};
+	callback();
 }
-countdown.cpts = [];

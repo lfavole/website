@@ -1,3 +1,6 @@
+#djDebug #djDebugToolbar::-webkit-scrollbar {
+    display: none;
+}
 #djDebug #djDebugToolbar li.djdt-active:before {
     content: "";
     border-style: solid;
@@ -29,7 +32,8 @@
     font-size: 16px;
 }
 
-#djDebug #djDebugToolbar li {
+#djDebug #djDebugToolbar li, #djDebug code {
+    text-wrap: wrap;
     word-break: break-word;
 }
 

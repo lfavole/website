@@ -5,8 +5,8 @@
 <link rel="stylesheet" href="{% static "debug_toolbar/css/custom.css" %}">
 {% endblock %}
 {% block js %}
-<script type="module" src="{% static "debug_toolbar/js/toolbar.js" %}" async></script>
 <script type="module" src="{% static "debug_toolbar/js/lazy_loading.js" %}" async></script>
+<script type="module" src="{% static "debug_toolbar/js/toolbar.js" %}" async></script>
 {% endblock %}
 <div id="djDebug" class="djdt-hidden" dir="ltr"
      {% if not toolbar.should_render_panels %}

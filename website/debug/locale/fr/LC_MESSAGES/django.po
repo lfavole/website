@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-27 13:36+0200\n"
+"POT-Creation-Date: 2023-12-03 19:44+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: .\debug\client.py:90 .\debug\client.py:218
+#: .\debug\client.py:90 .\debug\client.py:223
 msgid "Valid signature"
 msgstr "Signature valide"
 
-#: .\debug\client.py:91 .\debug\client.py:217
+#: .\debug\client.py:91 .\debug\client.py:222
 msgid "Invalid signature"
 msgstr "Signature invalide"
 
@@ -34,7 +34,7 @@ msgstr "Validité inconnue"
 msgid "Expired signature"
 msgstr "Signature expirée"
 
-#: .\debug\client.py:94 .\debug\client.py:206
+#: .\debug\client.py:94 .\debug\client.py:211
 msgid "Expired key"
 msgstr "Clé expirée"
 
@@ -42,15 +42,15 @@ msgstr "Clé expirée"
 msgid "Revoked key"
 msgstr "Clé révoquée"
 
-#: .\debug\client.py:96 .\debug\client.py:209
+#: .\debug\client.py:96 .\debug\client.py:214
 msgid "Can't check for validity"
 msgstr "Impossible de vérifier la validité"
 
-#: .\debug\client.py:97 .\debug\client.py:210
+#: .\debug\client.py:97 .\debug\client.py:215
 msgid "No signature"
 msgstr "Pas de signature"
 
-#: .\debug\client.py:100 .\debug\client.py:223
+#: .\debug\client.py:100 .\debug\client.py:228
 msgid "Status"
 msgstr "État"
 
@@ -66,51 +66,51 @@ msgstr "Empreinte de la clé"
 msgid "Trust level"
 msgstr "Niveau de sécurité"
 
-#: .\debug\client.py:207
+#: .\debug\client.py:212
 msgid "The key is not a signing key"
 msgstr "La clé ne sert pas à signer"
 
-#: .\debug\client.py:208
+#: .\debug\client.py:213
 msgid "Error while checking for validity"
 msgstr "Erreur lors de la vérification de la validité"
 
-#: .\debug\client.py:211
+#: .\debug\client.py:216
 msgid "Unknown signature type"
 msgstr "Type de signature inconnu"
 
-#: .\debug\client.py:212
+#: .\debug\client.py:217
 msgid "No user associated"
 msgstr "Pas d'utilisateur associé"
 
-#: .\debug\client.py:213
+#: .\debug\client.py:218
 msgid "Unverified email address"
 msgstr "Adresse mail non vérifiée"
 
-#: .\debug\client.py:214
+#: .\debug\client.py:219
 msgid "Bad email address"
 msgstr "Adresse mail invalide"
 
-#: .\debug\client.py:215
+#: .\debug\client.py:220
 msgid "Unknown key"
 msgstr "Clé inconnue"
 
-#: .\debug\client.py:216
+#: .\debug\client.py:221
 msgid "Malformed signature"
 msgstr "Signature malformée"
 
-#: .\debug\client.py:220
+#: .\debug\client.py:225
 msgid "yes"
 msgstr "oui"
 
-#: .\debug\client.py:220
+#: .\debug\client.py:225
 msgid "no"
 msgstr "non"
 
-#: .\debug\client.py:220
+#: .\debug\client.py:225
 msgid "unknown"
 msgstr "inconnu"
 
-#: .\debug\client.py:222
+#: .\debug\client.py:227
 msgid "Verified"
 msgstr "Vérifié"
 
@@ -178,16 +178,60 @@ msgstr "Profil de l'auteur du commit"
 msgid "URL"
 msgstr "URL"
 
+#: .\debug\panels.py:144
+msgid "Working tree status"
+msgstr "État des fichiers"
+
+#: .\debug\panels.py:147
+msgid "Unmodified"
+msgstr "Non modifié"
+
 #: .\debug\panels.py:148
+msgid "Modified"
+msgstr "Modifié"
+
+#: .\debug\panels.py:149
+msgid "File type changed"
+msgstr "Type de fichier changé"
+
+#: .\debug\panels.py:150
+msgid "Added"
+msgstr "Ajouté"
+
+#: .\debug\panels.py:151
+msgid "Deleted"
+msgstr "Supprimé"
+
+#: .\debug\panels.py:152
+msgid "Renamed"
+msgstr "Renommé"
+
+#: .\debug\panels.py:153
+msgid "Copied"
+msgstr "Copié"
+
+#: .\debug\panels.py:154
+msgid "Updated"
+msgstr "Modifié"
+
+#: .\debug\panels.py:155
+msgid "Untracked"
+msgstr "Non suivi"
+
+#: .\debug\panels.py:156
+msgid "Ignored"
+msgstr "Ignoré"
+
+#: .\debug\panels.py:161
 msgid "Git information"
 msgstr "Informations de Git"
 
-#: .\debug\panels.py:149
+#: .\debug\panels.py:162
 msgid "GitHub information"
 msgstr "Informations de GitHub"
 
 #. Translators: add a space before colon if needed
-#: .\debug\panels.py:165
+#: .\debug\panels.py:178
 msgid ":"
 msgstr " :"
 

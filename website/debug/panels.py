@@ -141,6 +141,19 @@ class GitInfoPanel(Panel):
             "author_profile": _("Author profile"),
             "committer_profile": _("Committer profile"),
             "url": _("URL"),
+            "status": _("Working tree status"),
+        }
+        status_types = {
+            " ": _("Unmodified"),
+            "M": _("Modified"),
+            "T": _("File type changed"),
+            "A": _("Added"),
+            "D": _("Deleted"),
+            "R": _("Renamed"),
+            "C": _("Copied"),
+            "U": _("Updated"),
+            "?": _("Untracked"),
+            "!": _("Ignored"),
         }
 
         parts: dict[str, list[tuple[str, str]]] = {}
@@ -168,6 +181,17 @@ class GitInfoPanel(Panel):
                     )
                 if attr == "url":
                     value = SafeString(f'<a href="{html.escape(value)}" target="_blank">{html.escape(value)}</a>')
+                if attr == "status":
+                    new_value = ""
+                    for line in value.splitlines():
+                        status1, status2, file = line[0:1], line[1:2], line[3:]
+                        status1 = status_types.get(status1, status1)
+                        status2 = status_types.get(status2, status2)
+                        new_value += "<tr>"
+                        for item in (status1, status2, file):
+                            new_value += f"<td>{html.escape(item)}</td>"
+                        new_value += "</tr>"
+                    value = SafeString(f"<table>{new_value}</table>")
                 if value is None or value == "":
                     value = "-"
                 parts[title].append((labels[attr], value))

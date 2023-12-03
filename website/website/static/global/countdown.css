@@ -1,0 +1,80 @@
+.countdown {
+    display: inline-block;
+    line-height: 1em;
+}
+
+/* hide the hidden parts and their associated spacers */
+.countdown .hidden,
+.countdown .hidden + .spacer {
+    display: none;
+}
+
+/* first-level elements */
+.countdown > span {
+    transition: color 0.4s ease-in-out;
+    display: inline-block;
+}
+.countdown .spacer {
+    display: inline;
+}
+
+/* second-level elements (digits) */
+.countdown > span > span {
+    display: inline-block;
+    width: 0.7em;
+    height: 1em;
+    text-align: center;
+}
+/* avoid excessive space between digits */
+.countdown > span > span:first-of-type {
+    text-align: right;
+}
+.countdown > span > span:last-of-type {
+    text-align: left;
+}
+
+/* third-level elements (digit transitions) */
+/* show as block */
+.countdown > span > span > span {
+    display: inline-block;
+    width: 0.7em;
+}
+.countdown .prev {
+    display: none;
+    user-select: none;
+}
+
+
+/* animation */
+.countdown.anim .prev {
+    display: inline-block;  /* show it */
+    animation: prev-before 0.4s ease-in-out;
+    opacity: 0;  /* hide it when the animation is finished */
+}
+/* scroll up and hide */
+@keyframes prev-before {
+    0% {
+        transform: translateY(0%);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+}
+
+.countdown.anim .act {
+    margin-left: -100%;  /* make it overflow the other digit */
+    animation: prev-after 0.4s ease-in-out;
+}
+/* scroll up and show */
+@keyframes prev-after {
+    0% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0%);
+        opacity: 1;
+    }
+}

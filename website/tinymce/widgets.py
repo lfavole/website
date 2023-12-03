@@ -91,7 +91,7 @@ class TinyMCE(forms.Textarea):
     @property
     def media(self):
         css = None
-        js = [tinymce_settings.JS_URL]
+        js = [str(tinymce_settings.JS_URL)]  # might be a proxy
         if tinymce_settings.USE_EXTRA_MEDIA:
             if "js" in tinymce_settings.USE_EXTRA_MEDIA:
                 js += tinymce_settings.USE_EXTRA_MEDIA["js"]

@@ -1,6 +1,7 @@
 $(function() {
     function add_fancybox() {
-        $('<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5/dist/fancybox/fancybox.css">')
+        $('<link rel="stylesheet">')
+        .attr("src", navigator.onLine ? "https://cdn.jsdelivr.net/npm/@fancyapps/ui@5/dist/fancybox/fancybox.css" : "/static/vendor/fancybox.css")
         .appendTo("head");
         $.getScript("https://cdn.jsdelivr.net/npm/@fancyapps/ui@5/dist/fancybox/fancybox.umd.js")
         .done(function() {

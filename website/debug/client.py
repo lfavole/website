@@ -103,6 +103,11 @@ class GitClient:
             _("Trust level"): trust_level,
         }
 
+    @property
+    @returns_on_fail(None)
+    def status(self):
+        return self._execute_git("status", "--porcelain")
+
     def _execute_git_show(self, format_text, commit="HEAD"):
         return self._execute_git("show", "--quiet", f"--format={format_text}", commit).strip()
 
