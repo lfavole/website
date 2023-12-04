@@ -14,7 +14,7 @@
     "categories": [],
     "icons": [
         {"src": "/static/global/profile_16.jpg", "type": "image/jpeg", "sizes": "16x16"},
-        {"src": "/static/global/profile.jpg", "type": "image/jpeg", "sizes": "100x100"},
+        {"src": "/static/global/profile.jpg", "type": "image/jpeg", "sizes": "100x100"}
     ],
-    "screenshots": [],
+    "screenshots": []
 }
