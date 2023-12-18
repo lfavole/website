@@ -1,0 +1,237 @@
+*, ::before, ::after {
+    box-sizing:border-box;
+}
+
+body, input, button, select, textarea {
+    font-family:Montserrat, Arial, Helvetica, sans-serif;
+}
+body {
+    min-height: 100vh;
+}
+
+.sr-only {
+    position:absolute;
+    clip:rect(1px, 1px, 1px, 1px);
+    padding:0;
+    border:0;
+    height:1px;
+    width:1px;
+    overflow:hidden;
+}
+
+/* Header and navbar */
+.navbar {
+    padding:1rem;
+    background-color:#efefef;
+	align-items:center;
+}
+header {
+    display:flex;
+    align-items:stretch;
+    white-space:nowrap;
+    height:3.25rem;
+}
+header img {
+    width:4rem;
+    height:4em;
+    border-radius:2rem;
+    margin:-0.5rem 0;
+}
+header .title {
+    font-size:2.5rem;
+    text-align:center;
+    padding:0 0.5em;
+    display:inline;
+}
+
+
+@media screen and (max-width: 1023px) {
+    input.navbar-checkbox:checked + nav {
+        display:block;
+    }
+    .navbar-menu {
+        margin-top:1rem;
+        border-top:1px solid black;
+        background:none;
+        box-shadow:none;
+    }
+}
+nav ul {
+    font-size:1.5rem;
+    margin:auto;
+}
+nav li {
+    position:relative;
+}
+@media screen and (max-width: 1023px) {
+    nav li {
+        padding-left:0.5rem;
+    }
+}
+@media screen and (min-width: 1024px) {
+    nav li {
+        display:inline-block;
+    }
+    nav li:not(:last-child)::after {
+        content:"";
+        display:inline-block;
+        width:0.6em;
+        border-bottom:0.0625em solid black;
+        margin:0.25em 0.2em;
+    }
+}
+nav li.has-subpages > a::after {
+    content:"";
+    display:inline-block;
+    margin-left:0.3em;
+    margin-right:0.3em;
+    width:0.55em;
+    height:0.55em;
+    border:0.1875em solid #485fc7;
+    border-left:0;
+    border-top:0;
+    border-radius:0.09375em;
+    transform:translateY(-25%) rotate(45deg);
+}
+
+@media screen and (min-width: 1024px) {
+    nav ul ul {
+        opacity:0;
+        pointer-events:none;
+        min-width:100%;
+        max-width:500px;
+        position:absolute;
+        left:0%;
+        top:100%;
+        z-index:1;
+        line-height:1.2em;
+        border-radius:0 0 8px 8px;
+        border-top:1px solid black;
+        background-color:#cccccc;
+    }
+    nav li:hover > ul,
+    nav a:focus + ul,
+    nav ul ul:focus-within {
+        opacity:1;
+        pointer-events:auto;
+    }
+    nav ul ul li {
+        display:block;
+        margin:4px 8px;
+    }
+}
+@media screen and (max-width: 1023px) {
+    nav ul ul {
+        opacity:1;
+        pointer-events:auto;
+        margin-left:1em;
+    }
+    nav ul ul li {
+        border-left:1px solid #485fc7;
+    }
+
+	.navbar .user {
+		margin-top:0.5rem;
+	}
+}
+
+
+/* Messages */
+ul.messagelist {
+    padding:0;
+    margin:0;
+}
+ul.messagelist li {
+    display:block;
+    padding:0.5rem 1rem;
+    margin:0.5rem auto;
+    word-break:break-word;
+	max-width:1000px;
+	border-radius:9999px;
+}
+ul.messagelist li::before {
+	content:"";
+	display:inline-block;
+	width:1em;
+	height:1em;
+	background-size:contain;
+	vertical-align:middle;
+	margin-right:0.3em;
+}
+ul.messageslist li.debug {
+    background-color:#ce93d8;
+    border-color:#7b1fa2;
+}
+ul.messagelist li.info {
+    background-color:#90caf9;
+    border:4px solid #1976d2;
+}
+ul.messagelist li.success {
+    background-color:#c5e1a5;
+    border-color:#689f38;
+}
+ul.messagelist li.success::before {
+	background-image:url(/static/admin/img/icon-yes.svg);
+}
+ul.messagelist li.warning {
+    background-color:#fff59d;
+    border-color:#fbc02d;
+}
+ul.messagelist li.error {
+    background-color:#ffab91;
+    border-color:#e64a19;
+}
+
+/* Main content */
+.content {
+    padding:1rem;
+    margin:auto;
+    max-width:1000px;
+    font-size:1.25em;
+}
+
+.helptext {
+    display:block;
+    font-size:0.8em;
+    font-style:italic;
+}
+input, button, .button, select, textarea {
+	border:1px solid black;
+	transition:border 0.4s;
+    background-color:#ddffdd;
+    line-height:inherit;
+    padding:0 0.375em;
+	border-radius:0.3em;
+    font-size:1em;
+	vertical-align:middle;
+}
+.button {
+	color:black;
+	text-decoration:none;
+    height:unset;
+}
+.logout-form {
+	display:inline;
+}
+.logout-form input[type=submit] {
+	color:#485fc7;
+	cursor:pointer;
+	text-decoration:none;
+	border:none;
+	padding:0;
+	background:none;
+}
+textarea {
+    resize:vertical;
+    max-height:10em;
+    width:16em;
+    text-align:left;
+}
+input[type=submit], input[type=button], button, .button {
+	cursor:pointer;
+    background-color:#ffff88;
+}
+input[type=checkbox], input[type=radio] {
+	width:1em;
+	height:1em;
+}

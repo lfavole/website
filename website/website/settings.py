@@ -11,9 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 import re
-import subprocess as sp
 from pathlib import Path
-from shutil import which
 
 import custom_settings
 from debug_toolbar.settings import PANELS_DEFAULTS
@@ -35,20 +33,20 @@ GITHUB_WEBHOOK_KEY = custom_settings.GITHUB_WEBHOOK_KEY
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-if custom_settings.SENTRY_DSN:
-    # Load Sentry at the start to capture as many errors as possible
-    import sentry_sdk
-    from sentry_sdk.integrations.django import DjangoIntegration
+# if custom_settings.SENTRY_DSN:
+#     # Load Sentry at the start to capture as many errors as possible
+#     import sentry_sdk
+#     from sentry_sdk.integrations.django import DjangoIntegration
 
-    sentry_sdk.init(
-        dsn=custom_settings.SENTRY_DSN,
-        environment="production" if PYTHONANYWHERE else "development",
-        integrations=[DjangoIntegration()],
-        send_default_pii=False,
-        traces_sample_rate=1.0,
-        profiles_sample_rate=0.1 if PRODUCTION else 1.0,
-        project_root=str(BASE_DIR),
-    )
+#     sentry_sdk.init(
+#         dsn=custom_settings.SENTRY_DSN,
+#         environment="production" if PYTHONANYWHERE else "development",
+#         integrations=[DjangoIntegration()],
+#         send_default_pii=False,
+#         traces_sample_rate=1.0,
+#         profiles_sample_rate=0.1 if PRODUCTION else 1.0,
+#         project_root=str(BASE_DIR),
+#     )
 
 
 SECRET_KEY = custom_settings.SECRET_KEY
@@ -83,7 +81,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # custom apps
     "adminsortable2",
-    "compressor",
     "django_cleanup.apps.CleanupConfig",
     "django_comments",
     "easy_thumbnails",
@@ -311,25 +308,11 @@ STATICFILES_DIRS = [
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-    "compressor.finders.CompressorFinder",
 ]
 STATIC_ROOT = BASE_DIR / "static/"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media/"
-
-# Compressor settings (Sass)
-sass_path = which("sass")
-if not sass_path:
-    sass_command = "django_libsass.SassCompiler"
-else:
-    sass_help = sp.run([sass_path, "--help"], check=False, stdout=sp.PIPE, stderr=sp.STDOUT, text=True).stdout
-    if "--scss" in sass_help:
-        sass_command = "sass --scss {infile} {outfile}"
-    else:
-        sass_command = "sass {infile} {outfile}"
-
-COMPRESS_PRECOMPILERS = (("text/x-scss", sass_command),)
 
 
 # Default primary key field type

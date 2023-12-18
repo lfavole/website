@@ -1,4 +1,3 @@
-{% load compress %}
 {% load static %}
 
 <!DOCTYPE html>
@@ -28,13 +27,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     {% endblock cdn_css %}
 
-    {% compress css %}
-    <link rel="stylesheet" type="text/x-scss" href="{% static "global/global.scss" %}">
-    {% endcompress %}
+    <link rel="stylesheet" href="{% static "global/global.css" %}">
+    <link rel="stylesheet" href="{% static "global/audioplayer.css" %}">
 
-    {% compress css %}
     {% block css %}{% endblock %}
-    {% endcompress %}
 
     {% block cdn_js %}
     {% if offline %}
@@ -46,14 +42,11 @@
     {% endif %}
     {% endblock cdn_js %}
 
-    {% compress js %}
     <script src="{% static "global/global.js" %}"></script>
+    <script src="{% static "global/audioplayer.js" %}"></script>
     <script src="{% static "global/fancybox.js" %}"></script>
-    {% endcompress %}
 
-    {% compress js %}
     {% block js %}{% endblock %}
-    {% endcompress %}
 
     {% block manifest %}
     <link rel="manifest" href="{% static "global/manifest.json" %}">
