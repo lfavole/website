@@ -3,6 +3,7 @@ from datetime import date
 from django.http import Http404, HttpRequest
 from django.shortcuts import render
 
+from globals.models import Setting
 from website.views import has_permission
 
 from .models import Day
@@ -29,7 +30,10 @@ def day(request, day: int):
     day_date = date(YEAR, MONTH, day)
 
     try:
-        day_obj = Day.objects.get(day=day)
+        if day == 25:
+            day_obj = Setting.objects.get(slug="25-12-2023")
+        else:
+            day_obj = Day.objects.get(day=day)
     except Day.DoesNotExist:
         day_obj = None  # hide the 404 error if too early (see below)
 

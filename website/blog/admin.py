@@ -56,7 +56,7 @@ class DataInline(DataMixin, GenericTabularInline):
     Inline for files/images.
     """
 
-    readonly_fields = ("file",)
+    fields = ("file",)
     extra = 0
 
 

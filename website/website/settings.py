@@ -352,7 +352,7 @@ class Stylesheets(LazyObject, list):
 
         self._wrapped = []
         for match in re.finditer(r'<link\b[^>]*\bhref=(["\']?)(.*?)\1[^>]*>', content):
-            if not re.match(r'rel=(["\']?)stylesheet\1', match.group(0)):
+            if not re.search(r'rel=(["\']?)stylesheet\1', match.group(0)):
                 continue
             self._wrapped.append(match.group(2))
 
