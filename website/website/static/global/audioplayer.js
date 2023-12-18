@@ -74,6 +74,8 @@ var audioplayer = (function() {
 		$(elements || "audio").each(function(_index, element) {
 			if(element.audioplayer) return;
 			var is_banner = add_banner && element == $banner_audio[0];
+            if(!is_banner)
+                $banner_audio.parent().show();
 			var $element = $(element);
 			function get_element() {
 				if(is_banner)
@@ -330,6 +332,7 @@ var audioplayer = (function() {
 				$("<div>")
 				.append($('<div class="currently-playing">'))
 				.append($banner_audio = $("<audio>"))
+                .hide()
 			);
 			init($banner_audio);
 		});
