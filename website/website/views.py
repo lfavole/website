@@ -36,7 +36,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.template import Engine, RequestContext
 from django.urls import resolve
 from django.utils.encoding import force_bytes
-from django.utils.translation import get_language_from_path
+from django.utils.translation import get_language_from_path, gettext_lazy as _
 from django.views.debug import technical_404_response
 from django.views.decorators.csrf import csrf_exempt
 from sentry_sdk import Hub
@@ -122,6 +122,7 @@ def handler_404(request, exception):
 
 DEBUG_ENGINE = Engine(
     dirs=[str(Path(__file__).parent / "templates")],
+    context_processors=["website.context_processors.offline"],
     debug=True,
     libraries={
         "compress": "compressor.templatetags.compress",
@@ -137,17 +138,20 @@ def handler_500(request, _template_name=None):
     """
     500 (server error) page that logs the error.
     """
-    with (Path(__file__).parent / "templates/website/500.html").open() as f:
-        t = DEBUG_ENGINE.from_string(f.read())
-    html = t.render(
-        RequestContext(
-            request,
-            {
-                "error_id": Hub.current._last_event_id,
-            }
+    try:
+        with (Path(__file__).parent / "templates/website/500.html").open() as f:
+            t = DEBUG_ENGINE.from_string(f.read())
+        html = t.render(
+            RequestContext(
+                request,
+                {
+                    "error_id": Hub.current._last_event_id,
+                }
+            )
         )
-    )
-    return HttpResponse(html, status=500)
+        return HttpResponse(html, status=500)
+    except Exception:
+        return HttpResponse(_("An unexpected error occured while trying to display the 500 error page."), "text/plain")
 
 
 def account_index(request):

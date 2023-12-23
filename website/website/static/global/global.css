@@ -42,6 +42,8 @@ header .title {
     text-align:center;
     padding:0 0.5em;
     display:inline;
+    color:#363636;
+    font-weight:bold;
 }
 
 
@@ -189,6 +191,11 @@ ul.messagelist li.error {
     max-width:1000px;
     font-size:1.25em;
 }
+a {
+    color:#485fc7;
+    cursor:pointer;
+    text-decoration:none;
+}
 
 .helptext {
     display:block;
@@ -234,4 +241,10 @@ input[type=submit], input[type=button], button, .button {
 input[type=checkbox], input[type=radio] {
 	width:1em;
 	height:1em;
+}
+
+/* Footer */
+footer {
+    background-color:#fafafa;
+    padding:3rem 1.5rem 6rem;
 }
