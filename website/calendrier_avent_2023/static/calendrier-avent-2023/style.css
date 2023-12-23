@@ -35,12 +35,10 @@ h1 a, h1 a:hover {
 	margin-left: 0.3em;
     color: inherit;
 }
-@import "arrows.scss";
 
 body.day main {
     display: flex;
     flex-direction: column;
-    max-height: 100vh;
     padding: 0.5em;
 }
 main img {
