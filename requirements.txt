@@ -8,6 +8,7 @@ easy-thumbnails ~= 2.8
 minify-html ~= 0.11
 Pillow ~= 10.0
 pyphen ~= 0.12
+python-dotenv ~= 1.0
 qrcode ~= 7.3
 requests ~= 2.0
 sentry-sdk[django] ~= 1.33

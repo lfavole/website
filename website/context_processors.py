@@ -1,8 +1,8 @@
 import os
 
 from django.utils.timezone import now
-from globals.models import Page
 
+from globals.models import Page
 from website.utils.connectivity import internet
 
 NavLinks = list[tuple[Page, "NavLinks"]]

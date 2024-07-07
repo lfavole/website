@@ -1,8 +1,8 @@
 venv*
-website/db.sqlite3
-website/.env
+db.sqlite3
+.env
 *.mo
 **/__pycache__/**
-website/media/**
-website/static/**
+media/**
+static/**
 data/**

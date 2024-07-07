@@ -1,23 +1,11 @@
-# type: ignore
 # pylint: disable=C0413, E0401, E0611
 import builtins
 import io
-import os
 import shlex
 import subprocess as sp
 import sys
 from pathlib import Path
 from typing import Callable
-
-BASE = Path(__file__).resolve().parent.parent
-
-# setup to avoid errors later
-DOTENV_PATH = BASE / "website/.env"
-DOTENV_PATH.touch()
-
-(BASE / "website/static").mkdir(exist_ok=True)
-
-TEST = os.environ.get("TEST")
 
 
 def run(args: list[str] | str, pipe=False, capture=False, **kwargs) -> sp.CompletedProcess[str]:
@@ -91,7 +79,7 @@ def pipe_function(f):
     def wrapper(*args, pipe=False, outputs: list[str] | None = None, **kwargs):
         if pipe:
             if not isinstance(outputs, list):
-                outputs: list[str] = []
+                outputs = []
             old_print = builtins.print
 
             def new_print(*args, file=None, **kwargs):
@@ -108,7 +96,7 @@ def pipe_function(f):
 
             builtins.print = old_print  # type: ignore
             return "".join(outputs)
-        else:
-            return f(*args, pipe=False, outputs=None, **kwargs)
+
+        return f(*args, pipe=False, outputs=None, **kwargs)
 
     return wrapper

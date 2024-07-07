@@ -12,7 +12,6 @@ from urllib.parse import quote, urljoin, urlparse
 from wsgiref.util import is_hop_by_hop
 
 import requests
-from blog.models import Image
 from django.apps import apps
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
@@ -41,6 +40,7 @@ from django.views.debug import technical_404_response
 from django.views.decorators.csrf import csrf_exempt
 from sentry_sdk import Hub
 
+from blog.models import Image
 from website.utils.http import encode_filename
 from website.utils.permission import has_permission
 
