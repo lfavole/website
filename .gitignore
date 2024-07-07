@@ -1,5 +1,6 @@
+venv*
 website/db.sqlite3
-website/custom_settings_overrides.py
+website/.env
 *.mo
 **/__pycache__/**
 website/media/**

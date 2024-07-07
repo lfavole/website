@@ -15,7 +15,6 @@ import requests
 from blog.models import Image
 from django.apps import apps
 from django.conf import settings
-from django.contrib.auth.views import LogoutView
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import PermissionDenied
 from django.core.serializers import get_serializer
@@ -36,7 +35,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.template import Engine, RequestContext
 from django.urls import resolve
 from django.utils.encoding import force_bytes
-from django.utils.translation import get_language_from_path, gettext_lazy as _
+from django.utils.translation import get_language_from_path
+from django.utils.translation import gettext_lazy as _
 from django.views.debug import technical_404_response
 from django.views.decorators.csrf import csrf_exempt
 from sentry_sdk import Hub
@@ -51,34 +51,6 @@ except ImportError:
     fetch = None
 
 DATA = Path(__file__).resolve().parent.parent.parent / "data"
-
-
-def redirect_lang_url(request, path):
-    lang = get_language_from_path(request.path)
-    response = HttpResponseRedirect("/" + path)
-    if not lang:
-        return response
-    response.set_cookie(
-        settings.LANGUAGE_COOKIE_NAME,
-        lang,
-        max_age=settings.LANGUAGE_COOKIE_AGE,
-        path=settings.LANGUAGE_COOKIE_PATH,
-        domain=settings.LANGUAGE_COOKIE_DOMAIN,
-        secure=settings.LANGUAGE_COOKIE_SECURE,
-        httponly=settings.LANGUAGE_COOKIE_HTTPONLY,
-        samesite=settings.LANGUAGE_COOKIE_SAMESITE,
-    )
-    return response
-
-
-class NewLogoutView(LogoutView):
-    """
-    New admin logout view that disallows logout via GET requests :
-    it redirects to allauth view with a button to log out (POST).
-    """
-
-    def get(self, *_args, **_kwargs):
-        return redirect("account_logout")
 
 
 def google(_request, id):
@@ -125,7 +97,6 @@ DEBUG_ENGINE = Engine(
     context_processors=["website.context_processors.offline"],
     debug=True,
     libraries={
-        "compress": "compressor.templatetags.compress",
         "i18n": "django.templatetags.i18n",
         "nav": "website.templatetags.nav",
         "socialaccount": "allauth.socialaccount.templatetags.socialaccount",
@@ -146,7 +117,7 @@ def handler_500(request, _template_name=None):
                 request,
                 {
                     "error_id": Hub.current._last_event_id,
-                }
+                },
             )
         )
         return HttpResponse(html, status=500)

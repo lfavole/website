@@ -13,9 +13,13 @@
      data-store-id="{{ toolbar.store_id }}"
      data-render-panel-url="{% url "djdt:render_panel" %}"
      {% endif %}
-     data-sidebar-url="{% url "djdt:history_sidebar" %}"
-     data-default-show="{{ toolbar.config.SHOW_COLLAPSED|yesno:"false,true" }}"
-     {{ toolbar.config.ROOT_TAG_EXTRA_ATTRS|safe }}>
+     {% url "djdt:history_sidebar" as history_url %}
+     {% if history_url %}
+     data-sidebar-url="{{ history_url }}"
+     {% endif %}
+     data-default-show="{% if toolbar.config.SHOW_COLLAPSED %}false{% else %}true{% endif %}"
+     {{ toolbar.config.ROOT_TAG_EXTRA_ATTRS|safe }}  data-update-on-fetch="{{ toolbar.config.UPDATE_ON_FETCH }}"
+     data-theme="{{ toolbar.config.DEFAULT_THEME }}">
   <div class="djdt-hidden" id="djDebugToolbar">
     <ul id="djDebugPanelList">
       <li><a id="djHideToolBarButton" href="#" title="{% trans "Hide toolbar" %}">{% trans "Hide" %} »</a></li>

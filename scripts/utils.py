@@ -2,6 +2,7 @@
 # pylint: disable=C0413, E0401, E0611
 import builtins
 import io
+import os
 import shlex
 import subprocess as sp
 import sys
@@ -11,19 +12,12 @@ from typing import Callable
 BASE = Path(__file__).resolve().parent.parent
 
 # setup to avoid errors later
-CUSTOM_SETTINGS_PATH = BASE / "website/custom_settings.py"
-CUSTOM_SETTINGS_PATH.touch()
+DOTENV_PATH = BASE / "website/.env"
+DOTENV_PATH.touch()
 
 (BASE / "website/static").mkdir(exist_ok=True)
 
-TEST = None
-
-sys.path.insert(0, str(BASE / "website"))
-import custom_settings  # noqa
-
-sys.path.pop(0)
-
-TEST = getattr(custom_settings, "TEST", False)
+TEST = os.environ.get("TEST")
 
 
 def run(args: list[str] | str, pipe=False, capture=False, **kwargs) -> sp.CompletedProcess[str]:

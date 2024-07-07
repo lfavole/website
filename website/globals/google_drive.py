@@ -1,6 +1,7 @@
+import os
+
 import requests
 from allauth.socialaccount.models import SocialToken
-from custom_settings import ADMIN_NAME
 
 from website.utils.oauth import ensure_valid_token
 
@@ -9,7 +10,7 @@ google_drive_files = ({}, {})
 
 
 def get_google_drive_token(request):
-    token = SocialToken.objects.get(app__provider="google", account__user__username=ADMIN_NAME)
+    token = SocialToken.objects.get(app__provider="google", account__user__username=os.environ.get("ADMIN_NAME", ""))
     ensure_valid_token(request, token)
     return token
 

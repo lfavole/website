@@ -1,6 +1,9 @@
-import custom_settings
+import os
+
 from django.utils.timezone import now
 from globals.models import Page
+
+from website.utils.connectivity import internet
 
 NavLinks = list[tuple[Page, "NavLinks"]]
 
@@ -9,7 +12,7 @@ def offline(_request):
     """
     Add an `offline` variable to all templates.
     """
-    return {"offline": custom_settings.OFFLINE}
+    return {"offline": not internet()}
 
 
 def now_variable(_request):
@@ -53,4 +56,4 @@ def github_repo_url(request):
     """
     Add an `github_repo` variable to all templates.
     """
-    return {"github_repo": custom_settings.GITHUB_REPO}
+    return {"github_repo": os.environ.get("GITHUB_REPO")}

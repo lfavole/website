@@ -1,8 +1,8 @@
 import datetime as dt
+import os
 from pathlib import PurePosixPath
 from typing import Type
 
-import custom_settings
 import requests
 from django.conf import settings
 from django.core.cache import cache
@@ -73,10 +73,10 @@ def contact(request):
 
 
 def google_drive(request: HttpRequest, path: str):
-    if request.user.username == custom_settings.ADMIN_NAME:  # type: ignore
+    if request.user.username == os.environ.get("ADMIN_NAME", ""):  # type: ignore
         folders = [""]
     else:
-        folders = custom_settings.GOOGLE_DRIVE_FOLDERS
+        folders = os.environ.get("GOOGLE_DRIVE_FOLDERS").split(",")
     token = get_google_drive_token(request)
     auth_header = {"Authorization": f"Bearer {token.token}"}
 

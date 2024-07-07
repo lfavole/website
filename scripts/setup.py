@@ -1,13 +1,13 @@
 import argparse
 import subprocess as sp
 
-from .utils import BASE, CUSTOM_SETTINGS_PATH
+from .utils import BASE, DOTENV_PATH
 
 
 def main(args):
     if args.test:
-        with CUSTOM_SETTINGS_PATH.open("w") as f:
-            f.write("TEST = True\r\n")  # CRLF for Pylint
+        with DOTENV_PATH.open("w") as f:
+            f.write("TEST=1")
 
     sp.run(["pip", "install", "-r", BASE / "requirements.txt"], check=True)
 

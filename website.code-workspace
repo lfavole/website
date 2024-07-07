@@ -20,7 +20,7 @@
         },
 		"pylint.args": [
 			"--rcfile",
-			".pylintrc"
+			"pyproject.toml"
 		],
 		"python.analysis.extraPaths": [
 			"./scripts"

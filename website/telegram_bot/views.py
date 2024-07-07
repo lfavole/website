@@ -1,7 +1,7 @@
 import io
+import os
 import re
 
-import custom_settings
 import requests
 from django.http.response import HttpResponse
 
@@ -16,7 +16,7 @@ def pattern(test):
     return wrapper
 
 
-BOT_TOKEN = getattr(custom_settings, "BOT_TOKEN", "")
+BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
 BASE_URL = f"https://api.telegram.org/bot{BOT_TOKEN}"
 
 

@@ -1,6 +1,7 @@
 """
 Test settings.
 """
+
 from captcha.constants import TEST_PRIVATE_KEY, TEST_PUBLIC_KEY
 
 SECRET_KEY = "h*e@_c5-p63ml=g4v(x*qiu&c!rb-0c4xu-8x=z%&_zewg$!%j"

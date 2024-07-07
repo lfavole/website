@@ -2,8 +2,8 @@ from datetime import date
 
 from django.http import Http404, HttpRequest
 from django.shortcuts import render
-
 from globals.models import Setting
+
 from website.views import has_permission
 
 from .models import Day
@@ -58,5 +58,5 @@ def day(request, day: int):
         {
             "day_obj": day_obj,
             "day": day,
-        }
+        },
     )

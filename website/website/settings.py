@@ -10,52 +10,57 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+import getpass
+import os
 import re
 from pathlib import Path
 
-import custom_settings
+from debug_toolbar.panels.history import views as history_views
 from debug_toolbar.settings import PANELS_DEFAULTS
 from debug_toolbar.toolbar import DebugToolbar
 from django.contrib.messages import constants as message_constants
 from django.http import HttpRequest
+from django.template.loader import render_to_string
 from django.templatetags.static import static
 from django.urls import reverse_lazy
 from django.utils.functional import LazyObject, lazy
 from django.utils.translation import gettext
+from dotenv import load_dotenv
 
-TEST = custom_settings.TEST
+load_dotenv()
+TEST = os.environ.get("TEST")
 
-PYTHONANYWHERE = custom_settings.PYTHONANYWHERE
-PRODUCTION = custom_settings.PRODUCTION
-OFFLINE = custom_settings.OFFLINE
-GITHUB_WEBHOOK_KEY = custom_settings.GITHUB_WEBHOOK_KEY
+PYTHONANYWHERE = os.environ.get("PYTHONANYWHERE")
+PRODUCTION = os.environ.get("PRODUCTION")
+OFFLINE = False if PYTHONANYWHERE else os.environ.get("OFFLINE")
+GITHUB_WEBHOOK_KEY = os.environ.get("GITHUB_WEBHOOK_KEY")
 
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# if custom_settings.SENTRY_DSN:
-#     # Load Sentry at the start to capture as many errors as possible
-#     import sentry_sdk
-#     from sentry_sdk.integrations.django import DjangoIntegration
+if os.environ.get("SENTRY_DSN"):
+    # Load Sentry at the start to capture as many errors as possible
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
 
-#     sentry_sdk.init(
-#         dsn=custom_settings.SENTRY_DSN,
-#         environment="production" if PYTHONANYWHERE else "development",
-#         integrations=[DjangoIntegration()],
-#         send_default_pii=False,
-#         traces_sample_rate=1.0,
-#         profiles_sample_rate=0.1 if PRODUCTION else 1.0,
-#         project_root=str(BASE_DIR),
-#     )
+    sentry_sdk.init(
+        dsn=os.environ.get("SENTRY_DSN"),
+        environment="production" if PRODUCTION else "development",
+        integrations=[DjangoIntegration()],
+        send_default_pii=False,
+        traces_sample_rate=0.1 if PRODUCTION else 1.0,
+        profiles_sample_rate=0.1 if PRODUCTION else 1.0,
+        project_root=str(BASE_DIR),
+    )
 
 
-SECRET_KEY = custom_settings.SECRET_KEY
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
-DEBUG = custom_settings.DEBUG
+DEBUG = os.environ.get("DEBUG")
 
 if not DEBUG:
     CONN_MAX_AGE = 600
-    ALLOWED_HOSTS = [custom_settings.HOST]
+    ALLOWED_HOSTS = os.environ.get("HOST", "").split(",")
     if PYTHONANYWHERE:
         CSRF_COOKIE_SECURE = True
         SESSION_COOKIE_SECURE = True
@@ -63,7 +68,7 @@ if not DEBUG:
 else:
     ALLOWED_HOSTS = ["*"]
 
-ADMINS = custom_settings.ADMINS
+ADMINS = os.environ.get("ADMINS", "").split(",")
 
 CSRF_USE_SESSIONS = True
 
@@ -124,13 +129,30 @@ DEBUG_TOOLBAR_CONFIG = {
     "SHOW_TOOLBAR_CALLBACK": "website.settings.show_toolbar",
     "SHOW_COLLAPSED": True,
     "RENDER_PANELS": False,
-    "OBSERVE_REQUEST_CALLBACK": "website.settings.observe_request",
 }
 DEBUG_TOOLBAR_PANELS = [
     *PANELS_DEFAULTS,
     "debug.panels.ErrorPanel",
     "debug.panels.GitInfoPanel",
 ]
+
+
+def new_render_to_string(*args, **kwargs):
+    ret = render_to_string(*args, **kwargs)
+    try:
+        import minify_html
+    except ImportError:
+        return ret
+    ret = minify_html.minify(
+        ret,
+        minify_css=True,
+        minify_js=True,
+        do_not_minify_doctype=True,
+    )
+    return ret
+
+
+history_views.render_to_string = new_render_to_string
 
 
 def show_toolbar(request: HttpRequest):
@@ -181,7 +203,7 @@ STORAGES = {
         "BACKEND": "storage.storages.CustomFileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+        "BACKEND": "storage.storages.CustomStaticFilesStorage",
     },
 }
 
@@ -195,14 +217,14 @@ DATABASES = (
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
-    if custom_settings.USE_SQLITE
+    if os.environ.get("USE_SQLITE")
     else {
         "default": {
             "ENGINE": "django.db.backends.mysql",
-            "NAME": custom_settings.DB_NAME,
-            "USER": custom_settings.DB_USER,
-            "PASSWORD": custom_settings.DB_PASSWORD,
-            "HOST": custom_settings.DB_HOST,
+            "NAME": os.environ.get("DB_NAME", getpass.getuser() + "$" + os.environ.get("REAL_DB_NAME", "")),
+            "USER": os.environ.get("DB_USER"),
+            "PASSWORD": os.environ.get("DB_PASSWORD"),
+            "HOST": os.environ.get("DB_HOST"),
             "OPTIONS": {
                 "init_command": 'SET sql_mode="STRICT_TRANS_TABLES"',
             },
@@ -212,9 +234,11 @@ DATABASES = (
 
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.db.DatabaseCache"
-        if PRODUCTION
-        else "django.core.cache.backends.locmem.LocMemCache",
+        "BACKEND": (
+            "django.core.cache.backends.db.DatabaseCache"
+            if PRODUCTION
+            else "django.core.cache.backends.locmem.LocMemCache"
+        ),
         "LOCATION": "cache",
     }
 }
@@ -323,8 +347,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # reCAPTCHA
 
-RECAPTCHA_PUBLIC_KEY = custom_settings.RECAPTCHA_PUBLIC_KEY
-RECAPTCHA_PRIVATE_KEY = custom_settings.RECAPTCHA_PRIVATE_KEY
+RECAPTCHA_PUBLIC_KEY = os.environ.get("RECAPTCHA_PUBLIC_KEY")
+RECAPTCHA_PRIVATE_KEY = os.environ.get("RECAPTCHA_PRIVATE_KEY")
 
 # TinyMCE editor
 
@@ -361,16 +385,12 @@ add_url_lazy = lazy(add_url)
 static_lazy = lazy(static)
 TINYMCE_JS_URL = (
     static_lazy("vendor/tinymce/tinymce.min.js")
-    if custom_settings.OFFLINE  # type: ignore
+    if OFFLINE  # type: ignore
     else "https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js"
 )
 TINYMCE_EXTRA_MEDIA = {"css": {"all": ("/static/tinymce/tinymce.css",)}, "js": ("/static/tinymce/tinymce.js",)}
 TINYMCE_DEFAULT_CONFIG = {
-    "base_url": (
-        STATIC_URL + "vendor/tinymce"
-        if custom_settings.OFFLINE
-        else "https://cdn.tiny.cloud/1/no-api-key/tinymce/6"
-    ),
+    "base_url": (STATIC_URL + "vendor/tinymce" if OFFLINE else "https://cdn.tiny.cloud/1/no-api-key/tinymce/6"),
     "body_class": "content",
     "content_css": Stylesheets(),
     "promotion": False,

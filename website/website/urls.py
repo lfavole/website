@@ -13,24 +13,20 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-import re
 
 from django.conf import settings
+from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
-from django.urls import URLResolver, converters, include, path
-from django.utils.translation import get_supported_language_variant
-from django.utils.translation.trans_real import language_code_prefix_re
+from django.urls import URLPattern, converters, include, path
 from django.views.static import serve
 
 from .views import (
-    NewLogoutView,
     account_index,
     export,
     google,
     handler_404,
     handler_500,
     make_error,
-    redirect_lang_url,
     reload_website,
     robots,
     songs_list,
@@ -43,7 +39,7 @@ handler500 = handler_500
 
 class OptionalPathConverter:
     """
-    Optional path that removes .php extension.
+    Optional path (path that can be empty).
     """
 
     regex = r".*"
@@ -58,44 +54,10 @@ class OptionalPathConverter:
 converters.register_converter(OptionalPathConverter, "optpath")
 
 
-class LocalePrefixPattern:
-    converters = {}
-    name = None
-
-    @property
-    def regex(self):
-        # This is only used by reverse() and cached in _reverse_dict.
-        return re.compile("^" + language_code_prefix_re.pattern[2:])
-
-    def match(self, path):
-        match = re.match("^" + language_code_prefix_re.pattern[2:], path)
-        if not match:
-            return None
-
-        lang_code = match.group(1)
-        try:
-            get_supported_language_variant(lang_code)
-            path = path[len(lang_code) + 1 :]
-            return path, (), {"path": path}
-        except LookupError:
-            return None
-
-    def check(self):
-        return []
-
-    def describe(self):
-        return "'{}'".format(self)
-
-    def __str__(self):
-        return "<language>/"
-
-
 app_name = "website"
-urlpatterns = [
-    URLResolver(LocalePrefixPattern(), [path("<optpath:path>", redirect_lang_url)]),  # type: ignore
+urlpatterns: list[list[URLPattern] | URLPattern] = i18n_patterns(
     path("500", make_error),
     path("admin/docs/", include("django.contrib.admindocs.urls")),
-    path("admin/logout/", NewLogoutView.as_view()),
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
     path("accounts/", account_index, name="account_index"),
@@ -116,7 +78,8 @@ urlpatterns = [
     path("robots.txt", robots),
     path("", include("django.conf.urls.i18n")),
     path("", include("globals.urls")),
-]
+    prefix_default_language=False,
+)  # type: ignore
 
 if not settings.PYTHONANYWHERE:
     if not settings.DEBUG:

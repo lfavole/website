@@ -1,13 +1,15 @@
 import datetime as dt
 import html
+import os
 import subprocess as sp
 from time import time
 from typing import Any
 
-import custom_settings
 import requests
 from django.utils.safestring import SafeString
 from django.utils.translation import gettext_lazy as _
+
+from website.utils.connectivity import internet
 
 
 def returns_on_fail(return_value):
@@ -138,13 +140,13 @@ class GitHubClient:
 
     @property
     def api_data(self) -> dict[str, Any]:
-        if custom_settings.OFFLINE:
+        if not internet():
             return {}
 
         if time() - self._data[0] < 60 and self._data[1]:
             return self._data[1]
 
-        parts = custom_settings.GITHUB_REPO.rstrip("/").split("/")
+        parts = os.environ.get("GITHUB_REPO").rstrip("/").split("/")
         req = requests.get(f"https://api.github.com/repos/{parts[-2]}/{parts[-1]}/commits/HEAD")
         ts = time()
         data = req.json()
