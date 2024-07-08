@@ -108,6 +108,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.telegram",
     "debug_toolbar",
 ]
+INSTALLED_APPS = [*dict.fromkeys(INSTALLED_APPS)]
 SITE_ID = 1
 
 MIDDLEWARE = [
