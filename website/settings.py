@@ -143,6 +143,7 @@ DEBUG_TOOLBAR_CONFIG = {
 }
 DEBUG_TOOLBAR_PANELS = [
     *PANELS_DEFAULTS,
+    "debug.panels.DebugModePanel",
     "debug.panels.ErrorPanel",
     "debug.panels.GitInfoPanel",
 ]

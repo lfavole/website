@@ -16,6 +16,22 @@ from django.views.debug import ExceptionReporter, technical_404_response
 from django.views.decorators.clickjacking import xframe_options_exempt
 
 
+class DebugModePanel(Panel):
+    """
+    A panel that sets `DEBUG` to `True`.
+    """
+
+    title = _("Debug mode")  # type: ignore
+    has_content = False  # type: ignore
+
+    def enable_instrumentation(self):
+        self._debug = settings.DEBUG
+        settings.DEBUG = True
+
+    def disable_instrumentation(self):
+        settings.DEBUG = self._debug
+
+
 class ErrorPanel(Panel):
     """
     A panel that displays debug information about 404 or 500 errors.
