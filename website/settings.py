@@ -59,7 +59,7 @@ if os.environ.get("SENTRY_DSN"):
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
-DEBUG = os.environ.get("DEBUG")
+DEBUG = bool(int(os.environ.get("DEBUG") or 0))
 
 if not DEBUG:
     CONN_MAX_AGE = 600
