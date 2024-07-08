@@ -1,10 +1,15 @@
 {
-    "installCommand": "pip install -r requirements.txt",
-    "buildCommand": "python manage.py setup",
     "builds": [
         {
             "src": "website/wsgi.py",
             "use": "@vercel/python"
+        },
+        {
+            "src": "build.sh",
+            "use": "@vercel/static-build",
+            "config": {
+                "distDir": "static"
+            }
         }
     ],
     "routes": [
