@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
-import getpass
 import os
 import re
 from pathlib import Path
@@ -18,6 +17,7 @@ from pathlib import Path
 from debug_toolbar.panels.history import views as history_views
 from debug_toolbar.settings import PANELS_DEFAULTS
 from debug_toolbar.toolbar import DebugToolbar
+import dj_database_url
 from django.contrib.messages import constants as message_constants
 from django.http import HttpRequest
 from django.template.loader import render_to_string
@@ -214,27 +214,10 @@ STORAGES = {
 # Database
 # https://docs.djangoproject.com/en/stable/ref/settings/#databases
 
-DATABASES = (
-    {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
-    }
-    if os.environ.get("USE_SQLITE")
-    else {
-        "default": {
-            "ENGINE": "django.db.backends.mysql",
-            "NAME": os.environ.get("DB_NAME", getpass.getuser() + "$" + os.environ.get("REAL_DB_NAME", "")),
-            "USER": os.environ.get("DB_USER"),
-            "PASSWORD": os.environ.get("DB_PASSWORD"),
-            "HOST": os.environ.get("DB_HOST"),
-            "OPTIONS": {
-                "init_command": 'SET sql_mode="STRICT_TRANS_TABLES"',
-            },
-        }
-    }
-)
+DATABASES = {
+    # POSTGRES_URL is put by Vercel
+    "default": dj_database_url.config(default=os.environ.get("POSTGRES_URL")),
+}
 
 CACHES = {
     "default": {
