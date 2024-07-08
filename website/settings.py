@@ -314,7 +314,7 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [
     BASE_DIR / "src/",
-    BASE_DIR.parent / "data/static/",
+    BASE_DIR / "data/static/",
 ]
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",

@@ -1,4 +1,5 @@
 import hashlib
+from django.conf import settings
 from pathlib import Path
 
 import requests
@@ -17,7 +18,7 @@ class Command(BaseCommand):
         for size in (SIZE_BIG, SIZE_SMALL):
             print(f"Downloading image ({size}px)")
             req = requests.get(f"https://www.gravatar.com/avatar/{md5}?s={size}", stream=True)
-            path = Path(__file__).resolve().parent.parent / f"data/static/global/profile_{size}.jpg"
+            path = settings.BASE_DIR / f"data/static/global/profile_{size}.jpg"
             path.parent.mkdir(parents=True, exist_ok=True)
             with path.open("wb") as f:
                 for data in req.iter_content(chunk_size=64 * 1024):
