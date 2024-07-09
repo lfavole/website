@@ -1,6 +1,8 @@
 import html
 import sys
 
+from django.conf import settings
+
 from debug.client import GitClient, GitHubClient
 from debug_toolbar.decorators import render_with_toolbar_language, require_show_toolbar
 from debug_toolbar.panels import Panel

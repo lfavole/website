@@ -90,6 +90,7 @@ INSTALLED_APPS = [
     "django.contrib.admindocs",
     "django.contrib.auth",
     "django.contrib.contenttypes",
+    "django.contrib.humanize",
     "django.contrib.messages",
     "django.contrib.sessions",
     "django.contrib.sites",
@@ -113,6 +114,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.github",
     "allauth.socialaccount.providers.telegram",
+    "allauth.usersessions",
     "debug_toolbar",
 ]
 INSTALLED_APPS = [*dict.fromkeys(INSTALLED_APPS)]
@@ -129,6 +131,7 @@ MIDDLEWARE = [
     "django.middleware.locale.LocaleMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "allauth.account.middleware.AccountMiddleware",
+    "allauth.usersessions.middleware.UserSessionsMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
@@ -251,20 +254,22 @@ LOGIN_URL = "/accounts/login"
 LOGIN_REDIRECT_URL = "/"
 
 # https://docs.allauth.org/en/stable/account/configuration.html
-ACCOUNT_LOGOUT_ON_GET = False
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_LOGIN_BY_CODE_ENABLED = True
 ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 ACCOUNT_SIGNUP_FORM_CLASS = "users.forms.AllAuthSignupForm"
-# Set the allauth adapter to be the 2FA adapter.
+# dummy adapter that changes the login form
 ACCOUNT_ADAPTER = "users.adapter.Adapter"
+ACCOUNT_EMAIL_NOTIFICATIONS = True
 
 # https://docs.allauth.org/en/stable/socialaccount/configuration.html
 SOCIALACCOUNT_QUERY_EMAIL = True
+SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
 SOCIALACCOUNT_STORE_TOKENS = True
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
+        "EMAIL_AUTHENTICATION": True,
         "SCOPE": [
             "profile",
             "email",
@@ -282,6 +287,8 @@ SOCIALACCOUNT_PROVIDERS = {
         "AUTH_PARAMS": {"auth_date_validity": 30},
     },
 }
+
+USERSESSIONS_TRACK_ACTIVITY = True
 
 
 # Messages

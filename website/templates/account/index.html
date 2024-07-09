@@ -18,11 +18,32 @@
                 <input type="submit" value="{% trans "Log out" %}">
             </form>
         </li>
-        <li><a href="{% url "account_reauthenticate" %}">{% trans "Confirm Access" %}</a></li>
-        <li><a href="{% url "account_email" %}">{% trans "Change e-mail" %}</a></li>
-        <li><a href="{% url "account_reset_password" %}">{% trans "Password Reset" %}</a></li>
-        <li><a href="{% url "socialaccount_connections" %}">{% trans "Account Connections" %}</a></li>
-        <li><a href="{% url "mfa_index" %}">{% trans "Two-Factor Authentication" %}</a></li>
+
+        {% url 'socialaccount_connections' as connections_url %}
+        {% if connections_url %}
+            <li><a href="{{ connections_url }}">{% trans "Account Connections" %}</a></li>
+        {% endif %}
+
+        {% url 'account_email' as email_url %}
+        {% if email_url %}
+            <li><a href="{{ email_url }}">{% trans "Change Email" %}</a></li>
+        {% endif %}
+
+        {% url 'account_change_password' as change_password_url %}
+        {% if change_password_url %}
+            <li><a href="{{ change_password_url }}">{% trans "Change Password" %}</a></li>
+        {% endif %}
+
+        {% url 'mfa_index' as mfa_url %}
+        {% if mfa_url %}
+            <li><a href="{{ mfa_url }}">{% trans "Two-Factor Authentication" %}</a></li>
+        {% endif %}
+
+        {% url 'usersessions_list' as usersessions_list_url %}
+        {% if usersessions_list_url %}
+            <li><a href="{{ usersessions_list_url }}">{% trans "Sessions" %}</a></li>
+        {% endif %}
+
         {% else %}
         <li><a href="{% url "account_login" %}">{% trans "Log in" %}</a></li>
         <li><a href="{% url "account_signup" %}">{% trans "Sign up" %}</a></li>
