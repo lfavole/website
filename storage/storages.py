@@ -89,6 +89,8 @@ class CustomFileSystemStorage(FileSystemStorage):
 
 
 class CustomStaticFilesStorage(ManifestStaticFilesStorage):
+    support_js_module_import_aggregation = True
+
     def compress_picture(self, name):
         try:
             from PIL import Image
