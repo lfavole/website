@@ -100,12 +100,19 @@ INSTALLED_APPS = [
     "django_cleanup.apps.CleanupConfig",
     "django_comments",
     "easy_thumbnails",
-    # apps with urls.py (automatic)
-    *(dir.name for dir in BASE_DIR.glob("*") if (dir / "urls.py").exists()),
-    # apps without urls.py
+    # my apps
+    "blog",
+    "calendrier_avent_2023",
     "captcha",
-    "users",
+    "debug",
+    "globals",
+    "pseudos",
     "storage",
+    "telegram_bot",
+    "temperatures",
+    "tinymce",
+    "users",
+    "website",
     # template overridding
     "allauth",
     "allauth.account",
