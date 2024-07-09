@@ -1,5 +1,6 @@
 import os.path
 from pathlib import PurePath
+import sys
 
 from django.contrib.staticfiles.storage import ManifestStaticFilesStorage
 from django.core.exceptions import SuspiciousFileOperation
@@ -156,3 +157,8 @@ class CustomStaticFilesStorage(ManifestStaticFilesStorage):
                 processed = True
 
             yield name, hashed_name, processed
+
+    def _url(self, hashed_name_func, name, force=False, hashed_files=None):
+        if "runserver" not in sys.argv:
+            force = True
+        return super()._url(hashed_name_func, name, force, hashed_files)
