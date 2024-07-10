@@ -81,6 +81,21 @@ EMAIL_PORT = int(os.environ.get("EMAIL_PORT", 0))
 EMAIL_USE_TLS = bool(int(os.environ.get("EMAIL_USE_TLS", 0)))
 EMAIL_USE_SSL = bool(int(os.environ.get("EMAIL_USE_SSL", 0)))
 
+LOGGING = {
+    "version": 1,
+    "handlers": {
+        "null": {
+            "class": "logging.NullHandler",
+        },
+    },
+    "loggers": {
+        "django.security.DisallowedHost": {
+            "handlers": ["null"],
+            "propagate": False,
+        },
+    },
+}
+
 CSRF_USE_SESSIONS = True
 
 # Application definition
