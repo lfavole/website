@@ -1,6 +1,19 @@
 #djDebug #djDebugToolbar::-webkit-scrollbar {
     display: none;
 }
+#djDebug #djDebugToolbar li:first-child {
+    position: sticky;
+    top: 0;
+    background-color: #111;
+    z-index: 1;
+    border-color: #fff;
+}
+@media (width <= 500px) {
+    #djDebug #djDebugToolbar li:first-child {
+        top: unset;
+        left: 0;
+    }
+}
 #djDebug #djDebugToolbar li.djdt-active:before {
     content: "";
     border-style: solid;
