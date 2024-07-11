@@ -41,7 +41,9 @@ GITHUB_WEBHOOK_KEY = os.environ.get("GITHUB_WEBHOOK_KEY")
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-if os.environ.get("SENTRY_DSN"):
+SENTRY_DSN = os.environ.get("SENTRY_DSN", "")
+
+if SENTRY_DSN:
     # Load Sentry at the start to capture as many errors as possible
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
@@ -55,6 +57,10 @@ if os.environ.get("SENTRY_DSN"):
         profiles_sample_rate=0.1 if PRODUCTION else 1.0,
         project_root=str(BASE_DIR),
     )
+
+match = re.match(r"^https?://(\w+)(?:@\w+)?\.ingest(?:\.([a-z]+))?\.sentry\.io/", SENTRY_DSN)
+if match:
+    SENTRY_SDK = f"https://js{'-' + match[2] if match[2] else ''}.sentry-cdn.com/{match[1]}.min.js"
 
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
@@ -229,6 +235,7 @@ TEMPLATES = [
                 "website.context_processors.now_variable",
                 "website.context_processors.admin_permission",
                 "website.context_processors.github_repo_url",
+                "website.context_processors.sentry_sdk",
             ],
         },
     },
