@@ -248,10 +248,10 @@ WSGI_APPLICATION = "website.wsgi.application"
 
 STORAGES = {
     "default": {
-        "BACKEND": "storage.storages.CustomFileSystemStorage",
+        "BACKEND": "storage.storages.CustomBlobStorage",
     },
     "staticfiles": {
-        "BACKEND": "storage.storages.CustomStaticFilesStorage",
+        "BACKEND": "storage.staticfiles.CustomStaticFilesStorage",
     },
 }
 
