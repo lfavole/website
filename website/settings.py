@@ -300,6 +300,12 @@ SOCIALACCOUNT_STORE_TOKENS = True
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
         "EMAIL_AUTHENTICATION": True,
+        "APPS": [
+            {
+                "client_id": os.getenv("GOOGLE_CLIENT_ID"),
+                "secret": os.getenv("GOOGLE_SECRET"),
+            },
+        ],
         "SCOPE": [
             "profile",
             "email",
@@ -309,11 +315,23 @@ SOCIALACCOUNT_PROVIDERS = {
         },
     },
     "github": {
+        "APPS": [
+            {
+                "client_id": os.getenv("GITHUB_CLIENT_ID"),
+                "secret": os.getenv("GITHUB_SECRET"),
+            },
+        ],
         "SCOPE": [
             "user",
         ],
     },
     "telegram": {
+        "APPS": [
+            {
+                "client_id": os.getenv("BOT_TOKEN", "").split(":")[0],
+                "secret": os.getenv("BOT_TOKEN"),
+            },
+        ],
         "AUTH_PARAMS": {"auth_date_validity": 30},
     },
 }
