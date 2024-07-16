@@ -65,3 +65,9 @@ def sentry_sdk(request):
     Add a `sentry_sdk` variable to all templates.
     """
     return {"SENTRY_SDK": settings.SENTRY_SDK}
+
+def csp_nonce(request):
+    """
+    Add a `CSP_NONCE` variable to all templates.
+    """
+    return {"CSP_NONCE": getattr(request, "_csp_nonce", "")}

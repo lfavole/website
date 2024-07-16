@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 import os
 import re
 from pathlib import Path
+from urllib.parse import quote, urlparse
 
 from debug_toolbar.panels.history import views as history_views
 from debug_toolbar.settings import PANELS_DEFAULTS
@@ -44,6 +45,7 @@ GITHUB_WEBHOOK_KEY = os.environ.get("GITHUB_WEBHOOK_KEY")
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SENTRY_DSN = os.environ.get("SENTRY_DSN", "")
+SENTRY_SDK = None
 
 if SENTRY_DSN:
     # Load Sentry at the start to capture as many errors as possible
@@ -166,8 +168,34 @@ MIDDLEWARE = [
     "allauth.usersessions.middleware.UserSessionsMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "website.middleware.CSPMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
+
+# Content Security Policy
+CONTENT_SECURITY_POLICY = {
+    "block-all-mixed-content": True,
+    "script-src": [
+        "self",
+        "https://cdn.jsdelivr.net",
+        "https://fonts.googleapis.com",
+        "https://browser.sentry-cdn.com",
+    ],
+    "style-src": ["self", "https://cdn.jsdelivr.net"],
+    "report-threshold": 0.1,
+}
+
+if SENTRY_SDK:
+    parts = urlparse(SENTRY_SDK)
+    CONTENT_SECURITY_POLICY["script-src"].append(f"{parts.scheme}://{parts.hostname}")
+
+SENTRY_PUBLIC_KEY = os.getenv("SENTRY_PUBLIC_KEY")
+if SENTRY_PUBLIC_KEY and SENTRY_DSN:
+    match = re.match(r"^(https?://)(?:\w+@)?(\w+\.ingest(?:\.[a-z]+)?\.sentry\.io)/(\d+)", SENTRY_DSN)
+    if match:
+        CONTENT_SECURITY_POLICY["report-uri"] = (
+            f"{match[1]}{match[2]}/api/{match[3]}/security/?sentry_key={quote(SENTRY_PUBLIC_KEY)}"
+        )
 
 # Debug toolbar settings
 # https://django-debug-toolbar.readthedocs.io/en/latest/configuration.html
