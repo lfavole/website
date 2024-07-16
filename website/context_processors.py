@@ -55,14 +55,14 @@ def admin_permission(request):
 
 def github_repo_url(request):
     """
-    Add an `github_repo` variable to all templates.
+    Add a `github_repo` variable to all templates.
     """
     return {"github_repo": os.environ.get("GITHUB_REPO")}
 
 
 def sentry_sdk(request):
     """
-    Add a `sentry_sdk` variable to all templates.
+    Add a `SENTRY_SDK` variable to all templates.
     """
     return {"SENTRY_SDK": settings.SENTRY_SDK}
 
