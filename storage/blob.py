@@ -4,6 +4,7 @@ from django.core.files.storage import Storage
 from django.utils.deconstruct import deconstructible
 import requests
 
+
 @deconstructible
 class BlobFileStorage(Storage):
     def __init__(self, folder="", token=None):

@@ -11,16 +11,13 @@
 
     <title>{% block title %}Mon site{% endblock%}</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
     {% block cdn_css %}
     {% if offline %}
     <link rel="stylesheet" href="{% static "vendor/bulma.min.css" %}">
     {% else %}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0/css/bulma.min.css">
+    <link rel="stylesheet" href="{% static "https://cdn.jsdelivr.net/npm/bulma@0/css/bulma.min.css" %}">
     {% endif %}
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link href="{% static "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;1,400;1,700&display=swap" %}" rel="stylesheet">
     {% endblock cdn_css %}
 
     <link rel="stylesheet" href="{% static "global/global.css" %}">
@@ -33,9 +30,9 @@
     <script src="{% static "vendor/jquery.min.js" %}"></script>
     <script src="{% static "vendor/moment.min.js" %}"></script>
     {% else %}
-    {% if SENTRY_SDK %}<script src="{{ SENTRY_SDK }}" crossorigin="anonymous"></script>{% endif %}
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/moment@2/moment.min.js"></script>
+    {% if SENTRY_SDK %}<script src="{% static SENTRY_SDK %}"></script>{% endif %}
+    <script src="{% static "https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" %}"></script>
+    <script src="{% static "https://cdn.jsdelivr.net/npm/moment@2/moment.min.js" %}"></script>
     {% endif %}
     {% endblock cdn_js %}
 

@@ -81,7 +81,7 @@ urlpatterns: list[list[URLPattern] | URLPattern] = i18n_patterns(
     prefix_default_language=False,
 )  # type: ignore
 
-if not settings.PYTHONANYWHERE:
+if not settings.PRODUCTION:
     if not settings.DEBUG:
         urlpatterns.append(
             path(
