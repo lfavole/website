@@ -252,6 +252,45 @@ def robots(_request):
     raise Http404()
 
 
+import json
+import requests
+from django.http import JsonResponse
+from urllib.parse import urlparse
+
+SENTRY_HOST = ""
+SENTRY_PROJECT_IDS = []
+
+if settings.SENTRY_DSN:
+    sentry_parsed = urlparse(settings.SENTRY_DSN)
+    SENTRY_HOST = sentry_parsed.hostname
+    SENTRY_PROJECT_IDS = [sentry_parsed.path.strip("/")]
+
+def sentry(request):
+    if not SENTRY_HOST:
+        return JsonResponse({"error": "Sentry is not set up on the server"}, status=500)
+
+    try:
+        envelope = request.body.decode('utf-8')
+        piece = envelope.split("\n")[0]
+        header = json.loads(piece)
+        dsn = urlparse(header["dsn"])
+        project_id = dsn.path.strip("/")
+
+        if dsn.hostname != SENTRY_HOST:
+            raise ValueError(f"Invalid Sentry hostname: {dsn.hostname}")
+
+        if not project_id or project_id not in SENTRY_PROJECT_IDS:
+            raise ValueError(f"Invalid Sentry project ID: {project_id}")
+
+        req = requests.post(f"https://{SENTRY_HOST}/api/{project_id}/envelope/", data=envelope)
+        req.raise_for_status()
+
+        return JsonResponse({}, status=200)
+
+    except Exception:
+        return JsonResponse({"error": "Error tunneling to Sentry"}, status=500)
+
+
 def songs_list(request, path):
     """
     Proxy for GitHub repo containing songs.

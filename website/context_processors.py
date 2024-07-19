@@ -71,3 +71,8 @@ def csp_nonce(request):
     Add a `CSP_NONCE` variable to all templates.
     """
     return {"CSP_NONCE": getattr(request, "_csp_nonce", "")}
+
+
+def status(request):
+    """Add "status" variables (production, debug...) to all requests."""
+    return {var: getattr(settings, var) for var in ("PRODUCTION", "DEVELOPMENT", "DEBUG")}

@@ -14,10 +14,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+import re
 from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 from django.urls import URLPattern, converters, include, path
+from django.utils.html import escapejs
 from django.views.static import serve
 
 from .views import (
@@ -29,6 +31,7 @@ from .views import (
     make_error,
     reload_website,
     robots,
+    sentry,
     songs_list,
     upload_image,
 )
@@ -69,6 +72,7 @@ urlpatterns: list[list[URLPattern] | URLPattern] = i18n_patterns(
     path("export/<format>/<app_label>/<model_name>/<elements_pk>", export, name="export"),
     path("pseudos/", include("pseudos.urls", namespace="pseudos")),
     path("reload-website", reload_website),
+    path("sentry", sentry),
     path("songs-list/<optpath:path>", songs_list),
     path("telegram-bot/", include("telegram_bot.urls", namespace="telegram_bot")),
     path("temperatures/", include("temperatures.urls", namespace="temperatures")),
@@ -82,6 +86,19 @@ urlpatterns: list[list[URLPattern] | URLPattern] = i18n_patterns(
 )  # type: ignore
 
 if not settings.PRODUCTION:
+    SENTRY_DSN = settings.SENTRY_DSN
+    if SENTRY_DSN:
+        # add a view that gives the custom Sentry loader
+        def replace_sentry(request):
+            ret = serve(request, "global/sentry.js", document_root=settings.STATIC_ROOT)
+            data = b"".join(ret.streaming_content).decode("utf-8")  # type: ignore
+            data = re.sub(r'dsn: ?"[^"]*?"', f'dsn: "{escapejs(settings.SENTRY_DSN)}"', data)
+            ret.streaming_content = [data.encode("utf-8")]
+            return ret
+
+        urlpatterns.append(path(settings.STATIC_URL.strip("/") + "/global/sentry.js", replace_sentry))
+        urlpatterns.append(path("sentry.js", replace_sentry))
+
     if not settings.DEBUG:
         urlpatterns.append(
             path(

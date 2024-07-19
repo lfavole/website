@@ -30,7 +30,14 @@
     <script src="{% static "vendor/jquery.min.js" %}"></script>
     <script src="{% static "vendor/moment.min.js" %}"></script>
     {% else %}
-    {% if SENTRY_SDK %}<script src="{% static SENTRY_SDK %}"></script>{% endif %}
+    {% if SENTRY_SDK %}
+        {% if DEBUG and DEVELOPMENT %}
+        <script type="module" src="/sentry.js"></script>
+        {% else %}
+        <script type="module" src="{% static "global/sentry.js" %}"></script>
+        {% endif %}
+        {% csrf_token %}
+    {% endif %}
     <script src="{% static "https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" %}"></script>
     <script src="{% static "https://cdn.jsdelivr.net/npm/moment@2/moment.min.js" %}"></script>
     {% endif %}

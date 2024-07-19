@@ -4,9 +4,11 @@ import os.path
 import posixpath
 import re
 import sys
+from django.conf import settings
 
 from django.contrib.staticfiles.storage import ManifestStaticFilesStorage
 from django.core.files.base import ContentFile
+from django.utils.html import escapejs
 import requests
 
 from .templates_finder import get_name_from_url
@@ -36,6 +38,19 @@ class CustomStaticFilesStorage(ManifestStaticFilesStorage):
         ),
     )
     manifest_strict = False
+
+    def add_sentry_dsn(self, _name, content):
+        SENTRY_DSN = settings.SENTRY_DSN
+        if not SENTRY_DSN:
+            return content
+
+        try:
+            data = content.decode("utf-8")
+        except UnicodeDecodeError:
+            return content
+
+        data = re.sub(r'dsn: ?"[^"]*?"', f'dsn: "{escapejs(SENTRY_DSN)}"', data)
+        return data.encode("utf-8")
 
     def fetch_external(self, name, content, files):
         try:
@@ -78,12 +93,12 @@ class CustomStaticFilesStorage(ManifestStaticFilesStorage):
         try:
             from PIL import Image
         except ImportError:
-            return None
+            return content
 
         try:
             img = Image.open(BytesIO(content))
         except (ValueError, OSError):
-            return None
+            return content
 
         output = BytesIO()
         img.save(output, img.format)
@@ -124,11 +139,10 @@ class CustomStaticFilesStorage(ManifestStaticFilesStorage):
             if hasattr(f, "seek"):
                 f.seek(0)
             content = f.read()
+            content = self.add_sentry_dsn(name, content)
             content = self.fetch_external(name, content, files)
             content = self.minify(name, content)
             content = self.compress_picture(name, content)
-            if not content:
-                return name
 
             if self.exists(name):
                 self.delete(name)

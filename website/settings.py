@@ -182,6 +182,7 @@ CONTENT_SECURITY_POLICY = {
         "https://browser.sentry-cdn.com",
     ],
     "style-src": ["self", "https://cdn.jsdelivr.net"],
+    "worker-src": ["self", "blob:"],
     "report-threshold": 0.1,
 }
 
@@ -267,6 +268,7 @@ TEMPLATES = [
                 "website.context_processors.admin_permission",
                 "website.context_processors.github_repo_url",
                 "website.context_processors.sentry_sdk",
+                "website.context_processors.status",
             ],
         },
     },
