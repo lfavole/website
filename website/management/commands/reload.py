@@ -31,7 +31,7 @@ class Command(BaseCommand):
         run_with_expl([*manage, "migrate"], "migrating")
         run_with_expl([*manage, "compilemessages"], "compiling translations")
         FetchGravatar().handle(reloading=True)
-        run_with_expl([*manage, "collectstatic", "--noinput", "--clear", "--link"], "collecting static files")
+        run_with_expl([*manage, "collectstatic", "--noinput", "--clear"], "collecting static files")
 
         wsgi_file = "/var/www/" + os.environ.get("HOST", "").replace(".", "_").lower().strip() + "_wsgi.py"
         if os.environ.get("PYTHONANYWHERE") and wsgi_file:
