@@ -177,6 +177,7 @@ CONTENT_SECURITY_POLICY = {
     "block-all-mixed-content": True,
     "script-src": [
         "self",
+        "unsafe-eval",
         "https://cdn.jsdelivr.net",
         "https://fonts.googleapis.com",
         "https://browser.sentry-cdn.com",
