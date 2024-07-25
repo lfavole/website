@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-20 15:11+0200\n"
+"POT-Creation-Date: 2024-07-25 13:54+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,10 +18,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: .\captcha\apps.py:10
 msgid "Django reCAPTCHA"
 msgstr "reCAPTCHA Django"
 
-#: .\captcha\fields.py:23 .\captcha\fields.py:24
 msgid "Error verifying reCAPTCHA, please try again."
 msgstr "Erreur lors de la vérification du reCAPTCHA, veuillez réessayer."

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-25 13:45+0200\n"
+"POT-Creation-Date: 2024-07-25 13:54+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,69 +17,54 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: globals/admin.py:41
 #, python-format
 msgid "Export selected %(verbose_name_plural)s"
 msgstr "Exporter les %(verbose_name_plural)s sélectionné·e·s"
 
-#: globals/apps.py:12
 msgid "Global configuration"
 msgstr "Configuration globale"
 
-#: globals/apps.py:20
 msgid "A comment was flagged"
 msgstr "Un commentaire a été marqué"
 
-#: globals/models.py:12 globals/models.py:70
 msgid "slug"
 msgstr "ID"
 
-#: globals/models.py:13 globals/models.py:71
 msgid "title"
 msgstr "titre"
 
-#: globals/models.py:14 globals/models.py:72
 msgid "content"
 msgstr "contenu"
 
-#: globals/models.py:15
 #, fuzzy
 #| msgid "hidden link"
 msgid "hidden page"
 msgstr "lien caché"
 
-#: globals/models.py:47
 msgid "order"
 msgstr "ordre"
 
-#: globals/models.py:48
 msgid "URL"
 msgstr "URL"
 
-#: globals/models.py:54
 #, fuzzy
 #| msgid "parent link"
 msgid "parent page"
 msgstr "lien précédent"
 
-#: globals/models.py:61
 msgid "page"
 msgstr ""
 
-#: globals/models.py:75
 #, python-format
 msgid "Setting '%s'"
 msgstr ""
 
-#: globals/models.py:78
 msgid "special content"
 msgstr "contenu spécial"
 
-#: globals/models.py:79
 msgid "special contents"
 msgstr "contenus spéciaux"
 
-#: globals/templates/account/email/comment_flagged_message.txt:4
 #, python-format
 msgid ""
 "The comment %(comment)s received a %(flag)s.\n"
@@ -90,17 +75,13 @@ msgstr ""
 "\n"
 "Veuillez le vérifier."
 
-#: globals/templates/google_drive/directory_index.html:5
 #, python-format
 msgid "Index of %(directory)s"
 msgstr "Index de %(directory)s"
 
-#: globals/templates/home/contact_captcha.html:4
-#: globals/templates/home/contact_captcha.html:7
 msgid "Contact"
 msgstr "Contact"
 
-#: globals/templates/home/contact_captcha.html:8
 msgid "Please complete the CAPTCHA to access to my contact information."
 msgstr ""
 "Veuillez compléter le CAPTCHA pour accéder à mes informations de contact."

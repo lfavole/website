@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-22 14:53+0100\n"
+"POT-Creation-Date: 2024-07-25 13:54+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,83 +18,63 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: .\temperatures\apps.py:8
 msgid "Temperature records"
 msgstr "Relevés de température"
 
-#: .\temperatures\models.py:10
 msgid "Date"
 msgstr "Date"
 
-#: .\temperatures\models.py:11
 msgid "Minimum temperature"
 msgstr "Température minimale"
 
-#: .\temperatures\models.py:12
 msgid "Weather"
 msgstr "Temps"
 
-#: .\temperatures\models.py:13
 msgid "Sunny"
 msgstr "Beau temps"
 
-#: .\temperatures\models.py:14
 msgid "Few clouds"
 msgstr "Ciel voilé"
 
-#: .\temperatures\models.py:15
 msgid "Cloudy"
 msgstr "Nuageux"
 
-#: .\temperatures\models.py:16
 msgid "Rain"
 msgstr "Pluie"
 
-#: .\temperatures\models.py:17
 msgid "Snow"
 msgstr "Neige"
 
-#: .\temperatures\models.py:19
 msgid "Wind"
 msgstr "Vent"
 
-#: .\temperatures\models.py:20
 msgid "Hail"
 msgstr "Grêle"
 
-#: .\temperatures\models.py:21
 msgid "Mist"
 msgstr "Brouillard"
 
-#: .\temperatures\models.py:22
 msgid "snow cm"
 msgstr "cm de neige"
 
-#: .\temperatures\models.py:23
 msgid "Maximum temperature"
 msgstr "Température maximale"
 
-#: .\temperatures\models.py:24
 msgid "Notes"
 msgstr "Notes"
 
-#: .\temperatures\models.py:30
 msgid "You must specify the snow cm when it snows."
 msgstr "Vous devez spécifier les cm de neige quand il neige."
 
-#: .\temperatures\models.py:38
 msgid "The maximum temperature must be greater than the minimum temperature."
 msgstr ""
 "La température maximale doit être supérieure à la température minimale."
 
-#: .\temperatures\models.py:45
 msgid "temperature"
 msgstr "température"
 
-#: .\temperatures\templates\temperatures\base.html:10
 msgid "Add temperatures"
 msgstr "Ajouter des températures"
 
-#: .\temperatures\templates\temperatures\base.html:11
 msgid "Chart"
 msgstr "Graphique"
