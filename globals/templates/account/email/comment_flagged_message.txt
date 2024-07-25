@@ -1,0 +1,6 @@
+{% extends "account/email/base_message.txt" %}
+{% load i18n %}
+
+{% block content %}{% autoescape off %}{% blocktrans %}The comment {{ comment }} received a {{ flag }}.
+
+Please take a look at it.{% endblocktrans %}{% endautoescape %}{% endblock content %}
