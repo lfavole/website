@@ -125,7 +125,6 @@ INSTALLED_APPS = [
     # custom apps
     "adminsortable2",
     "django_cleanup.apps.CleanupConfig",
-    "django_comments",
     "easy_thumbnails",
     # my apps
     "blog",
@@ -150,6 +149,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.telegram",
     "allauth.usersessions",
     "debug_toolbar",
+    "django_comments",
 ]
 INSTALLED_APPS = [*dict.fromkeys(INSTALLED_APPS)]
 SITE_ID = 1
