@@ -98,7 +98,7 @@ DEBUG_ENGINE = Engine(
     debug=True,
     libraries={
         "i18n": "django.templatetags.i18n",
-        "nav": "website.templatetags.nav",
+        "nav": "globals.templatetags.nav",
         "socialaccount": "allauth.socialaccount.templatetags.socialaccount",
         "static": "django.templatetags.static",
     },

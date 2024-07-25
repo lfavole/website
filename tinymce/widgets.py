@@ -98,8 +98,13 @@ class TinyMCE(forms.Textarea):
 
             if "css" in tinymce_settings.USE_EXTRA_MEDIA:
                 css = tinymce_settings.USE_EXTRA_MEDIA["css"]
-        js.append("django_tinymce/init_tinymce.js")
-        return forms.Media(css=css, js=js)
+        ret = forms.Media(css=css, js=js)
+        js.append(
+            mark_safe(
+                f'<script type="module" src="{escape(ret.absolute_path("django_tinymce/init_tinymce.js"))}"></script>'
+            )
+        )
+        return ret
 
 
 class AdminTinyMCE(TinyMCE, admin_widgets.AdminTextareaWidget):

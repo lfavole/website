@@ -1,7 +1,29 @@
+import tinyMCE from "https://cdn.jsdelivr.net/npm/tinymce@7/+esm";
+import "https://cdn.jsdelivr.net/npm/tinymce@7/icons/default/icons.min.js";
+import "https://cdn.jsdelivr.net/npm/tinymce@7/themes/silver/theme.min.js";
+import "https://cdn.jsdelivr.net/npm/tinymce@7/models/dom/model.min.js";
+import "https://cdn.tiny.cloud/1/no-api-key/tinymce/7/langs/fr_FR.js";
+import "https://cdn.jsdelivr.net/npm/tinymce@7/plugins/autolink/plugin.min.js";
+import "https://cdn.jsdelivr.net/npm/tinymce@7/plugins/code/plugin.min.js";
+import "https://cdn.jsdelivr.net/npm/tinymce@7/plugins/fullscreen/plugin.min.js";
+import "https://cdn.jsdelivr.net/npm/tinymce@7/plugins/help/plugin.min.js";
+import "https://cdn.jsdelivr.net/npm/tinymce@7/plugins/image/plugin.min.js";
+import "https://cdn.jsdelivr.net/npm/tinymce@7/plugins/link/plugin.min.js";
+import "https://cdn.jsdelivr.net/npm/tinymce@7/plugins/lists/plugin.min.js";
+import "https://cdn.jsdelivr.net/npm/tinymce@7/plugins/media/plugin.min.js";
+import "https://cdn.jsdelivr.net/npm/tinymce@7/plugins/preview/plugin.min.js";
+import "https://cdn.jsdelivr.net/npm/tinymce@7/plugins/quickbars/plugin.min.js";
+import "https://cdn.jsdelivr.net/npm/tinymce@7/plugins/save/plugin.min.js";
+import "https://cdn.jsdelivr.net/npm/tinymce@7/plugins/searchreplace/plugin.min.js";
+import "https://cdn.jsdelivr.net/npm/tinymce@7/plugins/table/plugin.min.js";
+
+import get_upload_handler from "./upload_handler.js";
+
 function initTinyMCE(el) {
     if (el.closest(".empty-form") !== null)  // Don't do empty inlines
         return
     var mce_conf = JSON.parse(el.dataset.mceConf);
+    mce_conf.images_upload_handler = get_upload_handler(mce_conf.upload_image_url);
 
     // There is no way to pass a JavaScript function as an option
     // because all options are serialized as JSON.
