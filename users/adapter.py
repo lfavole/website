@@ -8,8 +8,10 @@ from django.shortcuts import resolve_url
 class Adapter(DefaultAccountAdapter):
     """Dummy adapter."""
 
+
 class CustomLoginView(views.LoginView):
     """Login view that adds parameters for One Tap sign-in."""
+
     def get_context_data(self, **kwargs):
         ret = super().get_context_data(**kwargs)
 

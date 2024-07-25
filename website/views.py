@@ -265,12 +265,13 @@ if settings.SENTRY_DSN:
     SENTRY_HOST = sentry_parsed.hostname
     SENTRY_PROJECT_IDS = [sentry_parsed.path.strip("/")]
 
+
 def sentry(request):
     if not SENTRY_HOST:
         return JsonResponse({"error": "Sentry is not set up on the server"}, status=500)
 
     try:
-        envelope = request.body.decode('utf-8')
+        envelope = request.body.decode("utf-8")
         piece = envelope.split("\n")[0]
         header = json.loads(piece)
         dsn = urlparse(header["dsn"])

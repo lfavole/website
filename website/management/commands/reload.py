@@ -22,7 +22,9 @@ class Command(BaseCommand):
 
         manage = [sys.executable, str(BASE / "manage.py")]
 
-        run_with_expl(["python3", "-m", "pip", "install", "-r", str(BASE / "requirements.txt")], "installing requirements")
+        run_with_expl(
+            ["python3", "-m", "pip", "install", "-r", str(BASE / "requirements.txt")], "installing requirements"
+        )
         if os.environ.get("PYTHONANYWHERE"):
             run_with_expl(["python3", "-m", "pip", "install", "mysqclient~=2.2"], "installing MySQL")
         if os.environ.get("VERCEL"):
