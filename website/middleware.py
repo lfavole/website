@@ -1,9 +1,8 @@
 import base64
-from collections import defaultdict
 import logging
 import os
 import random
-from typing import Callable
+from typing import Callable, TypeVar
 from django.conf import settings
 
 from .csp import CSP_SOURCES, InvalidCSPError, compile_csp
@@ -61,14 +60,40 @@ class MinifyHtmlMiddleware:
         )
 
 
+K = TypeVar("K")
+V = TypeVar("V")
+
+
+class CSPNoncesDict(dict[K, V]):
+    """
+    A `dict` that contains CSP nonces for different sources.
+
+    This class behaves like `defaultdict` but takes the key as an argument
+    so errors can be raised when the nonce is fetched.
+    """
+    def __init__(self, generator: Callable[[K], V]):
+        self.generator = generator
+
+    def __getitem__(self, key):
+        if key not in self:
+            self[key] = self.generator(key)
+        return super().__getitem__(key)
+
+    def __repr__(self):
+        return f"CSPNoncesDict({super().__repr__()})"
+
+
 class CSPMiddleware:
     def __init__(self, get_response=None):
         self.get_response = get_response
         self.csp = getattr(settings, "CONTENT_SECURITY_POLICY", None) or {}
 
-    def _generate_nonce(self):
-        """Return a randomly generated nonce."""
-        return base64.b64encode(os.urandom(16)).decode("ascii")
+    def _generate_nonce(self, source):
+        """Return a randomly generated nonce for a given source."""
+        if source not in CSP_SOURCES:
+            raise InvalidCSPError(f"The source '{source}' is not a valid CSP source")
+        # we use a multiple of 3 so there are no "=" at the end of the nonce
+        return base64.b64encode(os.urandom(15)).decode("ascii")
 
     def _get_nonces_dict(self, request):
         """Return the nonce for the current request."""
@@ -77,7 +102,7 @@ class CSPMiddleware:
         if nonces_dict:
             return nonces_dict
 
-        nonces_dict = defaultdict(lambda: self._generate_nonce)
+        nonces_dict = CSPNoncesDict(self._generate_nonce)
         request._csp_nonces = nonces_dict
         return nonces_dict
 
@@ -155,8 +180,6 @@ class CSPMiddleware:
                     logger.warn("Trying to add the nonce but the CSP is a string. Skipping.")
                     warned = True
             else:
-                if source not in CSP_SOURCES:
-                    raise InvalidCSPError(f"The source '{source}' is not a valid CSP source")
                 csp.setdefault(f"{source}-src", []).append(f"nonce-{nonce}")
 
         # set the `Content-Security-Policy-Report-Only` header if `report-only` is true
