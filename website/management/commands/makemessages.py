@@ -16,6 +16,7 @@ class Command(OldCommand):
                 action.default = ["venv*"]
 
     def handle(self, *args, **options):
+        # compile twice (for scripts/templates and for JavaScript files)
         for domain in ("django", "djangojs"):
             print(f"Processing domain {domain}")
             options["domain"] = domain

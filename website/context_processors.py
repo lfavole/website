@@ -12,7 +12,7 @@ def globals(request):
         "now": now(),
         # True if the user can view at least one page in the admin site
         "admin_permission": admin.site.has_permission(request),
-        "CSP_NONCE": getattr(request, "_csp_nonce", ""),
+        "CSP_NONCES": getattr(request, "_csp_nonces", ""),
         # "status" variables (production, debug...)
         **{var: getattr(settings, var) for var in ("GITHUB_REPO", "SENTRY_SDK", "PRODUCTION", "DEVELOPMENT", "DEBUG")},
     }

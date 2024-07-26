@@ -2,10 +2,29 @@ class InvalidCSPError(ValueError):
     """Error in the CSP dict."""
 
 
+# special keywords that must be surrounded by quotes
 CSP_FETCH_SPECIAL = ("self", "none", "unsafe-inline", "unsafe-eval", "strict-dynamic")
 
+# special prefixes which say that the text must be surrounded by quotes
 CSP_PREFIX_SPECIAL = ("nonce-", "sha256-", "sha384-", "sha512-")
 
+# data sources (xxx-src directives) that can be used in templates or views
+CSP_SOURCES = (
+    "connect",
+    "child",
+    "default",
+    "font",
+    "frame",
+    "img",
+    "manifest",
+    "media",
+    "object",
+    "script",
+    "style",
+    "worker",
+)
+
+# types and possible values of all CSP directives
 CSP_SCHEMA: dict[str, tuple[type, None | set[str]]] = {
     ## Lists
     # Fetch directives:
@@ -80,12 +99,14 @@ def compile_csp(csp: dict | str):
 
     pieces = []
     for name, value in csp.items():
+        # raise for invalid CSP directives
         if name not in CSP_SCHEMA:
-            raise InvalidCSPError(f"Unknown directive: {name}")
+            raise InvalidCSPError(f"Unknown directive: {name + ': ' + value!r}")
 
         types, values = CSP_SCHEMA[name]
 
-        types = (list, tuple, set) if types is list else (types,)
+        LIST_TYPES = (list, tuple, set)
+        types = LIST_TYPES if types is list else (types,)
 
         if not isinstance(value, types):
             raise InvalidCSPError(f"Values for {name} must be {types[0].__name__} type, not {type(value).__name__}")
@@ -94,12 +115,16 @@ def compile_csp(csp: dict | str):
         if not value or name in ("report-only", "report-threshold"):
             continue
 
-        if values and value not in values:
-            raise InvalidCSPError(f"Unknown {name} value: {value}")
-
         if types[0] is bool:
             pieces.append(name)
             continue
+
+        # raise for invalid values
+        value_list = value if isinstance(value, LIST_TYPES) else [value]
+        if values:
+            for value_item in value_list:
+                if value_item not in values:
+                    raise InvalidCSPError(f"Unknown {name} directive: {value_item!r}")
 
         if types[0] is list:
             pieces.append(f"{name} {compile_list(value)}")

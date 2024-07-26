@@ -1,3 +1,4 @@
+# These are the real storage adapters used by the website.
 from django.core.files.storage import FileSystemStorage
 
 from .blob import BlobFileStorage

@@ -20,7 +20,7 @@ import requests
 
 
 class TemplatesFinder(BaseFinder):
-    """A static files finder that uses the `TEMPLATES` setting to locate files."""
+    """A static files finder that uses the `TEMPLATES` setting to locate external files."""
 
     def __init__(self):
         self.storage = WebStorage()

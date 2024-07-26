@@ -1,17 +1,20 @@
 import base64
+from collections import defaultdict
+import logging
 import os
 import random
 from typing import Callable
 from django.conf import settings
-from django.utils.functional import SimpleLazyObject
 
-from .csp import compile_csp
+from .csp import CSP_SOURCES, InvalidCSPError, compile_csp
 
 try:
     import minify_html
 except ImportError:
     minify_html = None
 from django.http import HttpRequest, HttpResponse
+
+logger = logging.Logger(__name__)
 
 
 class MinifyHtmlMiddleware:
@@ -48,18 +51,21 @@ class CSPMiddleware:
     def __init__(self, get_response=None):
         self.get_response = get_response
         self.csp = getattr(settings, "CONTENT_SECURITY_POLICY", None) or {}
-        self.nonce = None
 
-    def _get_nonce(self, request):
+    def _generate_nonce(self):
+        """Return a randomly generated nonce."""
+        return base64.b64encode(os.urandom(16)).decode("ascii")
+
+    def _get_nonces_dict(self, request):
         """Return the nonce for the current request."""
         # ensure that subsequent calls return the same value
-        nonce = getattr(request, "_csp_nonce", None)
-        if nonce:
-            return nonce
+        nonces_dict = getattr(request, "_csp_nonces", None)
+        if nonces_dict:
+            return nonces_dict
 
-        nonce = base64.b64encode(os.urandom(16)).decode("ascii")
-        request._csp_nonce = nonce
-        return nonce
+        nonces_dict = defaultdict(lambda: self._generate_nonce)
+        request._csp_nonces = nonces_dict
+        return nonces_dict
 
     def _check_overridable(self):
         """Raise if the CSP setting is a string and can't be overridden."""
@@ -100,6 +106,21 @@ class CSPMiddleware:
         # skip overridding for strings, None, ...
         return csp_dict
 
+    def should_remove_report_uri(self, csp: dict | str):
+        """Return `True` if we should remove the `report-uri` CSP parameter, `False` otherwise."""
+        if not csp:
+            return False
+        if isinstance(csp, str):
+            return False
+        threshold = csp.get("report-threshold", 1)
+        if not 0 <= threshold <= 1:
+            raise ValueError(f"Wrong CSP threshold: {threshold}")
+        # skip CSP reports if the threshold is zero
+        if threshold == 0:
+            return False
+        if threshold < 1 and "report-uri" in csp and random.random() >= threshold:
+            return True
+
     def add_csp_header(self, request, response):
         """Add the `Content-Security-Policy` or `Content-Security-Policy-Report-Only` header."""
         csp: dict | str = getattr(response, "csp", "") or ""
@@ -107,19 +128,22 @@ class CSPMiddleware:
         # try to override the default CSP by the view parameters
         csp = self.override(csp, request, response) or {**self.csp}  # type: ignore
 
-        if csp and not isinstance(csp, str):
-            threshold = csp.get("report-threshold", 1)
-            if not 0 <= threshold <= 1:
-                raise ValueError(f"Wrong CSP threshold: {threshold}")
-            # skip CSP reports if the threshold is zero
-            if threshold == 0:
-                return
-            if threshold < 1 and "report-uri" in csp and random.random() >= threshold:
-                del csp["report-uri"]
+        if self.should_remove_report_uri(csp):
+            assert isinstance(csp, dict)
+            del csp["report-uri"]
 
         # add the nonce
-        if not isinstance(csp, str) and self.nonce is not None:
-            pass  # TODO
+        warned = False
+        for source, nonce in self._get_nonces_dict(request).items():
+            if isinstance(csp, str):
+                # warn only once
+                if not warned:
+                    logger.warn("Trying to add the nonce but the CSP is a string. Skipping.")
+                    warned = True
+            else:
+                if source not in CSP_SOURCES:
+                    raise InvalidCSPError(f"The source '{source}' is not a valid CSP source")
+                csp.setdefault(f"{source}-src", []).append(f"nonce-{nonce}")
 
         # set the `Content-Security-Policy-Report-Only` header if `report-only` is true
         header = (
@@ -144,5 +168,6 @@ class CSPMiddleware:
         return response
 
     def __call__(self, request):
-        self.nonce = SimpleLazyObject(lambda: self._get_nonce(request))
+        # create the nonces dict
+        self._get_nonces_dict(request)
         return self.process_response(request, self.get_response(request))  # type: ignore

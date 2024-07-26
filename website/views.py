@@ -54,6 +54,7 @@ DATA = Path(__file__).resolve().parent.parent.parent / "data"
 
 
 def google(_request, id):
+    """Return the Google site verification file."""
     google_file = DATA / f"google{id}.html"
     if google_file.exists():
         return FileResponse(google_file.open("rb"))
@@ -72,6 +73,7 @@ def make_error(request):
     """
     if 1 + 1 == 2:
         raise TestError("Test of the 500 error page")
+    # this will never be called but will hide the type checker error in urls.py
     return HttpResponse()
 
 
@@ -267,6 +269,7 @@ if settings.SENTRY_DSN:
 
 
 def sentry(request):
+    """Handle Sentry error reporting requests."""
     if not SENTRY_HOST:
         return JsonResponse({"error": "Sentry is not set up on the server"}, status=500)
 
@@ -323,23 +326,31 @@ def songs_list(request, path):
 
 
 def upload_image(request: HttpRequest):
-    referer_url: str = request.headers["Referer"]
-    referer = urlparse(referer_url)
-    resolver_match = resolve(referer.path)
+    """Handle TinyMCE image uploads."""
+    # check the referrer URL: only the admin pages can send images
+    referrer = urlparse(request.headers.get("Referer", ""))
+    resolver_match = resolve(referrer.path)
     if resolver_match.app_name != "admin":
-        raise PermissionDenied("The referer URL is not an admin URL.")
+        raise PermissionDenied("The referrer URL is not an admin URL.")
 
+    # try to get the model from the URL...
     try:
         model: Type[Model] | None = resolver_match.func.model_admin.model
     except AttributeError:
         model = None
 
+    # ...and the primary key
     pk = resolver_match.kwargs.get("object_id")
 
+    # only "change object" URLs can send images
+    # (because they have a model and a primary key)
     if not model or pk is None or resolver_match.func.__name__ != "change_view":
         raise PermissionDenied("The referer URL is not a change URL.")
 
+    # get the currently editing object...
     instance = model.objects.get(pk=pk)
+    # ...and add the linked image
     image = Image.objects.create(item=instance, file=request.FILES["file"])
 
+    # return the image URL
     return JsonResponse({"location": image.file.url})

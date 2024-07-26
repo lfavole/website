@@ -17,7 +17,7 @@ class PwnedPasswordValidator:
     besides a good password will fail and raise a ValidationError.
     """
 
-    def __init__(self, timeout=5, fail_safe=True, min_breaches=1):
+    def __init__(self, timeout=5, fail_safe=False, min_breaches=1):
         self.timeout = timeout
         self.fail_safe = fail_safe
         self.min_breaches = min_breaches
