@@ -7,19 +7,20 @@ from .fields import TemperatureField
 
 
 class Temperature(models.Model):
+    class Weather(models.TextChoices):
+        SUNNY = "SUNNY", _("Sunny")
+        FEW_CLOUDS = "FEW_CLOUDS", _("Few clouds")
+        CLOUDY = "CLOUDY", _("Cloudy")
+        RAIN = "RAIN", _("Rain")
+        SNOW = "SNOW", _("Snow")
+
     date = models.DateField(_("Date"))
     temperature = TemperatureField(_("Minimum temperature"))
     weather = models.CharField(
         _("Weather"),
         max_length=15,
-        choices=[
-            ("SUNNY", _("Sunny")),
-            ("FEW_CLOUDS", _("Few clouds")),
-            ("CLOUDY", _("Cloudy")),
-            ("RAIN", _("Rain")),
-            ("SNOW", _("Snow")),
-        ],
-        default="SUNNY",
+        choices=Weather.choices,
+        default=Weather.SUNNY,
     )
     wind = models.BooleanField(_("Wind"))
     hail = models.BooleanField(_("Hail"))
