@@ -20,6 +20,11 @@ logger = logging.Logger(__name__)
 class MinifyHtmlMiddleware:
     sync_capable = True
     async_capable = True
+    prefixes = {
+        "text/html": "",
+        "text/css": "<style>",
+        "text/javascript": "<script>",
+    }
 
     def __init__(self, get_response: Callable[[HttpRequest], HttpResponse]):
         self.get_response = get_response
@@ -28,22 +33,31 @@ class MinifyHtmlMiddleware:
         response = self.get_response(request)
         if minify_html is not None and self.should_minify(request, response):
             content = response.content.decode(response.charset)
-            response.content = minify_html.minify(
-                content,
-                minify_css=True,
-                minify_js=True,
-                do_not_minify_doctype=True,
-            )
-            if "Content-Length" in response:
-                response["Content-Length"] = len(response.content)
+            prefix = self.prefixes[self.get_content_type(response)]
+            try:
+                response.content = minify_html.minify(
+                    prefix + content,
+                    minify_css=True,
+                    minify_js=True,
+                    do_not_minify_doctype=True,
+                ).removeprefix(prefix)
+            except:
+                # if there is an error during the minification, skip it silently
+                pass
+            else:
+                if "Content-Length" in response:
+                    response["Content-Length"] = len(response.content)
         return response
+
+    def get_content_type(self, response):
+        return response.get("Content-Type", "").split(";", 1)[0]
 
     def should_minify(self, request: HttpRequest, response: HttpResponse) -> bool:
         return (
             not getattr(response, "streaming", False)
             and (request.resolver_match is None or getattr(request.resolver_match.func, "should_minify_html", True))
             and response.get("Content-Encoding", "") == ""
-            and response.get("Content-Type", "").split(";", 1)[0] == "text/html"
+            and self.get_content_type(response) in self.prefixes
         )
 
 
