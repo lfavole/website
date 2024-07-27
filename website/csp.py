@@ -1,3 +1,7 @@
+from django.views import debug
+
+from .decorators import csp
+
 class InvalidCSPError(ValueError):
     """Error in the CSP dict."""
 
@@ -133,3 +137,7 @@ def compile_csp(csp: dict | str):
         pieces.append(f"{name} {value}")
 
     return "; ".join(pieces)
+
+_apply_csp = csp({"style-src": ["unsafe-inline"], "script-src": ["unsafe-inline"]})
+debug.technical_404_response = _apply_csp(debug.technical_404_response)
+debug.technical_500_response = _apply_csp(debug.technical_500_response)

@@ -3,13 +3,14 @@
 {% load temperatures_utils %}
 
 {% block title %}Graphique des températures{% endblock title %}
+{% block css %}
+<link rel="stylesheet" href="{% static "temperatures/highcharts.css" %}">
+{% endblock css %}
 {% block js %}
 <script src="{% static "temperatures/highcharts.js" %}"></script>
 <script src="{% static "temperatures/highcharts-boost.js" %}"></script>
 <script src="{% static "temperatures/chart.js" %}"></script>
-<script>
-{% get_all_temperatures %}
-</script>
+<script id="all-temperatures" type="application/json">{% get_all_temperatures %}</script>
 {% endblock js %}
 
 {% block content %}

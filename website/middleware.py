@@ -136,7 +136,7 @@ class CSPMiddleware:
                 self._check_overridable()
                 i = csp_dict.index(...)
                 csp_dict = [*csp_dict[:i], *self.csp, *csp_dict[i + 1 :]]
-            for i, item in csp_dict:
+            for i, item in enumerate(csp_dict):
                 if callable(item):
                     csp_dict[i] = item(request, response)
                 else:

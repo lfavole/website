@@ -1,10 +1,11 @@
 import datetime as dt
-import re
+import json
 
 from django import template
-from django.utils.html import escapejs
+from django.core.serializers.json import DjangoJSONEncoder
 from django.utils.safestring import mark_safe
-from temperatures.models import Temperature
+from ..counts import get_all_temperatures_data, get_weather_counts
+from ..models import Temperature
 
 register = template.Library()
 
@@ -54,89 +55,16 @@ def missing_extra_days():
     return mark_safe(ret)
 
 
-def get_js_timestamp(value: dt.date):
-    """
-    Return a JavaScript timestamp for the given date in UTC timezone.
-    """
-    return int(dt.datetime.combine(value, dt.time()).replace(tzinfo=dt.timezone.utc).timestamp() * 1000)
-
-
-def _none_empty(value):
-    """
-    Return "" for None or the original value.
-    """
-    return "" if value is None else value
-
-
-def _replace_all(value: str, old: str, new: str):
-    while len(value) != len(data := value.replace(old, new)):
-        pass
-    return value
-
-
 @register.simple_tag
 def get_all_temperatures():
-    all_temperatures = list(Temperature.objects.all())
-
-    if not all_temperatures:
-        return ""
-
-    data = ""
-    first_day = all_temperatures[0]
-    now = dt.date.today()
-    date = first_day.date
-
-    temps_displayed = 0
-
-    weathers_count = {}
-
-    while date <= now:
-        temps_for_date = [temp for temp in all_temperatures if temp.date == date]
-
-        if len(temps_for_date):
-            temp = temps_for_date[0]
-            weather = temp.weather
-            if weather not in weathers_count:
-                weathers_count[weather] = 0
-            weathers_count[weather] += 1
-            data += (
-                "["
-                + ",".join(
-                    str(el)
-                    for el in [
-                        temp.date.year,
-                        temp.date.month - 1,
-                        temp.date.day,
-                        temp.temperature,
-                        f'"{temp.weather.lower()}"',
-                        temp.snow_cm if temp.weather == "SNOW" else "",
-                        _none_empty(temp.max_temp),
-                    ]
-                )
-                + "],"
-            )
-            data = re.sub(r"\.0([,\]])", r"\1", data)
-            data = re.sub(r",+\]", "]", data)
-            data = re.sub(r"([\[,])0\.", r"\1.", data)
-            # data = _replace_all(data, ",]", "]")
-            # data = _replace_all(data, ".0,", ",")
-
-        temps_displayed += len(temps_for_date)
-        if temps_displayed == len(all_temperatures):
-            break
-
-        date += dt.timedelta(days=1)
-
-    weathers_js = ""
-    for weather, count in weathers_count.items():
-        weather_choice_name = ""
-        for field in Temperature._meta.fields:
-            if field.name == "weather":
-                for choice in field.choices:
-                    if choice[0] == weather:
-                        weather_choice_name = choice[1]
-                        break
-                break
-        weathers_js += f'["{escapejs(weather_choice_name)}",{count}],'
-
-    return mark_safe(f"var data=[{data[:-1]}],weather=[{weathers_js[:-1]}];")
+    temperatures = list(Temperature.objects.all())
+    return mark_safe(
+        json.dumps(
+            {
+                "data": get_all_temperatures_data(temperatures),
+                "weather": list(get_weather_counts(temperatures).items()),
+            },
+            cls=DjangoJSONEncoder,
+            separators=(",", ":"),
+        )
+    )

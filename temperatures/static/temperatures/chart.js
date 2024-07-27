@@ -1,27 +1,27 @@
-/* global Highcharts, data, weather */
+/* global Highcharts */
 $(function() {
 	var real_data = {
 		temperature: [],
 		max_temp: [],
 		snow_cm: []
 	};
-	function add(list, element) {
-		list[list.length] = element;
-	}
 	function get_null(element) {
 		// undefined => null
 		return typeof element == "undefined" ? null : element;
 	}
 	var date, old_date, days_to_add;
+    var content = JSON.parse(document.getElementById("all-temperatures").textContent);
+    var data = content.data;
+    var weather = content.weather;
 	for(var el, i = 0, l = data.length; i < l; i++) {
 		el = data[i];
 		date = Date.UTC(el[0], el[1], el[2]);
 		if(old_date && date - old_date != 86400000) {
 			days_to_add = (date - old_date) / 86400000;
 			for(var j = 0; j < days_to_add; j++)
-				add(real_data.temperature, [old_date + j * 86400000, null]);
+				real_data.temperature.push([old_date + j * 86400000, null]);
 		}
-		add(real_data.temperature, {
+		real_data.temperature.push({
 			x: date,
 			y: el[3],
 			marker: {
@@ -30,13 +30,13 @@ $(function() {
 				height: 30
 			}
 		});
-		add(real_data.snow_cm, [date, get_null(el[5])]);
+		real_data.snow_cm.push([date, get_null(el[5])]);
 
 		if(typeof el[6] != "undefined")
-			add(real_data.max_temp, [date, get_null(el[6])]);
+			real_data.max_temp.push([date, get_null(el[6])]);
 			// placeholder to avoid linking points
 		else
-			add(real_data.max_temp, [date, null]);
+			real_data.max_temp.push([date, null]);
 
 		old_date = date;
 	}
@@ -178,7 +178,7 @@ $(function() {
 	});
 
 	Highcharts.chart("weather-pie-chart", {
-		chart: {type: "pie"},
+		chart: {type: "pie", styledMode: true},
 		title: {text: "Temps"},
 		plotOptions: {
 			pie: {

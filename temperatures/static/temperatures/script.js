@@ -121,20 +121,13 @@ $(function() {
 		});
 	});
 
-	var date_set = false;
-	$("#days a").each(function(_index, element) {
-		if(!date_set) {
-			form.date.value = $(element).attr("href").substr(-10);
-			date_set = true;
-		}
-		$(element).on("click", function(evt) {
-			// set the date to the clicked day
-			evt.preventDefault();
-			var date = $(this).attr("href").substr(-10);
-			form.date.value = date;
-			show_weekday();
-		});
-	});
+	$("#days a").on("click", function(evt) {
+        // set the date to the clicked day
+        evt.preventDefault();
+        var date = $(this).attr("href").substr(-10);
+        form.date.value = date;
+        show_weekday();
+    });
 });
 
 function insert(element, start, end) {
