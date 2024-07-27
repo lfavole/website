@@ -31,7 +31,7 @@
     <script src="{% static "vendor/jquery.min.js" %}"></script>
     <script src="{% static "vendor/moment.min.js" %}"></script>
     {% else %}
-    {% if SENTRY_SDK %}
+    {% if SENTRY_SDK and cookies.performance %}
         {% if DEBUG and DEVELOPMENT %}
         <script type="module" src="/sentry.js"></script>
         {% else %}
@@ -44,6 +44,7 @@
     {% endif %}
     {% endblock cdn_js %}
 
+    <script src="/jsi18n"></script>
     <script src="{% static "global/global.js" %}"></script>
     <script src="{% static "global/messages.js" %}"></script>
     <script src="{% static "global/audioplayer.js" %}"></script>

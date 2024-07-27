@@ -4,6 +4,18 @@
 {% load socialaccount %}
 {% load static %}
 
+{% block css %}
+    {% if cookies_form %}
+    <link rel="stylesheet" href="{% static "cookies/cookies.css" %}">
+    {% endif %}
+{% endblock css %}
+
+{% block js %}
+    {% if cookies_form %}
+    <script src="{% static "cookies/cookies.js" %}"></script>
+    {% endif %}
+{% endblock js %}
+
 {% block body %}
 <div class="navbar">
     <header class="navbar-brand">
@@ -35,15 +47,6 @@
     {% endif %}
     </div>
 </div>
-{% if messages %}
-<div class="messages">
-    <ul class="messagelist">
-    {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}</li>
-    {% endfor %}
-    </ul>
-</div>
-{% endif %}
 <div class="main-content">
 {% block main-content %}
 <main class="content">
@@ -55,6 +58,16 @@
     {% block footer %}
     <a href="{{ github_repo }}" target="_blank" class="github-icon"></a>
     <img src="https://github.com/lfavole/website/actions/workflows/django.yml/badge.svg">
+    <form method="post" action="{% url "cookies:reset" %}">
+        {% csrf_token %}
+        <input type="submit" class="link" value="{% trans "Manage cookies" %}">
+    </form>
     {% endblock footer %}
 </footer>
+<ul class="messagelist">
+{% include "cookies/banner.html" %}
+{% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}</li>
+{% endfor %}
+</ul>
 {% endblock %}

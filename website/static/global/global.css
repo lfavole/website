@@ -171,17 +171,6 @@ input, button, .button, select, textarea {
 	text-decoration:none;
     height:unset;
 }
-.logout-form {
-	display:inline;
-}
-.logout-form input[type=submit] {
-	color:#485fc7;
-	cursor:pointer;
-	text-decoration:none;
-	border:none;
-	padding:0;
-	background:none;
-}
 textarea {
     resize:vertical;
     max-height:10em;
@@ -195,6 +184,17 @@ input[type=submit], input[type=button], button, .button {
 input[type=checkbox], input[type=radio] {
 	width:1em;
 	height:1em;
+}
+.logout-form {
+	display:inline;
+}
+input.link {
+	color:#485fc7;
+	cursor:pointer;
+	text-decoration:none;
+	border:none;
+	padding:0;
+	background:none;
 }
 
 /* Footer */

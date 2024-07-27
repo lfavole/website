@@ -2,6 +2,8 @@ import os
 import re
 from urllib.parse import quote, urlparse
 
+from django.utils.translation import gettext_lazy as _
+
 from .env import DEBUG, PRODUCTION, SENTRY_DSN, SENTRY_SDK
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
@@ -44,6 +46,11 @@ if SENTRY_PUBLIC_KEY and SENTRY_DSN:
         CONTENT_SECURITY_POLICY["report-uri"] = (
             f"{match[1]}{match[2]}/api/{match[3]}/security/?sentry_key={quote(SENTRY_PUBLIC_KEY)}"
         )
+
+COOKIE_TYPES = {
+    "essential": (_("Essential"), True),
+    "performance": (_("Performance"), False),
+}
 
 # reCAPTCHA
 

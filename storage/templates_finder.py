@@ -71,6 +71,7 @@ class TemplatesFinder(BaseFinder):
             return self.files
 
         context = RequestContext(HttpRequest())
+        context.request.session = {}  # type: ignore
         context.request.user = AnonymousUser()
 
         for template in self.templates:

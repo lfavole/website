@@ -20,6 +20,7 @@ from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 from django.urls import URLPattern, converters, include, path
 from django.utils.html import escapejs
+from django.views.i18n import JavaScriptCatalog
 from django.views.static import serve
 
 from .views import (
@@ -67,9 +68,11 @@ urlpatterns: list[list[URLPattern] | URLPattern] = i18n_patterns(
     path("blog/", include("blog.urls", namespace="blog")),
     path("calendrier-avent-2023/", include("calendrier_avent_2023.urls", namespace="calendrier_avent_2023")),
     path("comments/", include("django_comments.urls")),
+    path("cookies/", include("cookies.urls", namespace="cookies")),
     path("debug/", include("debug.urls", namespace="debug")),
     path("debug/", include("debug_toolbar.urls")),
     path("export/<format>/<app_label>/<model_name>/<elements_pk>", export, name="export"),
+    path("jsi18n", JavaScriptCatalog.as_view()),
     path("pseudos/", include("pseudos.urls", namespace="pseudos")),
     path("reload-website", reload_website),
     path("sentry", sentry),

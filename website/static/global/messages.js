@@ -2,23 +2,23 @@ var messages = window.messages = {
     container: null,
     list: [],
     add: function(title, text, type = "", persistent = true) {
-        var msg = $("<li>").addClass(type).toogleClass("persistent", persistent);
+        var msg = $("<li>").addClass(type).toggleClass("persistent", persistent);
         if(title)
             msg.append($("<b>").text(title)).append("<br>");
         msg.append($("<span>").text(text));
         msg.appendTo(this.container);
         return this._setup(msg);
     },
-    debug: function(title, text, persistent = True) {
+    debug: function(title, text, persistent = true) {
         this.add(title, text, "debug", persistent);
     },
-    info: function(title, text, persistent = True) {
+    info: function(title, text, persistent = true) {
         this.add(title, text, "info", persistent);
     },
-    warning: function(title, text, persistent = True) {
+    warning: function(title, text, persistent = true) {
         this.add(title, text, "warning", persistent);
     },
-    error: function(title, text, persistent = True) {
+    error: function(title, text, persistent = true) {
         this.add(title, text, "error", persistent);
     },
     _remove: function(msg) {
@@ -45,6 +45,7 @@ var messages = window.messages = {
         }
         function update_pin(val) {
             pinned = val;
+            msg.toggleClass("pinned", pinned);
             update_disappear();
         }
 
