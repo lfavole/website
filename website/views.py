@@ -4,6 +4,7 @@ import importlib
 import mimetypes
 import os.path
 import sys
+import traceback
 from hashlib import sha256
 from ipaddress import ip_address, ip_network
 from pathlib import Path
@@ -124,6 +125,8 @@ def handler_500(request, _template_name=None):
         )
         return HttpResponse(html, status=500)
     except Exception:
+        # print the exception to the logs
+        traceback.print_exc()
         return HttpResponse(_("An unexpected error occured while trying to display the 500 error page."), "text/plain")
 
 
