@@ -73,6 +73,7 @@ def make_error(request):
     This view doesn't return a page, it always fails with `TestError`.
     """
     if 1 + 1 == 2:
+        Hub._current.last_event_id = None
         raise TestError("Test of the 500 error page")
     # this will never be called but will hide the type checker error in urls.py
     return HttpResponse()
@@ -97,7 +98,7 @@ def handler_404(request, exception):
 
 DEBUG_ENGINE = Engine(
     dirs=[str(Path(__file__).parent / "templates")],
-    context_processors=["website.context_processors.offline"],
+    context_processors=["website.context_processors.globals"],
     debug=True,
     libraries={
         "i18n": "django.templatetags.i18n",
@@ -119,7 +120,8 @@ def handler_500(request, _template_name=None):
             RequestContext(
                 request,
                 {
-                    "error_id": Hub.current._last_event_id,
+                    "error": True,
+                    "error_id": Hub.current._last_event_id or "x" * 32,
                 },
             )
         )

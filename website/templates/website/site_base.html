@@ -11,7 +11,8 @@
 {% endblock css %}
 
 {% block js %}
-    {% if cookies_form %}
+    {% if not error and cookies_form %}
+    {# don't show the cookies form if there is an error #}
     <script src="{% static "cookies/cookies.js" %}"></script>
     {% endif %}
 {% endblock js %}
@@ -65,7 +66,10 @@
     {% endblock footer %}
 </footer>
 <ul class="messagelist">
-{% include "cookies/banner.html" %}
+{% if not error %}
+    {# don't show the cookies form if there is an error #}
+    {% include "cookies/banner.html" %}
+{% endif %}
 {% for message in messages %}
     <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}</li>
 {% endfor %}

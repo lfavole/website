@@ -1,5 +1,7 @@
 import os
 
+from website.views import TestError
+
 from .env import SENTRY_DSN, PRODUCTION, BASE_DIR
 
 LOGGING = {
@@ -30,4 +32,6 @@ if SENTRY_DSN:
         traces_sample_rate=0.1 if PRODUCTION else 1.0,
         profiles_sample_rate=0.1 if PRODUCTION else 1.0,
         project_root=str(BASE_DIR),
+        # ignore the test errors produced by the 500 error page
+        ignore_errors=[TestError],
     )
