@@ -56,6 +56,8 @@ DATA = Path(__file__).resolve().parent.parent.parent / "data"
 
 def google(_request, id):
     """Return the Google site verification file."""
+    if os.getenv("GOOGLE_SITE_VERIFICATION_ID", "") == id:
+        return HttpResponse(f"google-site-verification: google{os.getenv('GOOGLE_SITE_VERIFICATION_ID')}.html")
     google_file = DATA / f"google{id}.html"
     if google_file.exists():
         return FileResponse(google_file.open("rb"))
