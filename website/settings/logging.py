@@ -1,6 +1,6 @@
 import os
 
-from website.views import TestError
+from website.errors import TestError
 
 from .env import SENTRY_DSN, PRODUCTION, BASE_DIR
 

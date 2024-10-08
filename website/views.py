@@ -45,6 +45,8 @@ from blog.models import Image
 from website.utils.http import encode_filename
 from website.utils.permission import has_permission
 
+from .errors import TestError
+
 try:
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
     fetch = importlib.import_module(".fetch", "scripts").main
@@ -62,12 +64,6 @@ def google(_request, id):
     if google_file.exists():
         return FileResponse(google_file.open("rb"))
     raise Http404()
-
-
-class TestError(Exception):
-    """
-    An error for testing the 500 error page.
-    """
 
 
 def make_error(request):
