@@ -1,0 +1,89 @@
+.arrow {
+    position: relative;
+    display: inline-block;
+    vertical-align: 0.25em;
+    width: 1em;
+    --height: 0.1em;
+    --half-height: 0.05em;
+    height: var(--height);
+    border-radius: var(--height);
+    margin: 0 var(--half-height);
+}
+
+.arrow,
+.arrow::before,
+.arrow::after {
+    background-color: currentcolor;
+}
+
+.arrow::before,
+.arrow::after {
+    content: "";
+    position: absolute;
+    top: calc(50% - var(--half-height));
+    right: 0;
+    width: 0.625em; /* 1em / 1.6 */
+    height: 0.125em;
+    border-radius: var(--height);
+    transform-origin: calc(100% - var(--half-height)) 50%;
+    transition: transform 0.4s;
+}
+
+.arrow::before {
+    transform: rotate(45deg);
+}
+
+.arrow::after {
+    transform: rotate(-45deg);
+}
+
+.arrow:hover::before,
+button:hover .arrow::before,
+a:hover .arrow::before {
+    transform: rotate(30deg);
+}
+
+.arrow:hover::after,
+button:hover .arrow::after,
+a:hover .arrow::after {
+    transform: rotate(-30deg);
+}
+
+.arrow.left-arrow::before,
+.arrow.left-arrow::after {
+    right: unset;
+    left: 0;
+    transform-origin: var(--half-height) 50%;
+}
+
+.arrow.left-arrow::before {
+    transform: rotate(-45deg);
+}
+
+.arrow.left-arrow::after {
+    transform: rotate(45deg);
+}
+
+.arrow.left-arrow:hover::before,
+button:hover .arrow.left-arrow::before,
+a:hover .arrow.left-arrow::before,
+.arrow.left-arrow.clicked::before {
+    transform: rotate(-30deg);
+}
+
+.arrow.left-arrow:hover::after,
+button:hover .arrow.left-arrow::after,
+a:hover .arrow.left-arrow::after,
+.arrow.left-arrow.clicked::after {
+    transform: rotate(30deg);
+}
+
+.arrow {
+    transition: transform 0.8s cubic-bezier(0, 1, 0, 1);
+}
+.arrow.clicked {
+    transform: translate(0.5em);
+}
+.arrow.left-arrow.clicked {
+    transform: translate(-0.5em);
+}
