@@ -29,6 +29,7 @@ CONTENT_SECURITY_POLICY = {
         "https://cdn.jsdelivr.net",
         "https://fonts.googleapis.com",
         "https://browser.sentry-cdn.com",
+        "https://cdn.tiny.cloud",
         # https://developers.google.com/recaptcha/docs/faq#im-using-content-security-policy-csp-on-my-website.-how-can-i-configure-it-to-work-with-recaptcha
         "https://www.google.com/recaptcha/",
         "https://www.gstatic.com/recaptcha/",
@@ -38,7 +39,11 @@ CONTENT_SECURITY_POLICY = {
         "https://www.google.com/recaptcha/",
         "https://www.gstatic.com/recaptcha/",
     ],
-    "style-src": ["self", "https://cdn.jsdelivr.net"],
+    "style-src": [
+        "self",
+        "https://cdn.jsdelivr.net",
+        "https://cdn.tiny.cloud",
+    ],
     "worker-src": ["self", "blob:"],
     "report-threshold": 0.1,
 }

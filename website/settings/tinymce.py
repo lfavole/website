@@ -33,12 +33,8 @@ static_lazy = lazy(static)
 TINYMCE_JS_URL = (
     static_lazy("vendor/tinymce/tinymce.min.js")
     if OFFLINE  # type: ignore
-    else "https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js"
+    else "https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js"
 )
-TINYMCE_EXTRA_MEDIA = {
-    "css": {"all": ("/static/tinymce/tinymce.css",)},
-    "js": ("/static/tinymce/tinymce.js",),
-}
 TINYMCE_DEFAULT_CONFIG = {
     "base_url": STATIC_URL + "vendor/tinymce" if OFFLINE else "https://cdn.tiny.cloud/1/no-api-key/tinymce/7",
     "body_class": "content",
