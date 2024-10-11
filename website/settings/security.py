@@ -29,6 +29,14 @@ CONTENT_SECURITY_POLICY = {
         "https://cdn.jsdelivr.net",
         "https://fonts.googleapis.com",
         "https://browser.sentry-cdn.com",
+        # https://developers.google.com/recaptcha/docs/faq#im-using-content-security-policy-csp-on-my-website.-how-can-i-configure-it-to-work-with-recaptcha
+        "https://www.google.com/recaptcha/",
+        "https://www.gstatic.com/recaptcha/",
+    ],
+    "frame-src": [
+        # https://developers.google.com/recaptcha/docs/faq#im-using-content-security-policy-csp-on-my-website.-how-can-i-configure-it-to-work-with-recaptcha
+        "https://www.google.com/recaptcha/",
+        "https://www.gstatic.com/recaptcha/",
     ],
     "style-src": ["self", "https://cdn.jsdelivr.net"],
     "worker-src": ["self", "blob:"],
