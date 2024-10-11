@@ -22,7 +22,7 @@ function initTinyMCE(el) {
     fns.forEach((fn_name) => {
         if (typeof mce_conf[fn_name] == "undefined")
             return;
-        if (mce_conf[fn_name].includes("("))
+        if ((mce_conf[fn_name] + "").includes("("))
             mce_conf[fn_name] = eval("(" + mce_conf[fn_name] + ")");
         else
             mce_conf[fn_name] = window[mce_conf[fn_name]];
