@@ -17,7 +17,7 @@ import "https://cdn.jsdelivr.net/npm/tinymce@7/plugins/save/plugin.min.js";
 import "https://cdn.jsdelivr.net/npm/tinymce@7/plugins/searchreplace/plugin.min.js";
 import "https://cdn.jsdelivr.net/npm/tinymce@7/plugins/table/plugin.min.js";
 
-import get_upload_handler from "./upload_handler.js";
+import { get_upload_handler } from "./upload_handler.js";
 
 function initTinyMCE(el) {
     if (el.closest(".empty-form") !== null)  // Don't do empty inlines
