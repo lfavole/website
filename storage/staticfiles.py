@@ -163,7 +163,7 @@ class CustomStaticFilesStorage(ManifestStaticFilesStorage):
             content = f.read()
             content = self.add_sentry_dsn(name, content)
             content = self.fetch_external(name, initial_name, content, files)
-            content = self.minify(name, content)
+            # content = self.minify(name, content)
             content = self.compress_picture(name, content)
 
             if self.exists(name):
