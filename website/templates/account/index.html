@@ -15,7 +15,7 @@
 		<li>
             <form method="post" action="{% url "account_logout" %}" class="logout-form">
                 {% csrf_token %}
-                <input type="submit" value="{% trans "Log out" %}">
+                <input type="submit" class="link" value="{% trans "Log out" %}">
             </form>
         </li>
 
