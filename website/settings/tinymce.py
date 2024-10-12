@@ -54,4 +54,5 @@ TINYMCE_DEFAULT_CONFIG = {
     ],
     "image_advtab": True,
     "upload_image_url": reverse_lazy("tinymce-upload-image"),
+    "license_key": "gpl",
 }
