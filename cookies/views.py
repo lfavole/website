@@ -7,7 +7,7 @@ from cookies.forms import CookiesForm
 
 def reset(request: HttpRequest):
     if request.method == "POST":
-        request.session.pop("cookie_consent")
+        request.session.pop("cookie_consent", {})
     return redirect("/")
 
 
