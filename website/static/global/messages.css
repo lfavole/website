@@ -39,8 +39,8 @@ ul.messagelist li {
     }
 }
 ul.messagelist li.disappearing {
-    background-size: 100% 100%;
-    animation: disappear-bar 5s linear;
+    background-size: 0% 100%;
+    animation: disappear-bar 5s linear forwards;
 }
 @keyframes disappear-bar {
     0% {
@@ -51,7 +51,7 @@ ul.messagelist li.disappearing {
     }
 }
 ul.messagelist li.removing {
-    animation: remove 0.4s;
+    animation: remove 0.4s forwards;
     pointer-events: none;
 }
 @keyframes remove {
@@ -137,6 +137,8 @@ ul.messagelist li.error::before {
     display: inline-block;
     width: 1em;
     height: 1em;
+    vertical-align: middle;
+    margin-right: 0.3em;
     opacity: 0.5;
     transition: opacity 0.4s;
     background-position: center;
