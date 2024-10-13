@@ -18,7 +18,7 @@ $(function() {
         });
     }
 
-    if($("img").length) {
+    if($("main img").length) {
         add_fancybox();
     } else {
         var $main = $("main")[0];
