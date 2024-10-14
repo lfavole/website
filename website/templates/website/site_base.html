@@ -19,9 +19,11 @@
 
 {% block body %}
 <div class="navbar">
-    <header class="navbar-brand">
-        <img src="{% static "global/profile_100.jpg" %}">
-        <a class="title" href="/">Mon site</a>
+    <header>
+        <a class="title" href="/">
+            <img src="{% static "global/profile_100.jpg" %}">
+            Mon site
+        </a>
         <label class="navbar-burger" for="navbar-is-active">
             <span></span>
             <span></span>
@@ -30,19 +32,28 @@
     </header>
     <input type="checkbox" id="navbar-is-active" class="navbar-checkbox sr-only">
     <nav class="navbar-menu">
+        <label class="close" for="navbar-is-active"></label>
 {{ nav_links|nav }}
+        <a href="#" class="navbar-burger" for="navbar-is-active">
+            <span></span>
+            <span></span>
+            <span></span>
+        </a>
+        <ul></ul>
     </nav>
     <div class="user">
     {% if user.is_authenticated %}
-        {{ user.username }} –
-        {% if admin_permission %}
-        <a href="{% url "admin:index" %}" target="_blank">{% trans "Administration" %}</a> –
-        {% endif %}
-        <a href="{% url "account_index" %}">{% trans "Account" %}</a> –
-		<form method="post" action="{% url "account_logout" %}" class="logout-form">
-			{% csrf_token %}
-			<input type="submit" class="link" value="{% trans "Log out" %}">
-		</form>
+        <details>
+            <summary>{{ user.username }}</summary>
+            {% if admin_permission %}
+            <a href="{% url "admin:index" %}" target="_blank">{% trans "Administration" %}</a><br>
+            {% endif %}
+            <a href="{% url "account_index" %}">{% trans "Account" %}</a><br>
+            <form method="post" action="{% url "account_logout" %}" class="logout-form">
+                {% csrf_token %}
+                <input type="submit" class="link" value="{% trans "Log out" %}">
+            </form>
+        </details>
     {% else %}
         <a href="{% url "account_login" %}">{% trans "Log in" %}</a>
     {% endif %}

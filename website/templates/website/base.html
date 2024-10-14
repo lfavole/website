@@ -12,15 +12,11 @@
     <title>{% block title %}Mon site{% endblock%}</title>
 
     {% block cdn_css %}
-    {% if offline %}
-    <link rel="stylesheet" href="{% static "vendor/bulma.min.css" %}">
-    {% else %}
-    <link rel="stylesheet" href="{% static "https://cdn.jsdelivr.net/npm/bulma@0/css/bulma.min.css" %}">
-    {% endif %}
     <link href="{% static "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;1,400;1,700&display=swap" %}" rel="stylesheet">
     {% endblock cdn_css %}
 
     <link rel="stylesheet" href="{% static "global/global.css" %}">
+    <link rel="stylesheet" href="{% static "global/header.css" %}">
     <link rel="stylesheet" href="{% static "global/messages.css" %}">
     <link rel="stylesheet" href="{% static "global/audioplayer.css" %}">
 
@@ -49,6 +45,7 @@
     <script src="{% static "global/messages.js" %}"></script>
     <script src="{% static "global/audioplayer.js" %}"></script>
     <script src="{% static "global/fancybox.js" %}"></script>
+    <script src="{% static "global/navbar.js" %}"></script>
 
     {% block js %}{% endblock %}
 

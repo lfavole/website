@@ -1,0 +1,307 @@
+/*
+ * Header and navbar
+ */
+
+.navbar {
+    padding: 0.5rem;
+    background-color: #efefef;
+    display: flex;
+	align-items: stretch;
+    justify-content: space-between;
+}
+header {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+/* Profile picture */
+header a {
+    display: flex;
+    align-items: center;
+    color: #363636;
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+header img {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 9999px;
+    margin-right: 1rem;
+}
+@media (max-width: 1023px) {
+    header {
+        margin-bottom: 0.5em;
+    }
+}
+@media (min-width: 1024px) and (max-width: 1199px) {
+    header a {
+        flex-direction: column;
+        font-size: 2rem;
+    }
+    header img {
+        width: 3rem;
+        height: 3rem;
+        margin: unset;
+    }
+}
+
+/* Navbar burger */
+.navbar-burger {
+    display: block;
+    position: relative;
+    width: 3.25rem;
+    height: 3.25rem;
+    appearance: none;
+    background: none;
+    margin: 0;
+    border: none;
+    padding: 0;
+    color: #4a4a4a;
+    cursor: pointer;
+    margin-left: auto;
+}
+.navbar-burger span {
+    background-color: currentColor;
+    display: block;
+    height: 1px;
+    left: calc(50% - 8px);
+    position: absolute;
+    transform-origin: center;
+    transition-duration: 86ms;
+    transition-property: background-color, opacity, transform;
+    transition-timing-function: ease-out;
+    width: 16px;
+}
+.navbar-burger span:nth-child(1) {
+    top: calc(50% - 6px);
+}
+.navbar-burger span:nth-child(2) {
+    top: calc(50% - 1px);
+}
+.navbar-burger span:nth-child(3) {
+    top: calc(50% + 4px);
+}
+.navbar-burger:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Navbar */
+nav {
+    width: 100%;
+    margin: 1rem;
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+}
+nav > * {
+    /* Don't shrink the navbar */
+    flex-shrink: 0;
+}
+nav .navbar-burger {
+    /* Don't push the "more" navbar burger to the right */
+    margin-left: 0;
+}
+nav .close {
+    /* Hide the close button by default */
+    display: none;
+}
+nav ul {
+    /* Reset the style of lists */
+    margin: 0;
+    padding: 0;
+    list-style-position: inside;
+}
+/* Add some margin to nested lists */
+nav ul ul {
+    margin-left: 1em;
+}
+@media screen and (max-width: 1023px) {
+    .navbar {
+        /* Use a column layout (don't display the visible and hidden links adjacently) */
+        flex-direction: column;
+    }
+    header {
+        /* Display the profile in full width and the navbar burger (that opens the nav) at the right */
+        width: 100%;
+        justify-content: space-between;
+    }
+    nav {
+        /* Set the nav in fullscreen */
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        margin: 0;
+        height: 0;  /* Hide the nav by default */
+        flex-direction: column;
+        align-items: start;
+        transition: height 0.4s;
+        overflow-y: hidden;
+        background-color: #eee;
+    }
+    /* Set padding for lists */
+    nav > ul {
+        padding: 0 1rem;
+        width: 100%;
+    }
+    nav > ul:first-of-type {
+        padding-top: 1rem;
+    }
+    nav > ul:last-of-type {
+        padding-bottom: 1rem;
+    }
+    /* Hide the "more" navbar burger */
+    nav .navbar-burger {
+        display: none;
+    }
+    /* Display the close icon at the top right */
+    nav .close {
+        display: block;
+        position: fixed;
+        top: 0.5rem;
+        right: 0.5rem;
+        z-index: 1;
+        font-size: 1.5em;
+        transform: scale(0);
+        transition: transform 0.4s;
+    }
+    /* Display the nav and the close button when the checkbox is checked */
+    input.navbar-checkbox:checked + nav {
+        height: 100%;
+        overflow-y: auto;
+    }
+    input.navbar-checkbox:checked + nav .close {
+        transform: scale(1);
+    }
+}
+@media screen and (min-width: 1024px) {
+    /* Don't display the navbar burger that opens the nav */
+    header .navbar-burger {
+        display: none;
+    }
+    /* Add borders, padding and background to lists */
+    nav ul {
+        border: 1px solid black;
+        border-radius: 8px;
+        padding: 0.5em;
+        background-color: #f0f0f0;
+    }
+    /* Display the first list (visible links) in inline mode */
+    nav > ul:first-of-type {
+        display: inline;
+    }
+    nav > ul:first-of-type > li {
+        display: inline-block;
+    }
+    /* Remove the additional margin in the visible links list and in the submenus of visible links */
+    nav > ul:first-of-type, nav > ul:first-of-type > li > ul {
+        margin-left: 0;
+    }
+    /*
+    Remove margins, borders and paddings on lists that are contained in lists with borders:
+    the visible links list and all lists contained in submenus (nested links or hidden links)
+    */
+    nav > ul:first-of-type, nav ul ul ul, nav > ul:last-of-type ul {
+        margin-left: 1em;
+        border: none;
+        border-radius: 0;
+        padding: 0;
+        background: none;
+    }
+    nav > ul:last-of-type {
+        position: absolute;
+        transform: translateY(3.25rem);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.4s;
+        overflow-y: hidden;
+    }
+    /* Add dashes between visible links */
+    nav > ul:first-of-type > li:not(:first-child)::before {
+        content: "";
+        display: inline-block;
+        border-bottom: 0.0625em solid black;
+        width: 0.6em;
+        margin: 0.25em 0.2em;
+    }
+    /* Position the nested lists */
+    nav > ul:first-of-type > li {
+        position: relative;
+    }
+    nav > ul:first-of-type > li > ul {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.4s;
+        min-width: 8em;
+        position: absolute;
+        left: 1em;
+        top: 100%;
+        z-index: 1;
+    }
+    /* Show the nested lists and hidden links when they are hovered or focused */
+    nav ul:first-of-type > li > a:hover + ul,
+    nav ul:first-of-type > li > a:focus + ul,
+    nav ul:first-of-type > li > ul:hover,
+    nav ul:first-of-type > li > ul:focus-within,
+    nav > .navbar-burger:hover + ul:last-of-type,
+    nav > .navbar-burger:focus + ul:last-of-type,
+    nav > ul:last-of-type:hover,
+    nav > ul:last-of-type:focus-within {
+        opacity: 1;
+        pointer-events: auto;
+    }
+    /* Add a down arrow on visible links that contain other items */
+    nav > ul:first-of-type > li:has(ul) > a::after {
+        content: "";
+        display: inline-block;
+        margin: 0 0.2em;
+        width: 0.6em;
+        height: 0.6em;
+        border: 0.0625em solid black;
+        border-left: 0;
+        border-top: 0;
+        transform: rotate(45deg);
+        transform-origin: center right;
+    }
+}
+
+/* User information */
+@media screen and (max-width: 1023px) {
+	.navbar .user {
+		margin:0.5rem;
+	}
+}
+@media screen and (min-width: 1024px) {
+    .navbar .user {
+        width: 150px;
+        text-align: center;
+    }
+}
+.navbar .user {
+    flex-shrink: 0;
+}
+.navbar .user summary {
+    cursor: pointer;
+}
+/* Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com
+License - https://fontawesome.com/license/free
+Copyright 2024 Fonticons, Inc.
+
+Compressed with https://svgomg.net/
+*/
+.navbar .user summary::before {
+    content: "";
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    vertical-align: middle;
+    margin-right: 0.3em;
+    /* user */
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224 256a128 128 0 1 0 0-256 128 128 0 1 0 0 256zm-46 48C80 304 0 384 0 482c0 17 13 30 30 30h388c17 0 30-13 30-30 0-98-80-178-178-178h-92z"/></svg>');
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}

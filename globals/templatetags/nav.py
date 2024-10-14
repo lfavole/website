@@ -27,8 +27,7 @@ def nav(value: NavLinks):
             else:
                 href = resolve_url(page.url)
 
-            has_subpages_class = ' class="has-subpages"' if nested_pages else ""
-            ret += f'{indent_str}\t<li{has_subpages_class}>\n{indent_str}\t\t<a href="{href}">'
+            ret += f'{indent_str}\t<li>\n{indent_str}\t\t<a href="{href}">'
             if page.hidden:
                 ret += "<i>(<small>" + _("Hidden page:") + "</small> "
             ret += escape(page.title)
