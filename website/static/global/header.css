@@ -103,6 +103,10 @@ nav .navbar-burger {
     /* Don't push the "more" navbar burger to the right */
     margin-left: 0;
 }
+nav > .navbar-burger:has(+ ul:last-of-type:empty) {
+    /* Hide the "more" navbar burger when the list is empty */
+    display: none;
+}
 nav .close {
     /* Hide the close button by default */
     display: none;
