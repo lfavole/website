@@ -9,7 +9,7 @@ def nav_links(_request) -> dict[str, NavLinks]:
 
     This variable must be used with the `nav` filter.
     """
-    links_list = list(Page.objects.all())
+    links_list = list(Page.objects.select_related("parent_page"))
 
     def get_links(parent):
         links_query = [link for link in links_list if link.parent_page == parent]
