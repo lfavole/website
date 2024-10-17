@@ -145,7 +145,7 @@ class CSPMiddleware:
         # skip overridding for strings, None, ...
         return csp_dict
 
-    def should_remove_report_uri(self, csp: dict | str):
+    def should_remove_report_uri(self, csp: dict | str | None):
         """Return `True` if we should remove the `report-uri` CSP parameter, `False` otherwise."""
         if not csp:
             return False
@@ -162,10 +162,13 @@ class CSPMiddleware:
 
     def add_csp_header(self, request, response):
         """Add the `Content-Security-Policy` or `Content-Security-Policy-Report-Only` header."""
-        csp: dict | str = getattr(response, "csp", "") or ""
+        csp: dict | str | None = getattr(response, "csp", "")
 
-        # try to override the default CSP by the view parameters
-        csp = self.override(csp, request, response) or {**self.csp}  # type: ignore
+        if csp is not None:
+            # try to override the default CSP by the view parameters
+            csp = self.override(csp, request, response) or {**self.csp}  # type: ignore
+        else:
+            csp = {}
 
         if self.should_remove_report_uri(csp):
             assert isinstance(csp, dict)

@@ -23,7 +23,7 @@ def no_html_minification(view_func: ViewFunc) -> ViewFunc:
     )
 
 
-def csp(directives: dict | str):
+def csp(directives: dict | str | None):
     def decorator(view_func: ViewFunc) -> ViewFunc:
         """Add custom CSP directives to a view."""
 
@@ -37,3 +37,9 @@ def csp(directives: dict | str):
             wraps(view_func)(wrapped_view),
         )
     return decorator
+
+# Exclude WebAuthn views from CSP
+from allauth.mfa.webauthn import views
+views.AddWebAuthnView.get = csp(None)(views.AddWebAuthnView.get)
+views.AddWebAuthnView.post = csp(None)(views.AddWebAuthnView.post)
+views.signup_webauthn = csp(None)(views.signup_webauthn)

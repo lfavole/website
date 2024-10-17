@@ -79,4 +79,9 @@ SOCIALACCOUNT_PROVIDERS = {
     },
 }
 
+# https://docs.allauth.org/en/latest/mfa/configuration.html
+MFA_PASSKEY_LOGIN_ENABLED = True
+MFA_SUPPORTED_TYPES = ["recovery_codes", "totp", "webauthn"]
+WEBAUTHN_ALLOW_INSECURE_ORIGIN = True
+
 USERSESSIONS_TRACK_ACTIVITY = True
