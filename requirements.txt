@@ -1,7 +1,7 @@
 dj-database-url ~= 2.2
 Django ~= 5.0
 django-admin-sortable2 ~= 2.1
-django-allauth[mfa,socialaccount] ~= 0.57
+django-allauth[mfa,socialaccount] ~= 65.0
 django-cleanup ~= 7.0
 django-contrib-comments ~= 2.2
 django-debug-toolbar ~= 4.2
