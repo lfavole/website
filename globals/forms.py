@@ -1,6 +1,6 @@
-from captcha.fields import ReCaptchaField
+from captcha.fields import HCaptchaField
 from django import forms
 
 
 class ContactCaptchaForm(forms.Form):
-    captcha = ReCaptchaField()
+    captcha = HCaptchaField()

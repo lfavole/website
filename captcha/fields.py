@@ -4,53 +4,48 @@ from urllib.error import HTTPError
 
 from captcha.client import submit
 from captcha.constants import TEST_PRIVATE_KEY, TEST_PUBLIC_KEY
-from captcha.widgets import ReCaptchaBase, ReCaptchaV2Checkbox
+from captcha.widgets import HCaptchaWidget
 from django import forms
 from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured, ValidationError
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 logger = logging.getLogger(__name__)
 
 
-class ReCaptchaField(forms.CharField):
+class HCaptchaField(forms.CharField):
     """
-    Field that displays a reCAPTCHA and checks it.
+    Field that displays a hCaptcha and checks it.
     """
 
-    widget = ReCaptchaV2Checkbox
+    widget = HCaptchaWidget
     default_error_messages = {
-        "captcha_invalid": _("Error verifying reCAPTCHA, please try again."),
-        "captcha_error": _("Error verifying reCAPTCHA, please try again."),
+        "captcha_invalid": _("Error verifying hCaptcha, please try again."),
+        "captcha_error": _("Error verifying hCaptcha, please try again."),
     }
 
     def __init__(self, *args, public_key=None, private_key=None, **kwargs):
         """
-        ReCaptchaField can accepts attributes which is a dictionary of attributes to be passed
-        to the ReCaptcha widget class. The widget will loop over any options added and create
-        the RecaptchaOptions JavaScript variables as specified in
-        https://developers.google.com/recaptcha/docs/display#render_param.
+        HCaptchaField can accepts attributes which is a dictionary of attributes to be passed
+        to the hCaptcha widget class.
+
+        See https://docs.hcaptcha.com/configuration/#hcaptcha-container-configuration for more information.
         """
         super().__init__(*args, **kwargs)
 
-        if not isinstance(self.widget, ReCaptchaBase):
-            raise ImproperlyConfigured(
-                "captcha.fields.ReCaptchaField.widget must be a subclass of " "captcha.widgets.ReCaptchaBase"
-            )
-
-        # reCAPTCHA fields are always required.
+        # hCaptcha fields are always required.
         self.required = True
 
         # Setup instance variables.
-        self.private_key = private_key or getattr(settings, "RECAPTCHA_PRIVATE_KEY", TEST_PRIVATE_KEY)
-        self.public_key = public_key or getattr(settings, "RECAPTCHA_PUBLIC_KEY", TEST_PUBLIC_KEY)
+        self.private_key = private_key or getattr(settings, "HCAPTCHA_PRIVATE_KEY", TEST_PRIVATE_KEY)
+        self.public_key = public_key or getattr(settings, "HCAPTCHA_PUBLIC_KEY", TEST_PUBLIC_KEY)
 
         # Update widget attrs with data-sitekey.
         self.widget.attrs["data-sitekey"] = self.public_key
 
     def get_remote_ip(self):
         """
-        Return the remote IP address for passing to reCAPTCHA API.
+        Return the remote IP address for passing to hCaptcha API.
         """
         f = sys._getframe()
         while f:
@@ -70,7 +65,7 @@ class ReCaptchaField(forms.CharField):
 
         try:
             check_captcha = submit(
-                recaptcha_response=value,
+                hcaptcha_response=value,
                 private_key=self.private_key,
                 remoteip=self.get_remote_ip(),
             )
@@ -78,27 +73,27 @@ class ReCaptchaField(forms.CharField):
             raise ValidationError(self.error_messages["captcha_error"], code="captcha_error") from exc
 
         if not check_captcha.is_valid:
-            logger.warning("reCAPTCHA validation failed due to: %s", check_captcha.error_codes)
+            logger.warning("hCaptcha validation failed due to: %s", check_captcha.error_codes)
             raise ValidationError(self.error_messages["captcha_invalid"], code="captcha_invalid")
 
         required_score = self.widget.attrs.get("required_score")
         if required_score:
             # Our score values need to be floats, as that is the expected
-            # response from the Google endpoint. Rather than ensure that on
+            # response from the hCaptcha endpoint. Rather than ensure that on
             # the widget, we do it on the field to better support user
             # subclassing of the widgets.
             required_score = float(required_score)
 
-            # If a score was expected but non was returned, default to a 0,
-            # which is the lowest score that it can return. This is to do our
+            # If a score was expected but non was returned, default to a 1,
+            # which is the highest score that it can return. This is to do our
             # best to assure a failure here, we can not assume that a form
             # that needed the threshold should be valid if we didn't get a
             # value back.
-            score = float(check_captcha.data.get("score", 0))
+            score = float(check_captcha.data.get("score", 1))
 
-            if score < required_score:
+            if score >= required_score:
                 logger.warning(
-                    "reCAPTCHA validation failed due to its score of %s " "being lower than the required amount.",
+                    "hCaptcha validation failed due to its score of %s being greater than the required amount.",
                     score,
                 )
                 raise ValidationError(self.error_messages["captcha_invalid"], code="captcha_invalid")

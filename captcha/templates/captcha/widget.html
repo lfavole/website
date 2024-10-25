@@ -1,5 +1,5 @@
-{% include "captcha/includes/js_v2_invisible.html" %}
-<div class="g-recaptcha"
+<script src="https://js.hcaptcha.com/1/api.js{% if api_params %}?{{ api_params }}{% endif %}" async defer></script>
+<div class="h-captcha"
     {% for name, value in widget.attrs.items %}{% if value is not False %} {{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endfor %}
 >
 </div>

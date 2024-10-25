@@ -2,7 +2,7 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
@@ -18,8 +18,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-msgid "Django reCAPTCHA"
-msgstr "reCAPTCHA Django"
+msgid "Django hCaptcha"
+msgstr "hCaptcha Django"
 
-msgid "Error verifying reCAPTCHA, please try again."
-msgstr "Erreur lors de la vérification du reCAPTCHA, veuillez réessayer."
+msgid "Error verifying hCaptcha, please try again."
+msgstr "Erreur lors de la vérification du hCaptcha, veuillez réessayer."

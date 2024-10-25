@@ -1,6 +1,3 @@
-# Test keys as per https://developers.google.com/recaptcha/docs/faq
-# "With the following test keys, you will always get No CAPTCHA and all
-# verification requests will pass."
-TEST_PUBLIC_KEY = "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
-TEST_PRIVATE_KEY = "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
-DEFAULT_RECAPTCHA_DOMAIN = "www.google.com"
+# https://docs.hcaptcha.com/#test-key-set-publisher-or-pro-account
+TEST_PUBLIC_KEY = "10000000-ffff-ffff-ffff-000000000001"
+TEST_PRIVATE_KEY = "	0x0000000000000000000000000000000000000000"

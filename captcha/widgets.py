@@ -1,89 +1,30 @@
-import uuid
 from urllib.parse import urlencode
 
-from captcha.constants import DEFAULT_RECAPTCHA_DOMAIN
-from django.conf import settings
 from django.forms import widgets
 
 
-class ReCaptchaBase(widgets.Widget):
+class HCaptchaWidget(widgets.Widget):
     """
-    Base widget to be used for Google reCAPTCHA.
+    hCaptcha widget.
 
-    public_key -- String value: can optionally be `"PASSED"` to not make use of the project wide Google Site Key.
+    public_key -- String value: can optionally be `"PASSED"` to not make use of the project wide hCaptcha sitekey.
     """
 
-    recaptcha_response_name = "g-recaptcha-response"
+    template_name = "captcha/widget.html"
 
     def __init__(self, *args, api_params=None, **kwargs):
         super().__init__(*args, **kwargs)
-        self.uuid = uuid.uuid4().hex
         self.api_params = api_params or {}
 
     def value_from_datadict(self, data, files, name):
-        return data.get(self.recaptcha_response_name, None)
+        return data.get("h-captcha-response", None)
 
     def get_context(self, name, value, attrs):
         context = super().get_context(name, value, attrs)
-        params = urlencode(self.api_params)
         context.update(
             {
                 "public_key": self.attrs["data-sitekey"],
-                "widget_uuid": self.uuid,
-                "api_params": params,
-                "recaptcha_domain": getattr(settings, "RECAPTCHA_DOMAIN", DEFAULT_RECAPTCHA_DOMAIN),
+                "api_params": urlencode(self.api_params),
             }
         )
         return context
-
-    def build_attrs(self, base_attrs, extra_attrs=None):
-        attrs = super().build_attrs(base_attrs, extra_attrs)
-        attrs["data-widget-uuid"] = self.uuid
-
-        # Support the ability to override some of the Google data attrs.
-        attrs["data-callback"] = base_attrs.get("data-callback", f"onSubmit_{self.uuid}")
-        attrs["data-size"] = base_attrs.get("data-size", "normal")
-        return attrs
-
-
-class ReCaptchaV2Checkbox(ReCaptchaBase):
-    """
-    reCAPTCHA v2
-    """
-
-    template_name = "captcha/widget_v2_checkbox.html"
-
-
-class ReCaptchaV2Invisible(ReCaptchaBase):
-    """
-    reCAPTCHA v2 invisible
-    """
-
-    template_name = "captcha/widget_v2_invisible.html"
-
-    def build_attrs(self, base_attrs, extra_attrs=None):
-        attrs = super().build_attrs(base_attrs, extra_attrs)
-
-        # Invisible reCAPTCHA should not have another size
-        attrs["data-size"] = "invisible"
-        return attrs
-
-
-class ReCaptchaV3(ReCaptchaBase):
-    """
-    reCAPTCHA v3 (CAPTCHA with score)
-    """
-
-    template_name = "captcha/widget_v3.html"
-
-    def __init__(self, *args, api_params=None, **kwargs):
-        super().__init__(api_params=api_params, *args, **kwargs)
-        if not self.attrs.get("required_score", None):
-            self.attrs["required_score"] = getattr(settings, "RECAPTCHA_REQUIRED_SCORE", None)
-
-    def build_attrs(self, base_attrs, extra_attrs=None):
-        attrs = super().build_attrs(base_attrs, extra_attrs)
-        return attrs
-
-    def value_from_datadict(self, data, files, name):
-        return data.get(name)

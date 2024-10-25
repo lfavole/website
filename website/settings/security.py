@@ -30,19 +30,27 @@ CONTENT_SECURITY_POLICY = {
         "https://fonts.googleapis.com",
         "https://browser.sentry-cdn.com",
         "https://cdn.tiny.cloud",
-        # https://developers.google.com/recaptcha/docs/faq#im-using-content-security-policy-csp-on-my-website.-how-can-i-configure-it-to-work-with-recaptcha
-        "https://www.google.com/recaptcha/",
-        "https://www.gstatic.com/recaptcha/",
+        # https://docs.hcaptcha.com/#content-security-policy-settings
+        "https://hcaptcha.com",
+        "https://*.hcaptcha.com",
     ],
     "frame-src": [
-        # https://developers.google.com/recaptcha/docs/faq#im-using-content-security-policy-csp-on-my-website.-how-can-i-configure-it-to-work-with-recaptcha
-        "https://www.google.com/recaptcha/",
-        "https://www.gstatic.com/recaptcha/",
+        # https://docs.hcaptcha.com/#content-security-policy-settings
+        "https://hcaptcha.com",
+        "https://*.hcaptcha.com",
     ],
     "style-src": [
         "self",
         "https://cdn.jsdelivr.net",
         "https://cdn.tiny.cloud",
+        # https://docs.hcaptcha.com/#content-security-policy-settings
+        "https://hcaptcha.com",
+        "https://*.hcaptcha.com",
+    ],
+    "connect-src": [
+        # https://docs.hcaptcha.com/#content-security-policy-settings
+        "https://hcaptcha.com",
+        "https://*.hcaptcha.com",
     ],
     "worker-src": ["self", "blob:"],
     "report-threshold": 0.1,
@@ -65,7 +73,7 @@ COOKIE_TYPES = {
     "performance": (_("Performance"), False),
 }
 
-# reCAPTCHA
+# hCaptcha
 
-RECAPTCHA_PUBLIC_KEY = os.environ.get("RECAPTCHA_PUBLIC_KEY")
-RECAPTCHA_PRIVATE_KEY = os.environ.get("RECAPTCHA_PRIVATE_KEY")
+HCAPTCHA_PUBLIC_KEY = os.environ.get("HCAPTCHA_PUBLIC_KEY")
+HCAPTCHA_PRIVATE_KEY = os.environ.get("HCAPTCHA_PRIVATE_KEY")
