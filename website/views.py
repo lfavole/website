@@ -13,6 +13,9 @@ from urllib.parse import quote, urljoin, urlparse
 from wsgiref.util import is_hop_by_hop
 
 import requests
+from allauth.socialaccount.models import SocialAccount, SocialToken
+from allauth.usersessions.models import UserSession
+from allauth.usersessions.internal.flows.sessions import end_sessions
 from django.apps import apps
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
@@ -42,10 +45,12 @@ from django.views.decorators.csrf import csrf_exempt
 from sentry_sdk import Hub
 
 from blog.models import Image
+from users.models import User
 from website.utils.http import encode_filename
 from website.utils.permission import has_permission
 
 from .errors import TestError
+from .risc import validate_security_token
 
 try:
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
@@ -245,6 +250,59 @@ def reload_website(request: HttpRequest):
 
     # In case we receive an event that's not ping or push
     return HttpResponse(status=204)
+
+
+def risc(request):
+    # Get the token from the request body and validate it
+    token = validate_security_token(request.body)
+
+    # We are acting according to the reference document:
+    # https://developers.google.com/identity/protocols/risc#error_codes
+    for event, data in token["events"].items():
+        # Verification
+        if event == "https://schemas.openid.net/secevent/risc/event-type/verification":
+            # Send a dummy response
+            return HttpResponse("pong")
+
+        socialaccount = SocialAccount.objects.select_related("user").get(provider="google", uid=data["subject"]["sub"])
+
+        # Sessions revoked, (all) tokens revoked or account disabled because of hijacking
+        if (
+            event
+            in (
+                "https://schemas.openid.net/secevent/risc/event-type/sessions-revoked",
+                "https://schemas.openid.net/secevent/oauth/event-type/tokens-revoked",
+            )
+            or event == "https://schemas.openid.net/secevent/risc/event-type/account-disabled"
+            and data["reason"] == "hijacking"
+        ):
+            # End all the sessions
+            end_sessions(request, [UserSession.objects.filter(user=socialaccount.user)])
+
+        # Account disabled not because of bulk activity
+        if (
+            event == "https://schemas.openid.net/secevent/risc/event-type/account-disabled"
+            and data["reason"] != "bulk-account"
+        ):
+            # Disable login via Google
+            socialaccount.delete()
+
+        # Token (associated with this website) revoked
+        if event == "https://schemas.openid.net/secevent/oauth/event-type/token-revoked":
+            # Delete the tokens associated to that account
+            SocialToken.objects.filter(account=socialaccount).delete()
+
+        # Account enabled
+        if event == "https://schemas.openid.net/secevent/risc/event-type/account-enabled":
+            # Re-enable the Google login option
+            # XXX this won't do anything because the Google login option has already been removed
+            accounts = SocialAccount.objects.filter(provider="google", uid=data["subject"]["sub"])
+            for socialaccount in accounts:
+                socialaccount.user = User.objects.get(email=socialaccount.extra_data["email"])
+            SocialAccount.objects.bulk_update(accounts, ["user"])
+
+    # Return a 200 response
+    return HttpResponse("OK")
 
 
 def robots(_request):
