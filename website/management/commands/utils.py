@@ -1,11 +1,13 @@
 # pylint: disable=C0413, E0401, E0611
 import builtins
+from functools import wraps
 import io
 import shlex
 import subprocess as sp
 import sys
 from pathlib import Path
-from typing import Callable
+import threading
+from typing import Callable, TypeVar
 
 
 def run(args: list[str] | str, pipe=False, capture=False, **kwargs) -> sp.CompletedProcess[str]:
@@ -47,6 +49,20 @@ def run(args: list[str] | str, pipe=False, capture=False, **kwargs) -> sp.Comple
         ret.stdout = before_text + ret.stdout + after_text
 
     return ret
+
+
+FunctionT = TypeVar("FunctionT", bound=Callable)
+
+
+def run_in_thread(func: FunctionT) -> FunctionT:
+    """Run a function in a thread."""
+
+    @wraps(func)
+    def decorator(*args, **kwargs):
+        thread = threading.Thread(target=func, args=args, kwargs=kwargs)
+        thread.start()
+
+    return decorator  # type: ignore
 
 
 def get_run_with_expl(
