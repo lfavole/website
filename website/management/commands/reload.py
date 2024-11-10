@@ -50,7 +50,7 @@ class Command(BaseCommand):
 
         run_in_thread(compile_translations)()
         run_in_thread(FetchGravatar().handle)(reloading=True)
-        run_with_expl_thread([*manage, "collectstatic", "--noinput", "--clear"], "collecting static files")
+        run_with_expl_thread([*manage, "collectstatic", "--noinput", "--clear", "-v", "1"], "collecting static files")
 
         if os.environ.get("PYTHONANYWHERE"):
             run_with_expl(["python3", "-m", "pip", "install", "mysqlclient~=2.2"], "installing MySQL")
