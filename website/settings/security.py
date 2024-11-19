@@ -35,6 +35,7 @@ CONTENT_SECURITY_POLICY = {
         "https://*.hcaptcha.com",
     ],
     "frame-src": [
+        "self",
         # https://docs.hcaptcha.com/#content-security-policy-settings
         "https://hcaptcha.com",
         "https://*.hcaptcha.com",
@@ -48,6 +49,7 @@ CONTENT_SECURITY_POLICY = {
         "https://*.hcaptcha.com",
     ],
     "connect-src": [
+        "self",
         # https://docs.hcaptcha.com/#content-security-policy-settings
         "https://hcaptcha.com",
         "https://*.hcaptcha.com",
