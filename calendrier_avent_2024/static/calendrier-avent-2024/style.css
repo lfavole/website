@@ -14,7 +14,8 @@ h1 {
 	font-size: 72px;
 	text-align: center;
 	background-color: unset;
-	/* word-spacing: 0.1em; */
+	margin: 0;
+	margin-bottom: 1rem;
 }
 body.index h1 {
 	color: #eee;
@@ -40,6 +41,7 @@ body.day main {
     display: flex;
     flex-direction: column;
     padding: 0.5em;
+	max-height: 100vh;
 }
 main img {
     align-self: center;
@@ -76,24 +78,24 @@ main img {
 	z-index: 9500;
 	width: 30px;
 	height: 30px;
-    &::before, &::after {
-        content: "";
-        display: block;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        width: 8%;
-        height: 60%;
-        background-color: black;
-        transform-origin: center;
-        border-radius: 9999px;
-    }
-    &::before {
-        transform: translate(-50%, -50%) rotate(-45deg);
-    }
-    &::after {
-        transform: translate(-50%, -50%) rotate(45deg);
-    }
+}
+.fermer::before, .fermer::after {
+	content: "";
+	display: block;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 8%;
+	height: 60%;
+	background-color: black;
+	transform-origin: center;
+	border-radius: 9999px;
+}
+.fermer::before {
+	transform: translate(-50%, -50%) rotate(-45deg);
+}
+.fermer::after {
+	transform: translate(-50%, -50%) rotate(45deg);
 }
 
 .jours {

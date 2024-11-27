@@ -44,7 +44,7 @@ CONTENT_SECURITY_POLICY = {
     ],
     "img-src": [
         "self",
-        lazy(str, lambda: getattr(default_storage, "_prefix", ""))(),
+        lazy(lambda: getattr(default_storage, "_prefix", ""), str)(),
     ],
     "style-src": [
         "self",
