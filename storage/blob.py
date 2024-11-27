@@ -82,7 +82,7 @@ class BlobFileStorage(Storage):
             raise FileNotFoundError(f"The file {name} doesn't exist")
 
         # save the prefix for later use
-        self._prefix = data["blobs"][0]["url"].removeprefix(name).rstrip("/").removeprefix(self.folder).rstrip("/")
+        self._prefix = data["blobs"][0]["url"].removesuffix(name).rstrip("/").removesuffix(self.folder).rstrip("/")
         return data["blobs"][0]
 
     def url(self, name):

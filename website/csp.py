@@ -95,11 +95,11 @@ def compile_csp(csp: dict | str):
         for value in value_list:
             if value is None:
                 values.append("'none'")
-            elif value in CSP_FETCH_SPECIAL or value.startswith(CSP_PREFIX_SPECIAL):
+            elif value in CSP_FETCH_SPECIAL or str(value).startswith(CSP_PREFIX_SPECIAL):
                 values.append(f"'{value}'")
             else:
                 values.append(value)
-        return " ".join(values)
+        return " ".join(str(x) for x in values)
 
     pieces = []
     for name, value in csp.items():

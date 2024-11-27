@@ -2,6 +2,8 @@ import os
 import re
 from urllib.parse import quote, urlparse
 
+from django.core.files.storage import default_storage
+from django.utils.functional import lazy
 from django.utils.translation import gettext_lazy as _
 
 from .env import DEBUG, PRODUCTION, SENTRY_DSN, SENTRY_SDK
@@ -39,6 +41,10 @@ CONTENT_SECURITY_POLICY = {
         # https://docs.hcaptcha.com/#content-security-policy-settings
         "https://hcaptcha.com",
         "https://*.hcaptcha.com",
+    ],
+    "img-src": [
+        "self",
+        lazy(str, lambda: getattr(default_storage, "_prefix", ""))(),
     ],
     "style-src": [
         "self",
