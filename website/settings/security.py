@@ -41,6 +41,8 @@ CONTENT_SECURITY_POLICY = {
         # https://docs.hcaptcha.com/#content-security-policy-settings
         "https://hcaptcha.com",
         "https://*.hcaptcha.com",
+        "https://www.youtube.com",
+        "https://www.youtube-nocookie.com",
     ],
     "img-src": [
         "self",
