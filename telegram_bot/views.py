@@ -3,7 +3,12 @@ import os
 import re
 
 import requests
-from django.http.response import HttpResponse
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+
+from .models import AuthorizedDelivering
 
 callbacks = []
 
@@ -24,6 +29,15 @@ def call_api(method, endpoint, params=None, *args, **kwargs):
     if not BOT_TOKEN:
         return None
     return requests.request(method, BASE_URL + "/" + endpoint, *args, params=params, **kwargs)
+
+
+@require_POST
+@csrf_exempt
+def deliver(request: HttpRequest, uuid):
+    delivering = get_object_or_404(AuthorizedDelivering, uuid=uuid)
+
+    call_api("POST", "sendMessage", {**request.POST.dict(), "chat_id": delivering.recipient})
+    return HttpResponse("OK")
 
 
 def reply(request):

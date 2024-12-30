@@ -16,9 +16,10 @@ Including another URLconf
 
 from django.urls import path
 
-from .views import reply
+from .views import deliver, reply
 
 app_name = "telegram_bot"
 urlpatterns = [
+    path("deliver/<uuid:uuid>", deliver, name="deliver"),
     path("reply", reply, name="reply"),
 ]

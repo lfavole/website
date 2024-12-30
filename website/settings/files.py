@@ -1,8 +1,8 @@
-from .env import BASE_DIR
+from .env import BASE_DIR, VERCEL
 
 STORAGES = {
     "default": {
-        "BACKEND": "storage.storages.CustomBlobStorage",
+        "BACKEND": "storage.storages.CustomBlobStorage" if VERCEL else "storage.storages.CustomFileSystemStorage",
     },
     "staticfiles": {
         "BACKEND": "storage.staticfiles.CustomStaticFilesStorage",
