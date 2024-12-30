@@ -124,7 +124,7 @@ class GitClient:
         ts = time()
         try:
             output = sp.check_output(["git", *args], encoding="utf-8")
-        except (sp.SubprocessError, OSError) as err:
+        except (sp.CalledProcessError, OSError) as err:
             output = f"{type(err)}: {err}"
 
         self._outputs[args] = (ts, output)
