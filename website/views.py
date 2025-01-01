@@ -45,6 +45,7 @@ from django.views.decorators.csrf import csrf_exempt
 from sentry_sdk import Hub
 
 from blog.models import Image
+from globals.models import Setting
 from users.models import User
 from website.utils.http import encode_filename
 from website.utils.permission import has_permission
@@ -303,6 +304,13 @@ def risc(request):
 
     # Return a 200 response
     return HttpResponse("OK")
+
+
+def keybase(_request):
+    """
+    `keybase.txt` file.
+    """
+    return HttpResponse(get_object_or_404(Setting, slug="keybase").content, content_type="text/plain")
 
 
 def robots(_request):
