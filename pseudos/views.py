@@ -20,15 +20,6 @@ def _str_to_list(liste):
     return _normaliser(liste.split("\n"))
 
 
-def _log(*words):
-    import datetime
-    from pathlib import Path
-
-    now = str(datetime.datetime.now())
-    with open(Path(__file__).parent / "words.txt", "a") as f:
-        f.write("\n".join(now + " - " + word for word in words) + "\n")
-
-
 def add(request, name: str):
     """
     Add a pseudo (when clicking on a name on the results).
@@ -55,7 +46,6 @@ def home(request):
         if form.is_valid():
             data = form.cleaned_data
             words = _str_to_list(data["words"])
-            _log(*words)
             request.session["pseudos_last_words"] = "\n".join(words)
             s_words = words + s_words
             s_words = _normaliser(s_words)[0:10]
