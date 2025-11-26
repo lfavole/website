@@ -70,6 +70,7 @@ urlpatterns: list[list[URLPattern] | URLPattern] = i18n_patterns(
     path("blog/", include("blog.urls", namespace="blog")),
     path("calendrier-avent-2023/", include("calendrier_avent_2023.urls", namespace="calendrier_avent_2023")),
     path("calendrier-avent-2024/", include("calendrier_avent_2024.urls", namespace="calendrier_avent_2024")),
+    path("calendrier-avent-2025/", include("calendrier_avent_2025.urls", namespace="calendrier_avent_2025")),
     path("comments/", include("django_comments.urls")),
     path("cookies/", include("cookies.urls", namespace="cookies")),
     path("debug/", include("debug.urls", namespace="debug")),

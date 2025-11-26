@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     "blog",
     "calendrier_avent_2023",
     "calendrier_avent_2024",
+    "calendrier_avent_2025",
     "captcha",
     "cookies",
     "debug",

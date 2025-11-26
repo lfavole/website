@@ -39,13 +39,13 @@ class TemplatesFinder(BaseFinder):
     def check(self, **kwargs):
         return []
 
-    def find(self, path, all=False):
+    def find(self, path, find_all=False):
         """Look for files."""
         # if it's an already processed URL, return it
         if path.startswith("ext/"):
             path = safe_join(settings.STATIC_ROOT, path)
             if os.path.exists(path):
-                return [path] if all else path
+                return [path] if find_all else path
 
         # get the target filename
         target_filename = get_name_from_url(path)
