@@ -3,32 +3,36 @@ body {
     color: black;
 }
 body.index {
-    background-image: url("background.jpg");
+	background-color: #9b0008;
+    background-image: url("background.jpg"), linear-gradient(90deg, #a6000f, #fc0019 40%, #a6000f);
     background-position: center;
     background-size: cover;
 }
 h1, .jours {
-	font-family: Lobster, cursive;
+	font-family: Oleo Script Swash Caps, cursive;
 }
 h1 {
-	font-size: 72px;
+	font-size: 4.5em;
 	text-align: center;
 	background-color: unset;
 	margin: 0;
+}
+body.day h1 {
 	margin-bottom: 1rem;
 }
 body.index h1 {
 	color: #eee;
+	text-shadow: 0 0 0.1em #111;
 }
 h1 sup {
 	margin-left: 0.1em;
 }
 @media screen and (max-width: 500px) {
 	h1 {
-		font-size: 48px;
+		font-size: 3em;
 	}
 	.calendrier-avent h1 {
-		font-size: 42px;
+		font-size: 2.5em;
 	}
 }
 
@@ -98,6 +102,12 @@ main img {
 	transform: translate(-50%, -50%) rotate(45deg);
 }
 
+body.index main {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+}
 .jours {
 	display: grid;
 	grid-template-columns: repeat(6, 1fr);
@@ -116,7 +126,6 @@ main img {
 .jours + .jours {
 	display: flex;
 	justify-content: center;
-	margin-top: 70px;
 }
 .jours a {
 	width: 100px;
@@ -127,10 +136,10 @@ main img {
 	justify-content: center;
 	text-align: center;
 	font-size: 64px;
-	color: black;
+	color: white;
 	text-decoration: none;
-	background-color: #ffe082;
-	border: 5px solid #ffb300;
+	background-color: #003522;
+	border: 5px solid #007a46;
 	transition: background-color 0.4s, border-color 0.4s;
 }
 @media screen and (max-width: 500px) {
@@ -145,10 +154,12 @@ body.mode-nuit .jours a {
 	color: #222;
 }
 .jours + .jours a {
-	background-color: #80deea;
-	border-color: #0277bd;
+	background-color: #ffd54f;
+	border-color: #f57f17;
+	color: black;
 	position: relative;
 	border-radius: 50%;
+	margin-top: 40px;
 }
 .jours + .jours a::before, .jours + .jours a::after {
 	content: "";
@@ -156,7 +167,7 @@ body.mode-nuit .jours a {
 	bottom: 100%;
 	width: 60px;
 	height: 40px;
-	border: 4px solid #311b92;
+	border: 4px solid white;
 }
 .jours + .jours a::before {
 	right: calc(50% - 2px);
@@ -169,15 +180,6 @@ body.mode-nuit .jours a {
 .jours a.ajd {
 	background-color: #66bb6a;
 	border: 5px solid #558b2f;
-	animation: clignoter 2s ease-in-out infinite;
-}
-@keyframes clignoter {
-	0%, 100% {
-		background-color: #ff6e40;
-	}
-	50% {
-		background-color: #ffea00;
-	}
 }
 
 .note-photos {
