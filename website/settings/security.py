@@ -29,7 +29,6 @@ CONTENT_SECURITY_POLICY = {
         "self",
         "unsafe-eval",
         "https://cdn.jsdelivr.net",
-        "https://fonts.googleapis.com",
         "https://browser.sentry-cdn.com",
         "https://cdn.tiny.cloud",
         # https://docs.hcaptcha.com/#content-security-policy-settings
@@ -46,12 +45,14 @@ CONTENT_SECURITY_POLICY = {
     ],
     "img-src": [
         "self",
+        "data:",
         lazy(lambda: getattr(default_storage, "_prefix", ""), str)(),
     ],
     "style-src": [
         "self",
         "https://cdn.jsdelivr.net",
         "https://cdn.tiny.cloud",
+        "https://fonts.googleapis.com",
         # https://docs.hcaptcha.com/#content-security-policy-settings
         "https://hcaptcha.com",
         "https://*.hcaptcha.com",
