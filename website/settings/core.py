@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "telegram_bot",
     "temperatures",
     "tinymce",
+    "tracking",
     "users",
     "website",
     # template overridding
@@ -60,8 +61,11 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "website.middleware.CSPMiddleware",
+    "tracking.middleware.VisitTrackingMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
+
+TRACK_PAGEVIEWS = True
 
 ROOT_URLCONF = "website.urls"
 

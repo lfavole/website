@@ -1,0 +1,35 @@
+{% extends "website/site_base.html" %}
+{% load i18n %}
+
+{% block title %}{% translate "Tracking dashboard" %}{% endblock title %}
+
+{% block body %}
+<main>
+    <h1>{% translate "Tracking dashboard" %}</h1>
+    <div id="tracking-filters">
+        <form method="GET">
+            {{ form.as_p }}
+            <input type="submit" value="OK">
+        </form>
+    </div>
+    <div id="tracking-info">
+        <p>
+            {% blocktranslate with start_time=track_start_time|date:"DATETIME_FORMAT" %}
+                Visitor tracking began on
+                {{ start_time }}
+            {% endblocktranslate %}
+        </p>
+        {% if warn_incomplete %}
+        <p class=warning>
+            {% blocktranslate %}
+                The start time precedes the oldest tracked visitor, thus
+                the stats are not complete for the specified range.
+            {% endblocktranslate %}
+        </p>
+        {% endif %}
+    </div>
+    <div id="tracking-stats">
+        {% include "tracking/snippets/stats.html" %}
+    </div>
+</main>
+{% endblock body %}

@@ -86,6 +86,7 @@ urlpatterns: list[list[URLPattern] | URLPattern] = i18n_patterns(
     path("temperatures/", include("temperatures.urls", namespace="temperatures")),
     path("tinymce/upload-image", upload_image, name="tinymce-upload-image"),
     path("tinymce/", include("tinymce.urls")),
+    path("tracking/", include("tracking.urls")),
     path("google<str:id>.html", google),
     path("keybase.txt", keybase),
     path("robots.txt", robots),
