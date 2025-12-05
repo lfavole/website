@@ -33,7 +33,7 @@ class SettingAdmin(admin.ModelAdmin):
         return super().get_form(request, obj, change, **kwargs)
 
     def formfield_for_dbfield(self, db_field: Field, request=None, obj: Setting | None = None, **kwargs):
-        if obj and obj.slug in ("home", "contact", "25-12-2023", "25-12-2024") and isinstance(db_field, models.TextField):
+        if obj and (obj.slug in ("home", "contact") or obj.slug.startswith("25-12-")) and isinstance(db_field, models.TextField):
             kwargs["widget"] = AdminTinyMCE
         return super().formfield_for_dbfield(db_field, request, **kwargs)
 
