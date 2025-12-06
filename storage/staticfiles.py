@@ -146,7 +146,7 @@ class CustomStaticFilesStorage(ManifestStaticFilesStorage):
                     prefix + data,
                     minify_css=True,
                     minify_js=True,
-                    do_not_minify_doctype=True,
+                    minify_doctype=False,
                 )
                 .removeprefix(prefix)
                 .encode("utf-8")

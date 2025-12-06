@@ -29,7 +29,7 @@ def new_render_to_string(*args, **kwargs):
         ret,
         minify_css=True,
         minify_js=True,
-        do_not_minify_doctype=True,
+        minify_doctype=False,
     )
     return ret
 

@@ -38,7 +38,7 @@ class MinifyHtmlMiddleware:
                     prefix + content,
                     minify_css=True,
                     minify_js=True,
-                    do_not_minify_doctype=True,
+                    minify_doctype=False,
                 ).removeprefix(prefix)
             except:
                 # if there is an error during the minification, skip it silently
