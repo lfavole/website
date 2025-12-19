@@ -50,6 +50,7 @@ CONTENT_SECURITY_POLICY = {
     ],
     "style-src": [
         "self",
+        "unsafe-inline",
         "https://cdn.jsdelivr.net",
         "https://cdn.tiny.cloud",
         "https://fonts.googleapis.com",
